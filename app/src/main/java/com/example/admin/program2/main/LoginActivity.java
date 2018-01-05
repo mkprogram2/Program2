@@ -15,6 +15,7 @@ import com.example.admin.program2.common.SharedPreferenceEditor;
 import com.example.admin.program2.model.Login;
 import com.example.admin.program2.service.LoginService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -61,13 +62,16 @@ public class LoginActivity extends AppCompatActivity
         call.enqueue(new Callback<HashMap<String, String>>()
         {
             private String responseCode;
-            private String responseMessage;
+            private String responseMessage , idd, namee;
 
             @Override
             public void onResponse(retrofit2.Call<HashMap<String, String>> call, Response<HashMap<String, String>> response)
             {
                 final HashMap<String, String> data = response.body();
-                //Toast.makeText(LoginActivity.this, "aa", Toast.LENGTH_SHORT).show();
+
+                Log.d("aaa",data.keySet().toString());
+
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 
                 for (String resultKey : data.keySet())
                 {
@@ -75,24 +79,22 @@ public class LoginActivity extends AppCompatActivity
                     responseMessage = data.get(resultKey);
                     Log.d("RESPONSE FROM LOGIN", responseMessage);
 
-                    if (responseCode.equals("name"))
+                    String[] parts = responseMessage.split(";");
+
+                    if (responseCode.equals("id"))
                     {
-                        String[] parts = responseMessage.split(";");
-
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         intent.putExtra("id", parts[0]);
+                    }
+                    else if (responseCode.equals("name"))
+                    {
                         intent.putExtra("name", parts[0]);
-
-                    //    Toast.makeText(LoginActivity.this, responseCode + " " + parts[0], Toast.LENGTH_LONG).show();
-
-                    //    Toast.makeText(LoginActivity.this, "Login Berhasil", Toast.LENGTH_LONG).show();
-                        startActivity(intent);
                     }
                     else
                     {
                         Toast.makeText(LoginActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
                     }
                 }
+                startActivity(intent);
             }
 
             @Override
