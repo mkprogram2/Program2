@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity
 
     //TextView employee_name;
     Button checkin;
-    /*private List<Login> login;
+    /*private List<LoginActivity> login;
     private postHr posthr;*/
     @BindView(R.id.employee_name)
      TextView employee_name;

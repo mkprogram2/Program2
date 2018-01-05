@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.admin.program2.main.Login"
+    tools:context="com.example.admin.program2.main.LoginActivity"
     tools:showIn="@layout/activity_login">
 
     <LinearLayout
@@ -36,13 +36,12 @@
                 android:text="Username" />
 
             <EditText
-                android:id="@+id/login"
+                android:id="@+id/username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Name" />
+                android:inputType="textPersonName" />
         </LinearLayout>
 
         <LinearLayout
@@ -65,8 +64,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:password="true"
-                android:text="Password" />
+                android:password="true" />
 
         </LinearLayout>
 
