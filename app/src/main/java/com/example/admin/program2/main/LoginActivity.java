@@ -1,5 +1,6 @@
 package com.example.admin.program2.main;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -61,8 +62,9 @@ public class LoginActivity extends AppCompatActivity
             @Override
             public void onResponse(retrofit2.Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
             {
-                //final HashMap<Integer, String> data = response.body();
-                Toast.makeText(LoginActivity.this, "Tesssssssssssss", Toast.LENGTH_LONG).show();
+                final HashMap<Integer, String> data = response.body();
+                Toast.makeText(LoginActivity.this, "Login Berhasil", Toast.LENGTH_LONG).show();
+                startActivity(new Intent (LoginActivity.this, MainActivity.class));
             }
 
             @Override
