@@ -16,6 +16,7 @@ import com.example.admin.program2.model.Hr;
 import com.example.admin.program2.model.Login;
 import com.example.admin.program2.model.postHr;
 import com.example.admin.program2.service.HrService;
+import com.example.admin.program2.service.CheckinService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,8 +31,9 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity
 {
     private HrService service;
+    private CheckinService service2;
     private List<Hr> hr;
-    private String employee_id, mid, mname;
+    private String employee_id, mid, mname, persons;
 
     //TextView employee_name;
     Button checkin;
@@ -55,6 +57,9 @@ public class MainActivity extends AppCompatActivity
         IDs.setLoginUser(mname);
 
         employee_name.setText(IDs.getLoginUser());
+
+        service2 = ClientService.createService().create(CheckinService.class);
+        persons = SharedPreferenceEditor.LoadPreferences(this,"Persons","");
 
         //employee_name = (TextView) findViewById(R.id.employee_name);
         /*checkin = (Button) findViewById(R.id.checkin);
@@ -86,6 +91,29 @@ public class MainActivity extends AppCompatActivity
                         Toast.LENGTH_LONG).show();*//*
             }
         });*/
+    }
+
+    public void checkIn(final String persons, String id)
+    {
+        Call<HashMap<String, String>> call = service2.postCheckin(persons, id);
+        call.enqueue(new Callback<HashMap<String, String>>()
+        {
+            private String responseCode;
+            private String responseMessage;
+
+            @Override
+            public void onResponse(retrofit2.Call<HashMap<String, String>> call, Response<HashMap<String, String>> response)
+            {
+                final HashMap<String, String> data = response.body();
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<HashMap<String, String>> call, Throwable t)
+            {
+                Toast.makeText(MainActivity.this,"Error", Toast.LENGTH_LONG).show();
+            }
+
+        });
     }
 
     private void getHr(final String employee_id)
