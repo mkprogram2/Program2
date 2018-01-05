@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.example.admin.program2.R;
 import com.example.admin.program2.common.ClientService;
 import com.example.admin.program2.common.SharedPreferenceEditor;
+import com.example.admin.program2.common.IDs;
 import com.example.admin.program2.model.Hr;
 import com.example.admin.program2.model.Login;
 import com.example.admin.program2.model.postHr;
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity
 {
     private HrService service;
     private List<Hr> hr;
-    private String employee_id;
+    private String employee_id, mid, mname;
 
     //TextView employee_name;
     Button checkin;
@@ -47,25 +48,33 @@ public class MainActivity extends AppCompatActivity
 
         ButterKnife.bind(this);
 
+        mid = getIntent().getExtras().getString("id");
+        mname = getIntent().getExtras().getString("name");
+
+        IDs.setIdUser(mid);
+        IDs.setLoginUser(mname);
+
+        employee_name.setText(IDs.getLoginUser());
+
         //employee_name = (TextView) findViewById(R.id.employee_name);
-        checkin = (Button) findViewById(R.id.checkin);
+        /*checkin = (Button) findViewById(R.id.checkin);
 
         service = ClientService.createService().create(HrService.class);
 
         employee_id = SharedPreferenceEditor.LoadPreferences(this, "Employee Id", "");
 
-        getHr(employee_id);
+        getHr(employee_id);*/
 
         //checkin.setVisibility(View.INVISIBLE);
 
-        checkin.setOnClickListener (new View.OnClickListener()
+       /* checkin.setOnClickListener (new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                /*Hr tot = sethr();
+                *//*Hr tot = sethr();
 
-                postHr(employee_id, tot);*/
+                postHr(employee_id, tot);*//*
 
                 Hr uphr =  updatedataHr();
 
@@ -73,10 +82,10 @@ public class MainActivity extends AppCompatActivity
 
                 //deleteHr(employee_id,"4");
 
-                /*Toast.makeText(MainActivity.this, uphr.getName(),
-                        Toast.LENGTH_LONG).show();*/
+                *//*Toast.makeText(MainActivity.this, uphr.getName(),
+                        Toast.LENGTH_LONG).show();*//*
             }
-        });
+        });*/
     }
 
     private void getHr(final String employee_id)

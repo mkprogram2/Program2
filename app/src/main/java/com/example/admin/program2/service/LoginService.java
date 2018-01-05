@@ -16,7 +16,7 @@ import retrofit2.http.POST;
 
 public interface LoginService
 {
-    @POST("login/")
-    Call<HashMap<Integer, String>> postLogin(@Header("persons") String persons,
+    @POST("persons/login/")
+    Call<HashMap<String, String>> postLogin(@Header("persons") String persons,
                                              @Body Login login);
 }

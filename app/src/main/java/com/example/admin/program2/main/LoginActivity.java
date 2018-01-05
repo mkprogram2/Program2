@@ -3,6 +3,7 @@ package com.example.admin.program2.main;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,7 +30,7 @@ public class LoginActivity extends AppCompatActivity
 
     private LoginService service;
     private String persons;
-    private List<LoginActivity> listlogin;
+    private List<Login> listlogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -56,21 +57,49 @@ public class LoginActivity extends AppCompatActivity
 
     private void postlogin(String persons, Login logins)
     {
-        Call<HashMap<Integer, String>> call = service.postLogin(persons, logins);
-        call.enqueue(new Callback<HashMap<Integer, String>>()
+        Call<HashMap<String, String>> call = service.postLogin(persons, logins);
+        call.enqueue(new Callback<HashMap<String, String>>()
         {
+            private String responseCode;
+            private String responseMessage;
+
             @Override
-            public void onResponse(retrofit2.Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
+            public void onResponse(retrofit2.Call<HashMap<String, String>> call, Response<HashMap<String, String>> response)
             {
-                final HashMap<Integer, String> data = response.body();
-                Toast.makeText(LoginActivity.this, "Login Berhasil", Toast.LENGTH_LONG).show();
-                startActivity(new Intent (LoginActivity.this, MainActivity.class));
+                final HashMap<String, String> data = response.body();
+                //Toast.makeText(LoginActivity.this, "aa", Toast.LENGTH_SHORT).show();
+
+                for (String resultKey : data.keySet())
+                {
+                    responseCode = resultKey;
+                    responseMessage = data.get(resultKey);
+                    Log.d("RESPONSE FROM LOGIN", responseMessage);
+
+                    if (responseCode.equals("name"))
+                    {
+                        String[] parts = responseMessage.split(";");
+
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.putExtra("id", parts[0]);
+                        intent.putExtra("name", parts[0]);
+
+                    //    Toast.makeText(LoginActivity.this, responseCode + " " + parts[0], Toast.LENGTH_LONG).show();
+
+                    //    Toast.makeText(LoginActivity.this, "Login Berhasil", Toast.LENGTH_LONG).show();
+                        startActivity(intent);
+                    }
+                    else
+                    {
+                        Toast.makeText(LoginActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
 
             @Override
-            public void onFailure(retrofit2.Call<HashMap<Integer, String>> call, Throwable t)
+            public void onFailure(retrofit2.Call<HashMap<String, String>> call, Throwable t)
             {
-                Toast.makeText(LoginActivity.this,"Salah Pake Ini", Toast.LENGTH_LONG).show();
+                setFocus();
+                Toast.makeText(LoginActivity.this,"Username Atau Password Salah", Toast.LENGTH_LONG).show();
             }
 
         });
@@ -82,5 +111,11 @@ public class LoginActivity extends AppCompatActivity
         login.setId(password.getText().toString());
         login.setName(username.getText().toString());
         return login;
+    }
+
+    private void setFocus()
+    {
+        username.setText("");
+        password.setText("");
     }
 }
