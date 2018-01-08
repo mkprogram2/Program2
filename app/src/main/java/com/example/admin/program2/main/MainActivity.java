@@ -72,14 +72,15 @@ public class MainActivity extends AppCompatActivity
 
         //checkin.setVisibility(View.INVISIBLE);
 
-       /* checkin.setOnClickListener (new View.OnClickListener()
+        checkin.setOnClickListener (new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                *//*Hr tot = sethr();
+                checkIn(persons, mid);
+                /*Hr tot = sethr();
 
-                postHr(employee_id, tot);*//*
+                postHr(employee_id, tot);
 
                 Hr uphr =  updatedataHr();
 
@@ -87,10 +88,10 @@ public class MainActivity extends AppCompatActivity
 
                 //deleteHr(employee_id,"4");
 
-                *//*Toast.makeText(MainActivity.this, uphr.getName(),
-                        Toast.LENGTH_LONG).show();*//*
+                Toast.makeText(MainActivity.this, uphr.getName(),
+                        Toast.LENGTH_LONG).show();*/
             }
-        });*/
+        });
     }
 
     public void checkIn(final String persons, String id)
