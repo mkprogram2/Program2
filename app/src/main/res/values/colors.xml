@@ -5,7 +5,7 @@
     <color name="colorAccent">#FF4081</color>
 
     <!--Gray-->
-    <color name="gray100">#F5F5F5</color>
+    <color name="gray100">#f5f5f5</color>
     <color name="gray200">#EEEEEE</color>
     <color name="gray300">#E0E0E0</color>
     <color name="gray400">#BDBDBD</color>
@@ -19,7 +19,7 @@
 
     <color name="teal">#1DE9B6</color>
     <color name="light_green">#00E676</color>
-    <color name="blue">#4FC3F7</color>
+    <color name="blue">#4fc3f7</color>
     <color name="blue_gray">#90A4AE</color>
     <color name="deep_purple">#7E57C2</color>
 
