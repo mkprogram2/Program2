@@ -29,7 +29,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".main.MainActivity" />
-        <activity android:name=".main.WorkhoursActivity"></activity>
+        <activity android:name=".main.WorkhoursActivity" />
+        <activity android:name=".main.CalendarActivity"></activity>
     </application>
 
 </manifest>

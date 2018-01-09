@@ -13,6 +13,7 @@ import com.example.admin.program2.common.ClientService;
 import com.example.admin.program2.common.SharedPreferenceEditor;
 import com.example.admin.program2.common.IDs;
 import com.example.admin.program2.model.Hr;
+import com.example.admin.program2.model.person;
 import com.example.admin.program2.model.Login;
 import com.example.admin.program2.model.postHr;
 import com.example.admin.program2.service.HrService;
@@ -33,14 +34,22 @@ public class MainActivity extends AppCompatActivity
     private HrService service;
     private CheckinService service2;
     private List<Hr> hr;
-    private String employee_id, mid, mname, persons;
+    private String employee_id, mid, mname, mshift, persons;
 
     //TextView employee_name;
-    Button checkin;
+    //Button checkin;
     /*private List<LoginActivity> login;
     private postHr posthr;*/
     @BindView(R.id.employee_name)
      TextView employee_name;
+    @BindView(R.id.kehadiran)
+    TextView kehadiran;
+    @BindView(R.id.calendar)
+    Button calendar;
+    @BindView(R.id.checkin)
+    Button checkin;
+    @BindView(R.id.workhours)
+    Button workhours;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,9 +61,15 @@ public class MainActivity extends AppCompatActivity
 
         mid = getIntent().getExtras().getString("id");
         mname = getIntent().getExtras().getString("name");
+        mshift = getIntent().getExtras().getString("shiftid");
 
         IDs.setIdUser(mid);
         IDs.setLoginUser(mname);
+
+        person person = new person();
+        person.setId(mid);
+        person.setName(mname);
+        person.setShiftid(mshift);
 
         employee_name.setText(IDs.getLoginUser());
 
@@ -62,9 +77,7 @@ public class MainActivity extends AppCompatActivity
         persons = SharedPreferenceEditor.LoadPreferences(this,"Persons","");
 
         //employee_name = (TextView) findViewById(R.id.employee_name);
-        /*checkin = (Button) findViewById(R.id.checkin);
-
-        service = ClientService.createService().create(HrService.class);
+        /*service = ClientService.createService().create(HrService.class);
 
         employee_id = SharedPreferenceEditor.LoadPreferences(this, "Employee Id", "");
 
@@ -92,6 +105,20 @@ public class MainActivity extends AppCompatActivity
                         Toast.LENGTH_LONG).show();*/
             }
         });
+
+        calendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,CalendarActivity.class));
+            }
+        });
+
+        workhours.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, WorkhoursActivity.class));
+            }
+        });
     }
 
     public void checkIn(final String persons, String id)
@@ -106,6 +133,7 @@ public class MainActivity extends AppCompatActivity
             public void onResponse(retrofit2.Call<HashMap<String, String>> call, Response<HashMap<String, String>> response)
             {
                 final HashMap<String, String> data = response.body();
+                kehadiran.setText("Anda Luar Biasa");
             }
 
             @Override

@@ -50,6 +50,7 @@ public class LoginActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
+                //startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 Login plog = setlogin();
                 postlogin(persons, plog);
             }
@@ -78,6 +79,7 @@ public class LoginActivity extends AppCompatActivity
                     responseCode = resultKey;
                     responseMessage = data.get(resultKey);
                     Log.d("RESPONSE FROM LOGIN", responseMessage);
+                    Log.d("Response Code", responseCode);
 
                     String[] parts = responseMessage.split(";");
 
@@ -89,18 +91,33 @@ public class LoginActivity extends AppCompatActivity
                     {
                         intent.putExtra("name", parts[0]);
                     }
-                    else
+                    else if (responseCode.equals("shiftid"))
+                    {
+                        intent.putExtra("shiftid", parts[0]);
+                    }
+                    else if (responseCode.equals("role"))
+                    {
+                        if (responseMessage.equals("1"))
+                        {
+                            startActivity(intent);
+                        }
+                        else
+                        {
+                            Toast.makeText(LoginActivity.this, "Admin Cuy", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    /*else
                     {
                         Toast.makeText(LoginActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
-                    }
+                    }*/
                 }
-                startActivity(intent);
+                //startActivity(intent);
             }
 
             @Override
             public void onFailure(retrofit2.Call<HashMap<String, String>> call, Throwable t)
             {
-                setFocus();
+                //setFocus();
                 Toast.makeText(LoginActivity.this,"Username Atau Password Salah", Toast.LENGTH_LONG).show();
             }
 
@@ -110,8 +127,8 @@ public class LoginActivity extends AppCompatActivity
     private Login setlogin()
     {
         Login login = new Login();
-        login.setId(password.getText().toString());
         login.setName(username.getText().toString());
+        login.setPassword(password.getText().toString());
         return login;
     }
 

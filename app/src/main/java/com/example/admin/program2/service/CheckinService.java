@@ -15,7 +15,7 @@ import retrofit2.http.POST;
 
 public interface CheckinService
 {
-    @POST("persons/login/")
+    @POST("workhours/checkin/")
     Call<HashMap<String, String>> postCheckin(@Header("persons") String persons,
                                             @Body String id);
 }
