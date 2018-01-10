@@ -10,7 +10,7 @@ public class person
     public String name;
     public String password;
     public int role;
-    public String shiftid;
+    public Integer shiftid;
 
     public String getId() { return id; }
 
@@ -28,7 +28,7 @@ public class person
 
     public void setRole(Integer role) { this.role = role; }
 
-    public String getShitid() { return shiftid; }
+    public Integer getShitid() { return shiftid; }
 
-    public void  setShiftid(String shiftid) {this.shiftid = shiftid; }
+    public void  setShiftid(Integer shiftid) {this.shiftid = shiftid; }
 }

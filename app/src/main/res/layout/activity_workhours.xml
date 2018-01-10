@@ -59,7 +59,7 @@
             android:paddingBottom="40dp">
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/masuk"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -70,7 +70,7 @@
                 android:textStyle="bold" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/keluar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -86,6 +86,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingBottom="100dp">
+
+            <TextView
+                android:id="@+id/kehadiran"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Kehadiran"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -139,19 +147,6 @@
                     android:text=""
                     android:focusable="false"/>
             </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/button3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableTop="@drawable/ic_checkout"
-                android:text="Check Out" />
         </LinearLayout>
 
     </LinearLayout>

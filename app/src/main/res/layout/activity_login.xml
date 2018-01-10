@@ -8,6 +8,9 @@
     tools:context="com.example.admin.program2.main.LoginActivity"
     tools:showIn="@layout/activity_login">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,7 +20,7 @@
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="LOGIN"
+            android:text="@string/login"
             android:textSize="30dp"
             android:textAlignment="center"
             android:paddingTop="100dp"
@@ -82,4 +85,6 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    </ScrollView>
 </android.support.constraint.ConstraintLayout>

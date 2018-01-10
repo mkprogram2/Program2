@@ -62,8 +62,7 @@ public class LoginActivity extends AppCompatActivity
         Call<HashMap<String, String>> call = service.postLogin(persons, logins);
         call.enqueue(new Callback<HashMap<String, String>>()
         {
-            private String responseCode;
-            private String responseMessage , idd, namee;
+            private String responseCode, responseMessage;
 
             @Override
             public void onResponse(retrofit2.Call<HashMap<String, String>> call, Response<HashMap<String, String>> response)
@@ -106,12 +105,7 @@ public class LoginActivity extends AppCompatActivity
                             Toast.makeText(LoginActivity.this, "Admin Cuy", Toast.LENGTH_LONG).show();
                         }
                     }
-                    /*else
-                    {
-                        Toast.makeText(LoginActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
-                    }*/
                 }
-                //startActivity(intent);
             }
 
             @Override
