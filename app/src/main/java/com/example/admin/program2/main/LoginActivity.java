@@ -131,7 +131,7 @@ public class LoginActivity extends AppCompatActivity
             public void onFailure(retrofit2.Call<person> call, Throwable t)
             {
                 //setFocus();
-                Toast.makeText(LoginActivity.this,t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "Username Atau Password Salah", Toast.LENGTH_LONG).show();
             }
 
         });

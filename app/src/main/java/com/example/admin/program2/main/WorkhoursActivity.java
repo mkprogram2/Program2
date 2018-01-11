@@ -20,10 +20,10 @@ import butterknife.ButterKnife;
 public class WorkhoursActivity extends AppCompatActivity
 {
 
-    private String workstart, workstartinterval, workend, interval_work;
+    private String workstart, workstartinterval, interval_work;
     private Long workstart_time, workstartinterval_time;
-    private String[] waktu_shift, waktu_kerja;
-    private Integer jam_pulang_shift, menit_pulang_shift, jam_pulang, menit_pulang, selisih_jam, selisih_menit;
+    private String[] waktu_shift, waktu_kerja, waktu_terlambat;
+    private Integer jam_pulang_shift, menit_pulang_shift, jam_pulang, menit_pulang;
 
     @BindView(R.id.masuk)
     Button masuk;
@@ -67,14 +67,16 @@ public class WorkhoursActivity extends AppCompatActivity
             jam_pulang = Integer.parseInt(waktu_kerja[0]) + jam_pulang_shift;
             menit_pulang = Integer.parseInt(waktu_kerja[1]) + menit_pulang_shift;
 
+            waktu_terlambat = getDate(workstartinterval_time).split(":");
+
 
             if (workstartinterval_time < 0)
             {
                 /*SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm");
                 simpleDateFormat.parse(workstartinterval);*/
-                Toast.makeText(WorkhoursActivity.this, workstartinterval, Toast.LENGTH_LONG).show();
+                //Toast.makeText(WorkhoursActivity.this, workstartinterval, Toast.LENGTH_LONG).show();
                 keluar.setText(jam_pulang + ":" + menit_pulang);
-                kehadiran.setText("Terlambat " + getDate(workstartinterval_time));
+                kehadiran.setText("Terlambat " + Integer.parseInt(waktu_terlambat[0]) + " Jam : " + Integer.parseInt(waktu_terlambat[1]) + " Menit");
             }
             else
             {

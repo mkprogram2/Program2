@@ -19,6 +19,7 @@ import com.example.admin.program2.model.Login;
 import com.example.admin.program2.model.postHr;
 import com.example.admin.program2.service.HrService;
 import com.example.admin.program2.service.CheckinService;
+import com.example.admin.program2.service.WorkhourService;
 
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity
 {
     private HrService service;
     private CheckinService service2;
+    private WorkhourService service3;
     private person person;
     private List<Hr> hr;
     public static String mid, mname, shift_workstart, shift_workend, interval_work, workstart, workstart_interval;
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity
     private Timestamp timestamp;
     //private Long time_stamp_server = new Long(1515573272749L);
     private Long time_stamp_checkin;
+    private Integer status_checkin = 0;
 
     //TextView employee_name;
     //Button checkin;
@@ -85,8 +88,6 @@ public class MainActivity extends AppCompatActivity
         shift_workstart = getIntent().getExtras().getString("shift_workstart");
         shift_workend = getIntent().getExtras().getString("shift_workend");
 
-        //interval_work = shift_workend - shift_workstart;
-
         try{
             SimpleDateFormat date = new SimpleDateFormat("hh:mm");
             Date tglAwal = (Date) date.parse(shift_workstart);
@@ -96,19 +97,18 @@ public class MainActivity extends AppCompatActivity
             interval_work = String.format("%02d:%02d",TimeUnit.MILLISECONDS.toHours(bedaHari),
                     TimeUnit.MILLISECONDS.toMinutes(bedaHari) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(bedaHari)));
 
-            employee_name.setText(mid);
+            employee_name.setText(mname);
 
         }catch(Exception e){}
 
 
-            IDs.setIdUser(mid);
+        IDs.setIdUser(mid);
         IDs.setLoginUser(mname);
 
-        Log.d("RESPONSE WEBID: ", mid);
-
-        //employee_name.setText("");
+        Log.d("RESPONSE WEBID: ", mname);
 
         service2 = ClientService.createService().create(CheckinService.class);
+        service3 = ClientService.createService().create(WorkhourService.class);
         persons = SharedPreferenceEditor.LoadPreferences(this,"Persons","");
 
         String strRequestBody = mid;
@@ -154,7 +154,8 @@ public class MainActivity extends AppCompatActivity
         workhours.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, WorkhoursActivity.class));
+                workhour(persons, mid);
+                //startActivity(new Intent(MainActivity.this, WorkhoursActivity.class));
             }
         });
 
@@ -166,13 +167,12 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    public void checkIn(final String persons, RequestBody id)
+    private void checkIn(final String persons, RequestBody id)
     {
         Call<HashMap<String, String>> call = service2.postCheckin(persons, id);
         call.enqueue(new Callback<HashMap<String, String>>()
         {
-            private String responseCode;
-            private String responseMessage;
+            private String responseCode, responseMessage;
 
             @Override
             public void onResponse(retrofit2.Call<HashMap<String, String>> call, Response<HashMap<String, String>> response)
@@ -187,34 +187,39 @@ public class MainActivity extends AppCompatActivity
                 {
                     responseCode = resultKey;
                     responseMessage = data.get(resultKey);
-                    if (responseCode == null || responseMessage == null)
+                    if (responseCode != null)
                     {
-                        Log.d("teh", "haaa");
-                    }
-                    else
-                    {
-                        String[] parts = responseMessage.split(";");
-                        Log.d("RESPONSE FROM LOGIN", responseMessage);
-                        Log.d("Response Code", responseCode);
-                        Log.d("walaaa", parts[0]);
-                        if (responseCode.equals("workstart"))
+                        if (responseMessage != null)
                         {
-                            intent.putExtra("workstart", parts[0]);
-                            workstart = parts[0].toString();
-                            /*time_stamp_checkin = Long.parseLong(parts[0]);
-                            kehadiran.setText(getDate(time_stamp_checkin));*/
+                            String[] parts = responseMessage.split(";");
+                            Log.d("RESPONSE FROM LOGIN", responseMessage);
+                            Log.d("Response Code", responseCode);
+                            Log.d("walaaa", parts[0]);
+                            if (responseCode.equals("personid"))
+                            {
+                                status_checkin = 1;
+                            }
+                            else if (responseCode.equals("workstart"))
+                            {
+                                intent.putExtra("workstart", parts[0]);
+                                workstart = parts[0].toString();
+                            }
+                            else if(responseCode.equals("workstartinterval"))
+                            {
+                                workstart_interval = parts[0].toString();
+                                intent.putExtra("workstartinterval", parts[0]);
+                            }
                         }
-                        else if(responseCode.equals("workstartinterval"))
+                        else
                         {
-                            /*time_stamp_checkin = Long.parseLong(parts[0]);
-                            kehadiran.setText(parts[0]);*/
-                            workstart_interval = parts[0].toString();
-
-                            intent.putExtra("workstartinterval", parts[0]);
+                            if (responseCode.equals("personid"))
+                            {
+                                status_checkin = 0;
+                            }
                         }
                     }
                 }
-                if (responseCode == null || responseMessage == null)
+                if (status_checkin == 0)
                 {
                     Toast.makeText(MainActivity.this, "Anda Telah CheckIn Hari Ini", Toast.LENGTH_LONG).show();
                 }
@@ -255,6 +260,78 @@ public class MainActivity extends AppCompatActivity
             {
                 kehadiran.setText(t.getMessage());
                 Toast.makeText(MainActivity.this,"Error", Toast.LENGTH_LONG).show();
+            }
+
+        });
+
+    }
+
+    private void workhour (final String persons, String id)
+    {
+        Call<HashMap<String, String>> call = service3.getCheckworkhour(persons, id);
+        call.enqueue(new Callback<HashMap<String, String>>()
+        {
+            private String responseCode, responseMessage;
+
+            @Override
+            public void onResponse(retrofit2.Call<HashMap<String, String>> call, Response<HashMap<String, String>> response)
+            {
+                final HashMap<String, String> data = response.body();
+
+                Log.d("aaa",data.keySet().toString());
+
+                Intent intent = new Intent(MainActivity.this, WorkhoursActivity.class);
+
+                for (String resultKey : data.keySet())
+                {
+                    responseCode = resultKey;
+                    responseMessage = data.get(resultKey);
+                    if (responseCode != null)
+                    {
+                        if (responseMessage != null)
+                        {
+                            String[] parts = responseMessage.split(";");
+                            Log.d("RESPONSE FROM LOGIN", responseMessage);
+                            Log.d("Response Code", responseCode);
+                            Log.d("walaaa", parts[0]);
+                            if (responseCode.equals("personid"))
+                            {
+                                status_checkin = 1;
+                            }
+                            else if (responseCode.equals("workstart"))
+                            {
+                                intent.putExtra("workstart", parts[0]);
+                                workstart = parts[0].toString();
+                            }
+                            else if(responseCode.equals("workstartinterval"))
+                            {
+                                workstart_interval = parts[0].toString();
+                                intent.putExtra("workstartinterval", parts[0]);
+                            }
+                        }
+                        else
+                        {
+                            if (responseCode.equals("personid"))
+                            {
+                                status_checkin = 0;
+                            }
+                        }
+                    }
+                }
+                if (status_checkin == 0)
+                {
+                    Toast.makeText(MainActivity.this, "Silahkan CheckIn Terlebih Dahulu", Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<HashMap<String, String>> call, Throwable t)
+            {
+                Toast.makeText(MainActivity.this,"Silahkan CheckIn Terlebih Dahulu", Toast.LENGTH_LONG).show();
             }
 
         });
