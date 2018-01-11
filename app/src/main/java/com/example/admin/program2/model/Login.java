@@ -1,5 +1,8 @@
 package com.example.admin.program2.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by admin on 1/3/2018.
  */
@@ -15,5 +18,5 @@ public class Login
 
     public String getPassword() { return password; }
 
-    public void setPassword(String password) { this.password = password; }
+    public void setPassword (String password) { this.password = password; }
 }

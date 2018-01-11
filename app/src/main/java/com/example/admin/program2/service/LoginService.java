@@ -2,8 +2,10 @@ package com.example.admin.program2.service;
 
 
 import com.example.admin.program2.model.Login;
+import com.example.admin.program2.model.person;
 
 import java.util.HashMap;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -17,6 +19,6 @@ import retrofit2.http.POST;
 public interface LoginService
 {
     @POST("persons/login/")
-    Call<HashMap<String, String>> postLogin(@Header("persons") String persons,
-                                             @Body Login login);
+    Call<person> postLogin(@Header("persons") String persons,
+                           @Body person login);
 }

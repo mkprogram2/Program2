@@ -22,11 +22,14 @@ import com.example.admin.program2.service.CheckinService;
 
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import android.widget.TextView;
 
@@ -42,9 +45,11 @@ public class MainActivity extends AppCompatActivity
 {
     private HrService service;
     private CheckinService service2;
+    private person person;
     private List<Hr> hr;
-    private String employee_id, mid, mname, persons, tgl;
-    private Integer mshift;
+    public static String mid, mname, shift_workstart, shift_workend, interval_work, workstart, workstart_interval;
+    public static Integer mshiftid;
+    private String employee_id, persons, tgl;
     private Timestamp timestamp;
     //private Long time_stamp_server = new Long(1515573272749L);
     private Long time_stamp_checkin;
@@ -54,7 +59,7 @@ public class MainActivity extends AppCompatActivity
     /*private List<LoginActivity> login;
     private postHr posthr;*/
     @BindView(R.id.employee_name)
-     TextView employee_name;
+    TextView employee_name;
     @BindView(R.id.kehadiran)
     TextView kehadiran;
     @BindView(R.id.calendar)
@@ -76,19 +81,32 @@ public class MainActivity extends AppCompatActivity
 
         mid = getIntent().getExtras().getString("id");
         mname = getIntent().getExtras().getString("name");
-        mshift = Integer.parseInt(getIntent().getExtras().getString("shiftid")) ;
+        mshiftid = Integer.parseInt(getIntent().getExtras().getString("shiftid")) ;
+        shift_workstart = getIntent().getExtras().getString("shift_workstart");
+        shift_workend = getIntent().getExtras().getString("shift_workend");
 
-        IDs.setIdUser(mid);
+        //interval_work = shift_workend - shift_workstart;
+
+        try{
+            SimpleDateFormat date = new SimpleDateFormat("hh:mm");
+            Date tglAwal = (Date) date.parse(shift_workstart);
+            Date tglAkhir = (Date) date.parse(shift_workend);
+
+            long bedaHari = Math.abs(tglAkhir.getTime() - tglAwal.getTime());
+            interval_work = String.format("%02d:%02d",TimeUnit.MILLISECONDS.toHours(bedaHari),
+                    TimeUnit.MILLISECONDS.toMinutes(bedaHari) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(bedaHari)));
+
+            employee_name.setText(mid);
+
+        }catch(Exception e){}
+
+
+            IDs.setIdUser(mid);
         IDs.setLoginUser(mname);
 
         Log.d("RESPONSE WEBID: ", mid);
 
-        final person person = new person();
-        person.setId(mid);
-        person.setName(mname);
-        person.setShiftid(mshift);
-
-        employee_name.setText(IDs.getLoginUser());
+        //employee_name.setText("");
 
         service2 = ClientService.createService().create(CheckinService.class);
         persons = SharedPreferenceEditor.LoadPreferences(this,"Persons","");
@@ -104,8 +122,6 @@ public class MainActivity extends AppCompatActivity
         getHr(employee_id);*/
 
         //checkin.setVisibility(View.INVISIBLE);
-
-        //kehadiran.setText(getDate(time_stamp_server));
 
         checkin.setOnClickListener (new View.OnClickListener()
         {
@@ -184,6 +200,7 @@ public class MainActivity extends AppCompatActivity
                         if (responseCode.equals("workstart"))
                         {
                             intent.putExtra("workstart", parts[0]);
+                            workstart = parts[0].toString();
                             /*time_stamp_checkin = Long.parseLong(parts[0]);
                             kehadiran.setText(getDate(time_stamp_checkin));*/
                         }
@@ -191,13 +208,15 @@ public class MainActivity extends AppCompatActivity
                         {
                             /*time_stamp_checkin = Long.parseLong(parts[0]);
                             kehadiran.setText(parts[0]);*/
+                            workstart_interval = parts[0].toString();
+
                             intent.putExtra("workstartinterval", parts[0]);
                         }
                     }
                 }
                 if (responseCode == null || responseMessage == null)
                 {
-
+                    Toast.makeText(MainActivity.this, "Anda Telah CheckIn Hari Ini", Toast.LENGTH_LONG).show();
                 }
                 else
                 {
@@ -244,8 +263,21 @@ public class MainActivity extends AppCompatActivity
 
     private String getDate(long time_stamp_server) {
 
-        SimpleDateFormat formatter = new SimpleDateFormat("hh:mm");
+        SimpleDateFormat formatter = new SimpleDateFormat("hh:mm:ss");
         return formatter.format(time_stamp_server);
+    }
+
+    private Date setdate(String workstartinterval)
+    {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
+        Date a = null;
+        try {
+            a =  simpleDateFormat.parse(workstartinterval);
+        } catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+        return a;
     }
 
     private void getHr(final String employee_id)

@@ -7,10 +7,11 @@ package com.example.admin.program2.model;
 public class person
 {
     public String id;
-    public String name;
+    public static String name;
     public String password;
     public int role;
-    public Integer shiftid;
+    public Double salary;
+    public Shift Shift;
 
     public String getId() { return id; }
 
@@ -28,7 +29,7 @@ public class person
 
     public void setRole(Integer role) { this.role = role; }
 
-    public Integer getShitid() { return shiftid; }
+    public Double getSalary () { return salary; }
 
-    public void  setShiftid(Integer shiftid) {this.shiftid = shiftid; }
+    public void setSalary (Double salary) { this.salary = salary;}
 }

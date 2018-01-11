@@ -13,6 +13,7 @@ import com.example.admin.program2.R;
 import com.example.admin.program2.common.ClientService;
 import com.example.admin.program2.common.SharedPreferenceEditor;
 import com.example.admin.program2.model.Login;
+import com.example.admin.program2.model.person;
 import com.example.admin.program2.service.LoginService;
 
 import java.util.ArrayList;
@@ -51,27 +52,45 @@ public class LoginActivity extends AppCompatActivity
             public void onClick(View v)
             {
                 //startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                Login plog = setlogin();
-                postlogin(persons, plog);
+                person personlogin = setlogin();
+                postlogin(persons, personlogin);
             }
         });
     }
 
-    private void postlogin(String persons, Login logins)
+    private void postlogin(String persons, person logins)
     {
-        Call<HashMap<String, String>> call = service.postLogin(persons, logins);
-        call.enqueue(new Callback<HashMap<String, String>>()
+        Call<person> call = service.postLogin(persons, logins);
+        call.enqueue(new Callback<person>()
         {
             private String responseCode, responseMessage;
 
             @Override
-            public void onResponse(retrofit2.Call<HashMap<String, String>> call, Response<HashMap<String, String>> response)
+            public void onResponse(retrofit2.Call<person> call, Response<person> response)
             {
-                final HashMap<String, String> data = response.body();
-
-                Log.d("aaa",data.keySet().toString());
+                final person data = response.body();
+                Toast.makeText(LoginActivity.this,data.getName().toString(), Toast.LENGTH_LONG).show();
 
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.putExtra("id", data.getId());
+                intent.putExtra("name", data.getName());
+                intent.putExtra("role", data.getRole());
+                intent.putExtra("shiftid", data.Shift.getId());
+                intent.putExtra("shift_workstart",data.Shift.getWorkstart());
+                intent.putExtra("shift_workend", data.Shift.getWorkend());
+
+                if (data.getRole() == 1)
+                {
+                    startActivity(intent);
+                }
+                else
+                {
+                    Toast.makeText(LoginActivity.this, "Admin Cuy", Toast.LENGTH_LONG).show();
+                }
+
+                Log.d("data",data.toString());
+                /*Log.d("aaa",data.keySet().toString());
+
 
                 for (String resultKey : data.keySet())
                 {
@@ -105,25 +124,25 @@ public class LoginActivity extends AppCompatActivity
                             Toast.makeText(LoginActivity.this, "Admin Cuy", Toast.LENGTH_LONG).show();
                         }
                     }
-                }
+                }*/
             }
 
             @Override
-            public void onFailure(retrofit2.Call<HashMap<String, String>> call, Throwable t)
+            public void onFailure(retrofit2.Call<person> call, Throwable t)
             {
                 //setFocus();
-                Toast.makeText(LoginActivity.this,"Username Atau Password Salah", Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this,t.getMessage(), Toast.LENGTH_LONG).show();
             }
 
         });
     }
 
-    private Login setlogin()
+    private person setlogin()
     {
-        Login login = new Login();
-        login.setName(username.getText().toString());
-        login.setPassword(password.getText().toString());
-        return login;
+        person person = new person();
+        person.setName(username.getText().toString());
+        person.setPassword(password.getText().toString());
+        return person;
     }
 
     private void setFocus()

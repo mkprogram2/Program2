@@ -64,7 +64,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/gray100"
-                android:text="08 00"
                 android:textColor="@color/blue"
                 android:textSize="30sp"
                 android:textStyle="bold" />
@@ -75,7 +74,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/gray100"
-                android:text="17 00"
                 android:textColor="@color/blue"
                 android:textSize="30sp"
                 android:textStyle="bold" />
