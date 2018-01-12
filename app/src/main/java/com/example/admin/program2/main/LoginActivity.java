@@ -69,12 +69,13 @@ public class LoginActivity extends AppCompatActivity
             public void onResponse(retrofit2.Call<person> call, Response<person> response)
             {
                 final person data = response.body();
-                Toast.makeText(LoginActivity.this,data.getName().toString(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(LoginActivity.this,data.getSalary().toString(), Toast.LENGTH_LONG).show();
 
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.putExtra("id", data.getId());
                 intent.putExtra("name", data.getName());
                 intent.putExtra("role", data.getRole());
+                intent.putExtra("salary", data.getSalary());
                 intent.putExtra("shiftid", data.Shift.getId());
                 intent.putExtra("shift_workstart",data.Shift.getWorkstart());
                 intent.putExtra("shift_workend", data.Shift.getWorkend());
@@ -89,42 +90,6 @@ public class LoginActivity extends AppCompatActivity
                 }
 
                 Log.d("data",data.toString());
-                /*Log.d("aaa",data.keySet().toString());
-
-
-                for (String resultKey : data.keySet())
-                {
-                    responseCode = resultKey;
-                    responseMessage = data.get(resultKey);
-                    Log.d("RESPONSE FROM LOGIN", responseMessage);
-                    Log.d("Response Code", responseCode);
-
-                    String[] parts = responseMessage.split(";");
-
-                    if (responseCode.equals("id"))
-                    {
-                        intent.putExtra("id", parts[0]);
-                    }
-                    else if (responseCode.equals("name"))
-                    {
-                        intent.putExtra("name", parts[0]);
-                    }
-                    else if (responseCode.equals("shiftid"))
-                    {
-                        intent.putExtra("shiftid", parts[0]);
-                    }
-                    else if (responseCode.equals("role"))
-                    {
-                        if (responseMessage.equals("1"))
-                        {
-                            startActivity(intent);
-                        }
-                        else
-                        {
-                            Toast.makeText(LoginActivity.this, "Admin Cuy", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                }*/
             }
 
             @Override

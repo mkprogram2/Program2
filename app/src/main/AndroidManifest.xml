@@ -31,7 +31,7 @@
         <activity android:name=".main.MainActivity" />
         <activity android:name=".main.WorkhoursActivity" />
         <activity android:name=".main.CalendarActivity" />
-        <activity android:name=".main.PaymentActivity"></activity>
+        <activity android:name=".main.SalaryActivity"></activity>
     </application>
 
 </manifest>

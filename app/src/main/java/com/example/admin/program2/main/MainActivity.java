@@ -3,7 +3,6 @@ package com.example.admin.program2.main;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -13,23 +12,13 @@ import com.example.admin.program2.R;
 import com.example.admin.program2.common.ClientService;
 import com.example.admin.program2.common.SharedPreferenceEditor;
 import com.example.admin.program2.common.IDs;
-import com.example.admin.program2.model.Hr;
-import com.example.admin.program2.model.person;
-import com.example.admin.program2.model.Login;
-import com.example.admin.program2.model.postHr;
-import com.example.admin.program2.service.HrService;
 import com.example.admin.program2.service.CheckinService;
+import com.example.admin.program2.service.SalaryService;
 import com.example.admin.program2.service.WorkhourService;
 
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import android.widget.TextView;
@@ -44,23 +33,14 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
 {
-    private HrService service;
     private CheckinService service2;
     private WorkhourService service3;
-    private person person;
-    private List<Hr> hr;
     public static String mid, mname, shift_workstart, shift_workend, interval_work, workstart, workstart_interval;
+    public static double gross_salary;
     public static Integer mshiftid;
-    private String employee_id, persons, tgl;
-    private Timestamp timestamp;
-    //private Long time_stamp_server = new Long(1515573272749L);
-    private Long time_stamp_checkin;
+    private String persons;
     private Integer status_checkin = 0;
 
-    //TextView employee_name;
-    //Button checkin;
-    /*private List<LoginActivity> login;
-    private postHr posthr;*/
     @BindView(R.id.employee_name)
     TextView employee_name;
     @BindView(R.id.kehadiran)
@@ -86,9 +66,11 @@ public class MainActivity extends AppCompatActivity
 
         mid = getIntent().getExtras().getString("id");
         mname = getIntent().getExtras().getString("name");
+        gross_salary = getIntent().getExtras().getDouble("salary");
         mshiftid = Integer.parseInt(getIntent().getExtras().getString("shiftid")) ;
         shift_workstart = getIntent().getExtras().getString("shift_workstart");
         shift_workend = getIntent().getExtras().getString("shift_workend");
+        //Toast.makeText(MainActivity.this,gross_salary, Toast.LENGTH_LONG).show();
 
         try{
             SimpleDateFormat date = new SimpleDateFormat("hh:mm");
@@ -116,33 +98,12 @@ public class MainActivity extends AppCompatActivity
         String strRequestBody = mid;
         final RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"),strRequestBody);
 
-        //employee_name = (TextView) findViewById(R.id.employee_name);
-        /*service = ClientService.createService().create(HrService.class);
-
-        employee_id = SharedPreferenceEditor.LoadPreferences(this, "Employee Id", "");
-
-        getHr(employee_id);*/
-
-        //checkin.setVisibility(View.INVISIBLE);
-
         checkin.setOnClickListener (new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
                 checkIn(persons, requestBody);
-                /*Hr tot = sethr();
-
-                postHr(employee_id, tot);
-
-                Hr uphr =  updatedataHr();
-
-                updateHr(employee_id, uphr);
-
-                //deleteHr(employee_id,"4");
-
-                Toast.makeText(MainActivity.this, uphr.getName(),
-                        Toast.LENGTH_LONG).show();*/
             }
         });
 
@@ -170,7 +131,7 @@ public class MainActivity extends AppCompatActivity
         salary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(MainActivity.this, SalaryActivity.class));
             }
         });
     }
@@ -343,143 +304,5 @@ public class MainActivity extends AppCompatActivity
             }
 
         });
-
-    }
-
-    private void salary ()
-    {
-
-    }
-
-    private String getDate(long time_stamp_server) {
-
-        SimpleDateFormat formatter = new SimpleDateFormat("hh:mm:ss");
-        return formatter.format(time_stamp_server);
-    }
-
-    private Date setdate(String workstartinterval)
-    {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
-        Date a = null;
-        try {
-            a =  simpleDateFormat.parse(workstartinterval);
-        } catch (ParseException e)
-        {
-            e.printStackTrace();
-        }
-        return a;
-    }
-
-    private void getHr(final String employee_id)
-    {
-        Call<List<Hr>> call = service.getHr(employee_id);
-        call.enqueue(new Callback<List<Hr>>()
-        {
-            @Override
-            public void onResponse(Call<List<Hr>> call, Response<List<Hr>> response)
-            {
-                    hr = response.body();
-                    employee_name.setText(hr.get(0).getName());
-            }
-
-            @Override
-            public void onFailure(Call<List<Hr>> call, Throwable t)
-            {
-                employee_name.setText(t.getMessage());
-                Toast.makeText(MainActivity.this, t.getMessage(),
-                Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    private void postHr(String employee_id, Hr hrr)
-    {
-        Call<HashMap<Integer, String>> call = service.postHr(employee_id, hrr);
-        call.enqueue(new Callback<HashMap<Integer, String>>()
-        {
-            @Override
-            public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
-            {
-                //final HashMap<Integer, String> data = response.body();
-                Toast.makeText(MainActivity.this, "Tesssssssssssss", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
-            {
-                //Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-
-        });
-    }
-
-    private void updateHr(String employee_id, Hr uphr)
-    {
-        //Hr hr2;
-        Call<List<Hr>> call = service.updateHr(employee_id, uphr);
-        call.enqueue(new Callback<List<Hr>>()
-        {
-            private int responseCode;
-            private String responseMessage;
-
-            @Override
-            public void onResponse(Call<List<Hr>> call, Response<List<Hr>> response)
-            {
-                //final HashMap<Integer, String> data = response.body();
-                Toast.makeText(MainActivity.this, "Bisa", Toast.LENGTH_LONG).show();
-                /*for (int resultKey : data.keySet())
-                {
-                    responseCode = resultKey;
-                    responseMessage = data.get(resultKey);
-                    Log.d("RESPONSE WEBSERVICE: ", String.valueOf(responseCode) + responseMessage);
-
-                    Toast.makeText(MainActivity.this, responseMessage, Toast.LENGTH_SHORT).show();
-                }*/
-            }
-
-            @Override
-            public void onFailure(Call<List<Hr>> call, Throwable t)
-            {
-                Log.d(t.getMessage(), "onFailure: ");
-                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-
-        });
-    }
-
-    private void deleteHr(String employee_id, String id_employee)
-    {
-        Call<HashMap<Integer, String>> call = service.deleteHr(employee_id, id_employee);
-        call.enqueue(new Callback<HashMap<Integer, String>>()
-        {
-            @Override
-            public void onResponse(Call<HashMap<Integer, String>> call, Response<HashMap<Integer, String>> response)
-            {
-
-            }
-
-            @Override
-            public void onFailure(Call<HashMap<Integer, String>> call, Throwable t)
-            {
-
-            }
-
-        });
-    }
-
-    private Hr sethr()
-    {
-        Hr hrr = new Hr();
-        hrr.setName("ani anak baik");
-        hrr.setId("4");
-        return hrr;
-    }
-
-    private Hr updatedataHr()
-    {
-        Hr uphr = new Hr();
-        uphr.setId("4");
-        uphr.setName("Ivan jangan Nakal");
-        return  uphr;
     }
 }

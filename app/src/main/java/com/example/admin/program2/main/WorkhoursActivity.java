@@ -74,9 +74,6 @@ public class WorkhoursActivity extends AppCompatActivity
 
             if (workstartinterval_time < 0)
             {
-                /*SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm");
-                simpleDateFormat.parse(workstartinterval);*/
-                //Toast.makeText(WorkhoursActivity.this, workstartinterval, Toast.LENGTH_LONG).show();
                 keluar.setText(jam_pulang + ":" + menit_pulang);
                 kehadiran.setText("Terlambat " + telat_jam + " Jam : " + telat_menit + " Menit");
             }

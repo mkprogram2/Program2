@@ -7,10 +7,10 @@ package com.example.admin.program2.model;
 public class person
 {
     public String id;
-    public static String name;
+    public String name;
     public String password;
     public int role;
-    public Double salary;
+    public double salary;
     public Shift Shift;
 
     public String getId() { return id; }
@@ -25,11 +25,11 @@ public class person
 
     public void setPassword(String password) { this.password = password; }
 
+    public double getSalary () { return salary; }
+
+    public void setSalary (double salary) { this.salary = salary;}
+
     public Integer getRole() { return role; }
 
     public void setRole(Integer role) { this.role = role; }
-
-    public Double getSalary () { return salary; }
-
-    public void setSalary (Double salary) { this.salary = salary;}
 }
