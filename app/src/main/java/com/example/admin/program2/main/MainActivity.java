@@ -73,6 +73,8 @@ public class MainActivity extends AppCompatActivity
     Button workhours;
     @BindView(R.id.checkout)
     Button checkout;
+    @BindView(R.id.salary)
+    Button salary;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -155,7 +157,6 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 workhour(persons, mid);
-                //startActivity(new Intent(MainActivity.this, WorkhoursActivity.class));
             }
         });
 
@@ -163,6 +164,13 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 checkOut(persons, requestBody);
+            }
+        });
+
+        salary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }
@@ -335,6 +343,11 @@ public class MainActivity extends AppCompatActivity
             }
 
         });
+
+    }
+
+    private void salary ()
+    {
 
     }
 

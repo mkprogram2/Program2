@@ -121,13 +121,13 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/button5"
+                    android:id="@+id/salary"
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
                     android:layout_margin="5dp"
                     android:layout_weight=".40"
                     android:drawableTop="@drawable/ic_payments"
-                    android:text="Payment"
+                    android:text="Salary"
                     android:textAllCaps="false" />
 
                 <Button

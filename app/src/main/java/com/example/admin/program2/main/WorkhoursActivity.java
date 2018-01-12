@@ -22,8 +22,8 @@ public class WorkhoursActivity extends AppCompatActivity
 
     private String workstart, workstartinterval, interval_work;
     private Long workstart_time, workstartinterval_time;
-    private String[] waktu_shift, waktu_kerja, waktu_terlambat;
-    private Integer jam_pulang_shift, menit_pulang_shift, jam_pulang, menit_pulang;
+    private String[] waktu_shift, waktu_kerja, waktu_terlambat, telat_s;
+    private Integer jam_pulang_shift, menit_pulang_shift, jam_pulang, menit_pulang, telat_jam, telat_menit;
 
     @BindView(R.id.masuk)
     Button masuk;
@@ -39,12 +39,12 @@ public class WorkhoursActivity extends AppCompatActivity
         setContentView(R.layout.activity_workhours);
 
         ButterKnife.bind(this);
-/*
-        workstart = getIntent().getExtras().getString("workstart");
-        workstartinterval = getIntent().getExtras().getString("workstartinterval");*/
+        //workstart = getIntent().getExtras().getString("workstart");
+        workstartinterval = getIntent().getExtras().getString("workstartinterval");
+
         MainActivity main = new MainActivity();
         workstart = main.workstart;
-        workstartinterval = main.workstart_interval;
+        //workstartinterval = main.workstart_interval;
         interval_work = main.interval_work;
 
 
@@ -68,7 +68,9 @@ public class WorkhoursActivity extends AppCompatActivity
             menit_pulang = Integer.parseInt(waktu_kerja[1]) + menit_pulang_shift;
 
             waktu_terlambat = getDate(workstartinterval_time).split(":");
-
+            telat_s = workstartinterval.split("-");
+            telat_jam = Integer.parseInt(telat_s[1]) / 3600;
+            telat_menit = (Integer.parseInt(telat_s[1])  % 3600) / 60;
 
             if (workstartinterval_time < 0)
             {
@@ -76,7 +78,7 @@ public class WorkhoursActivity extends AppCompatActivity
                 simpleDateFormat.parse(workstartinterval);*/
                 //Toast.makeText(WorkhoursActivity.this, workstartinterval, Toast.LENGTH_LONG).show();
                 keluar.setText(jam_pulang + ":" + menit_pulang);
-                kehadiran.setText("Terlambat " + Integer.parseInt(waktu_terlambat[0]) + " Jam : " + Integer.parseInt(waktu_terlambat[1]) + " Menit");
+                kehadiran.setText("Terlambat " + telat_jam + " Jam : " + telat_menit + " Menit");
             }
             else
             {

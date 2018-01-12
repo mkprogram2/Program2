@@ -30,7 +30,8 @@
         </activity>
         <activity android:name=".main.MainActivity" />
         <activity android:name=".main.WorkhoursActivity" />
-        <activity android:name=".main.CalendarActivity"></activity>
+        <activity android:name=".main.CalendarActivity" />
+        <activity android:name=".main.PaymentActivity"></activity>
     </application>
 
 </manifest>
