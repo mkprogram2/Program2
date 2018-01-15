@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.example.admin.program2.R;
 import com.example.admin.program2.common.ClientService;
 import com.example.admin.program2.common.SharedPreferenceEditor;
+import com.example.admin.program2.main.admin.MainadminActivity;
 import com.example.admin.program2.model.Login;
 import com.example.admin.program2.model.person;
 import com.example.admin.program2.service.LoginService;
@@ -86,7 +87,7 @@ public class LoginActivity extends AppCompatActivity
                 }
                 else
                 {
-                    Toast.makeText(LoginActivity.this, "Admin Cuy", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(LoginActivity.this, MainadminActivity.class));
                 }
 
                 Log.d("data",data.toString());

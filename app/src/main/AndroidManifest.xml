@@ -31,7 +31,10 @@
         <activity android:name=".main.MainActivity" />
         <activity android:name=".main.WorkhoursActivity" />
         <activity android:name=".main.CalendarActivity" />
-        <activity android:name=".main.SalaryActivity"></activity>
+        <activity android:name=".main.SalaryActivity" />
+        <activity android:name=".main.admin.MainadminActivity" />
+        <activity android:name=".main.admin.RemunerationActivity" />
+        <activity android:name=".main.admin.EmployeeRecyclerActivity"></activity>
     </application>
 
 </manifest>

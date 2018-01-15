@@ -1,5 +1,6 @@
 package com.example.admin.program2.main;
 
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,9 @@ import com.example.admin.program2.common.SharedPreferenceEditor;
 import com.example.admin.program2.model.Shift;
 import com.example.admin.program2.model.Workhour;
 import com.example.admin.program2.service.SalaryService;
+import com.rackspira.kristiawan.rackmonthpicker.RackMonthPicker;
+import com.rackspira.kristiawan.rackmonthpicker.listener.DateMonthDialogListener;
+import com.rackspira.kristiawan.rackmonthpicker.listener.OnCancelMonthDialogListener;
 
 import org.w3c.dom.Text;
 
@@ -24,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,7 +39,7 @@ import retrofit2.Response;
 public class SalaryActivity extends AppCompatActivity {
 
     private SalaryService service4;
-    private String persons, g_salary, mid;
+    private String persons, g_salary, mid, months, yearss;
 
     @BindView(R.id.gross_salary)
     TextView gross_salary;
@@ -44,12 +49,10 @@ public class SalaryActivity extends AppCompatActivity {
     TextView absent_day;
     @BindView(R.id.net_salary)
     TextView net_salary;
+    @BindView(R.id.workdays)
+    TextView workdays;
     @BindView(R.id.salary)
     Button salary;
-    @BindView(R.id.year_spin)
-    Spinner year_spin;
-    @BindView(R.id.month_spin)
-    Spinner month_spin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,21 +68,30 @@ public class SalaryActivity extends AppCompatActivity {
         g_salary = setString(main.gross_salary);
         mid = main.mid;
 
-        ArrayList<String> years = new ArrayList<String>();
-        int thisYear = Calendar.getInstance().get(Calendar.YEAR);
-        for (int i = 2000; i <= thisYear; i++) {
-            years.add(Integer.toString(i));
-        }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, years);
+        final RackMonthPicker rackMonthPicker = new RackMonthPicker(SalaryActivity.this)
+                .setLocale(Locale.ENGLISH)
+                .setPositiveButton(new DateMonthDialogListener() {
+                    @Override
+                    public void onDateMonth(int month, int startDate, int endDate, int year, String monthLabel) {
+                         months = String.valueOf(month);
+                         yearss = String.valueOf(year);
 
-        year_spin.setAdapter(adapter);
+                        getSalary(persons, months, yearss, mid);
+                        getPresent(persons, months, yearss, mid);
+                        GetWorkdays(persons, months, yearss);
+                    }
+                })
+                .setNegativeButton(new OnCancelMonthDialogListener() {
+                    @Override
+                    public void onCancel(AlertDialog dialog) {
+                        
+                    }
+                });
 
         salary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gross_salary.setText(g_salary);
-                getSalary(persons, "1", "2018", mid);
-                getPresent(persons, "1", "2018", mid);
+                rackMonthPicker.show();
             }
         });
     }
@@ -93,8 +105,15 @@ public class SalaryActivity extends AppCompatActivity {
             public void onResponse(retrofit2.Call<Double> call, Response<Double> response)
             {
                 final double data = response.body();
-
                 net_salary.setText(setString(data));
+                if (data == 0.0)
+                {
+                    gross_salary.setText("0");
+                }
+                else
+                {
+                    gross_salary.setText(g_salary);
+                }
             }
 
             @Override
@@ -120,6 +139,27 @@ public class SalaryActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(retrofit2.Call<List<Workhour>> call, Throwable t)
+            {
+                Toast.makeText(SalaryActivity.this,t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+
+        });
+    }
+
+    private void GetWorkdays (final String persons, String month, String year)
+    {
+        Call<Integer> call = service4.GetWorkdays(persons, month, year);
+        call.enqueue(new Callback<Integer>()
+        {
+            @Override
+            public void onResponse(retrofit2.Call<Integer> call, Response<Integer> response)
+            {
+                final Integer workhours = response.body();
+                workdays.setText(workhours.toString());
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<Integer> call, Throwable t)
             {
                 Toast.makeText(SalaryActivity.this,t.getMessage(), Toast.LENGTH_LONG).show();
             }

@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity
     public static double gross_salary;
     public static Integer mshiftid;
     private String persons;
-    private Integer status_checkin = 0;
 
     @BindView(R.id.employee_name)
     TextView employee_name;
@@ -70,9 +69,9 @@ public class MainActivity extends AppCompatActivity
         mshiftid = Integer.parseInt(getIntent().getExtras().getString("shiftid")) ;
         shift_workstart = getIntent().getExtras().getString("shift_workstart");
         shift_workend = getIntent().getExtras().getString("shift_workend");
-        //Toast.makeText(MainActivity.this,gross_salary, Toast.LENGTH_LONG).show();
 
-        try{
+        try
+        {
             SimpleDateFormat date = new SimpleDateFormat("hh:mm");
             Date tglAwal = (Date) date.parse(shift_workstart);
             Date tglAkhir = (Date) date.parse(shift_workend);
@@ -82,8 +81,8 @@ public class MainActivity extends AppCompatActivity
                     TimeUnit.MILLISECONDS.toMinutes(bedaHari) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(bedaHari)));
 
             employee_name.setText(mname);
-
-        }catch(Exception e){}
+        }
+        catch(Exception e){}
 
 
         IDs.setIdUser(mid);
@@ -138,73 +137,33 @@ public class MainActivity extends AppCompatActivity
 
     private void checkIn(final String persons, RequestBody id)
     {
-        Call<HashMap<String, String>> call = service2.postCheckin(persons, id);
-        call.enqueue(new Callback<HashMap<String, String>>()
+        Call<Integer> call = service2.postCheckin(persons, id);
+        call.enqueue(new Callback<Integer>()
         {
-            private String responseCode, responseMessage;
-
             @Override
-            public void onResponse(retrofit2.Call<HashMap<String, String>> call, Response<HashMap<String, String>> response)
+            public void onResponse(retrofit2.Call<Integer> call, Response<Integer> response)
             {
-                final HashMap<String, String> data = response.body();
+                final Integer data = response.body();
 
-                Log.d("aaa",data.keySet().toString());
-
-                Intent intent = new Intent(MainActivity.this, WorkhoursActivity.class);
-
-                for (String resultKey : data.keySet())
+                if (data == 1)
                 {
-                    responseCode = resultKey;
-                    responseMessage = data.get(resultKey);
-                    if (responseCode != null)
-                    {
-                        if (responseMessage != null)
-                        {
-                            String[] parts = responseMessage.split(";");
-                            Log.d("RESPONSE FROM LOGIN", responseMessage);
-                            Log.d("Response Code", responseCode);
-                            Log.d("walaaa", parts[0]);
-                            if (responseCode.equals("personid"))
-                            {
-                                status_checkin = 1;
-                            }
-                            else if (responseCode.equals("workstart"))
-                            {
-                                intent.putExtra("workstart", parts[0]);
-                                workstart = parts[0].toString();
-                            }
-                            else if(responseCode.equals("workstartinterval"))
-                            {
-                                workstart_interval = parts[0].toString();
-                                intent.putExtra("workstartinterval", parts[0]);
-                            }
-                        }
-                        else
-                        {
-                            if (responseCode.equals("personid"))
-                            {
-                                status_checkin = 0;
-                            }
-                        }
-                    }
+                    workhour(persons, mid);
                 }
-                if (status_checkin == 0)
+                else if(data == 2)
                 {
-                    Toast.makeText(MainActivity.this, "Anda Telah CheckIn Hari Ini", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this,"Anda Telah CheckIn Hari Ini", Toast.LENGTH_LONG).show();
                 }
                 else
                 {
-                    startActivity(intent);
+                    Toast.makeText(MainActivity.this,"Holiday!!", Toast.LENGTH_LONG).show();
                 }
             }
-
             @Override
-            public void onFailure(retrofit2.Call<HashMap<String, String>> call, Throwable t)
+            public void onFailure(retrofit2.Call<Integer> call, Throwable t)
             {
                 kehadiran.setText(t.getMessage());
                 Toast.makeText(MainActivity.this,"Error", Toast.LENGTH_LONG).show();
             }
-
         });
     }
 
@@ -263,11 +222,7 @@ public class MainActivity extends AppCompatActivity
                             Log.d("RESPONSE FROM LOGIN", responseMessage);
                             Log.d("Response Code", responseCode);
                             Log.d("walaaa", parts[0]);
-                            if (responseCode.equals("personid"))
-                            {
-                                status_checkin = 1;
-                            }
-                            else if (responseCode.equals("workstart"))
+                            if (responseCode.equals("workstart"))
                             {
                                 intent.putExtra("workstart", parts[0]);
                                 workstart = parts[0].toString();
@@ -278,23 +233,9 @@ public class MainActivity extends AppCompatActivity
                                 intent.putExtra("workstartinterval", parts[0]);
                             }
                         }
-                        else
-                        {
-                            if (responseCode.equals("personid"))
-                            {
-                                status_checkin = 0;
-                            }
-                        }
                     }
                 }
-                if (status_checkin == 0)
-                {
-                    Toast.makeText(MainActivity.this, "Silahkan CheckIn Terlebih Dahulu", Toast.LENGTH_LONG).show();
-                }
-                else
-                {
-                    startActivity(intent);
-                }
+                startActivity(intent);
             }
 
             @Override

@@ -23,8 +23,13 @@ public interface SalaryService
                                                     @Path("id") String id);
 
     @GET("workhours/{month}/{year}/{id}")
-    Call<List<Workhour>> getDay(@Header("person") String person,
+    Call<List<Workhour>> getDay (@Header("person") String person,
                              @Path("month") String month,
                              @Path("year") String year,
                              @Path("id") String id);
+
+    @GET("remunerations/totalwim/{month}/{year}")
+    Call<Integer> GetWorkdays (@Header("person") String person,
+                               @Path("month") String month,
+                               @Path("year") String year);
 }

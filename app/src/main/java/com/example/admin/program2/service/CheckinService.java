@@ -19,7 +19,7 @@ import retrofit2.http.PUT;
 public interface CheckinService
 {
     @POST("workhours/checkin/")
-    Call<HashMap<String, String>> postCheckin(@Header("persons") String persons,
+    Call<Integer> postCheckin(@Header("persons") String persons,
                                             @Body RequestBody id);
 
     @PUT("workhours/checkout/")
