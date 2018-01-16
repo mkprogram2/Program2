@@ -32,7 +32,7 @@ public class EmployeeRecyclerActivity extends AppCompatActivity {
     private RecyclerView rvCategory;
     private List<person> list;
     private EmployeeService employeeService;
-    private String persons;
+    private String persons, activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,9 +89,22 @@ public class EmployeeRecyclerActivity extends AppCompatActivity {
 
     private void showSelectedPerson(person person){
         Toast.makeText(this, "Kamu memilih "+person.getName(), Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(EmployeeRecyclerActivity.this, RemunerationActivity.class);
-        intent.putExtra("id", person.getId());
-        intent.putExtra("name", person.getName());
-        startActivity(intent);
+
+        activity = getIntent().getExtras().getString("activity");
+
+        if (activity.equals("employee"))
+        {
+            Intent intent = new Intent(EmployeeRecyclerActivity.this, EmployeeActivity.class);
+            intent.putExtra("id", person.getId());
+            intent.putExtra("name", person.getName());
+            startActivity(intent);
+        }
+        else if(activity.equals("remuneration"))
+        {
+            Intent intent = new Intent(EmployeeRecyclerActivity.this, RemunerationActivity.class);
+            intent.putExtra("id", person.getId());
+            intent.putExtra("name", person.getName());
+            startActivity(intent);
+        }
     }
 }

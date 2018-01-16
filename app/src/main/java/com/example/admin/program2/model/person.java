@@ -9,9 +9,9 @@ public class person
     public String id;
     public String name;
     public String password;
-    public int role;
     public double salary;
     public Shift Shift;
+    public Role Role;
 
     public String getId() { return id; }
 
@@ -28,8 +28,4 @@ public class person
     public double getSalary () { return salary; }
 
     public void setSalary (double salary) { this.salary = salary;}
-
-    public Integer getRole() { return role; }
-
-    public void setRole(Integer role) { this.role = role; }
 }

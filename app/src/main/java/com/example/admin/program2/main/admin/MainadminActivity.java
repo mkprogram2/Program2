@@ -15,6 +15,8 @@ public class MainadminActivity extends AppCompatActivity {
 
     @BindView(R.id.remuneration)
     Button remuneration;
+    @BindView(R.id.employee)
+    Button employee;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +28,18 @@ public class MainadminActivity extends AppCompatActivity {
         remuneration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainadminActivity.this, EmployeeRecyclerActivity.class));
+                Intent intent = new Intent(MainadminActivity.this, EmployeeRecyclerActivity.class);
+                intent.putExtra("activity", "remuneration");
+                startActivity(intent);
+            }
+        });
+
+        employee.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainadminActivity.this, EmployeeRecyclerActivity.class);
+                intent.putExtra("activity", "employee");
+                startActivity(intent);
             }
         });
     }

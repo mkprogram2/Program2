@@ -75,17 +75,17 @@ public class LoginActivity extends AppCompatActivity
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.putExtra("id", data.getId());
                 intent.putExtra("name", data.getName());
-                intent.putExtra("role", data.getRole());
+                intent.putExtra("role", data.Role.getId());
                 intent.putExtra("salary", data.getSalary());
                 intent.putExtra("shiftid", data.Shift.getId());
                 intent.putExtra("shift_workstart",data.Shift.getWorkstart());
                 intent.putExtra("shift_workend", data.Shift.getWorkend());
 
-                if (data.getRole() == 1)
+                if (data.Role.getId() != 1)
                 {
                     startActivity(intent);
                 }
-                else
+                else if (data.Role.getId() == 1)
                 {
                     startActivity(new Intent(LoginActivity.this, MainadminActivity.class));
                 }

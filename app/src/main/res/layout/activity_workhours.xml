@@ -9,6 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <TextView
@@ -24,7 +25,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:background="@color/gray300"
+            android:orientation="horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
 
             <TextView
                 android:id="@+id/textView7"
@@ -36,7 +40,8 @@
                 android:paddingRight="20dp"
                 android:text="In"
                 android:textSize="30sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textAlignment="center"/>
 
             <TextView
                 android:id="@+id/textView9"
@@ -48,7 +53,8 @@
                 android:paddingRight="20dp"
                 android:text="Out"
                 android:textSize="30sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textAlignment="center"/>
 
         </LinearLayout>
 
@@ -56,7 +62,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingBottom="40dp">
+            android:paddingBottom="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
 
             <Button
                 android:id="@+id/masuk"
@@ -82,6 +90,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/gray100"
             android:orientation="vertical"
             android:paddingBottom="100dp">
 
@@ -105,7 +116,7 @@
                     android:layout_weight="1"
                     android:paddingLeft="20dp"
                     android:text="Shift"
-                    android:textSize="20sp" />
+                    android:textSize="15sp" />
 
                 <EditText
                     android:id="@+id/shift"
@@ -113,10 +124,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
+                    android:focusable="false"
                     android:inputType="textPersonName"
                     android:paddingRight="20dp"
-                    android:text=""
-                    android:focusable="false"/>
+                    android:text="" />
 
             </LinearLayout>
 
@@ -133,7 +144,7 @@
                     android:layout_weight="1"
                     android:paddingLeft="20dp"
                     android:text="Working Status"
-                    android:textSize="20sp" />
+                    android:textSize="15sp" />
 
                 <EditText
                     android:id="@+id/editText2"
@@ -141,9 +152,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
+                    android:focusable="false"
                     android:inputType="textPersonName"
-                    android:text=""
-                    android:focusable="false"/>
+                    android:text="" />
             </LinearLayout>
         </LinearLayout>
 

@@ -12,7 +12,6 @@ import com.bumptech.glide.Glide;
 import com.example.admin.program2.R;
 import com.example.admin.program2.model.person;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

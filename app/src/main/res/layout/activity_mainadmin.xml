@@ -30,34 +30,25 @@
                 android:orientation="horizontal">
 
                 <Button
+                    android:id="@+id/employee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight=".40"
+                    android:drawableTop="@drawable/ic_person"
+                    android:text="Employee"
+                    android:textSize="10sp" />
+
+                <Button
                     android:id="@+id/remuneration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:layout_weight=".40"
-                    android:drawableTop="@drawable/ic_action_name"
+                    android:drawableTop="@drawable/ic_payments"
                     android:text="Remuneration"
                     android:textSize="10sp" />
 
-                <Button
-                    android:id="@+id/button2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Button"
-                    android:drawableTop="@drawable/ic_action_name"
-                    android:layout_weight=".40"
-                    android:layout_margin="5dp"
-                    android:textSize="10sp"/>
-
-                <Button
-                    android:id="@+id/button3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Button"
-                    android:drawableTop="@drawable/ic_action_name"
-                    android:layout_weight=".40"
-                    android:layout_margin="5dp"
-                    android:textSize="10sp"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

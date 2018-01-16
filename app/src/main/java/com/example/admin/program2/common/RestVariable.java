@@ -6,5 +6,5 @@ package com.example.admin.program2.common;
 
 public class RestVariable
 {
-    public static final String SERVER_URL = "http://192.168.71.145:8080/";
+    public static final String SERVER_URL = "http://54.179.195.87:8083/";
 }
