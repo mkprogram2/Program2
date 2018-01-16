@@ -1,17 +1,21 @@
 package com.example.admin.program2.main.admin;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.admin.program2.R;
 import com.example.admin.program2.common.ClientService;
 import com.example.admin.program2.common.SharedPreferenceEditor;
+import com.example.admin.program2.main.LoginActivity;
 import com.example.admin.program2.main.MainActivity;
 import com.example.admin.program2.main.admin.adapter.EmployeeAdapter;
+import com.example.admin.program2.main.admin.adapter.ItemClickSupport;
 import com.example.admin.program2.model.person;
 import com.example.admin.program2.service.EmployeeService;
 
@@ -41,10 +45,7 @@ public class EmployeeRecyclerActivity extends AppCompatActivity {
         rvCategory = (RecyclerView)findViewById(R.id.rv_employee);
         rvCategory.setHasFixedSize(true);
 
-        /*list = new ArrayList<>();
-        list.addAll(PresidentData.getListData());*/
         GetPerson(persons);
-        //showRecyclerList();
     }
 
     private void showRecyclerList(){
@@ -52,6 +53,13 @@ public class EmployeeRecyclerActivity extends AppCompatActivity {
         EmployeeAdapter EmployeeAdapter = new EmployeeAdapter(this);
         EmployeeAdapter.setListPerson(list);
         rvCategory.setAdapter(EmployeeAdapter);
+
+        ItemClickSupport.addTo(rvCategory).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                showSelectedPerson(list.get(position));
+            }
+        });
     }
 
     private void GetPerson (String persons)
@@ -77,5 +85,13 @@ public class EmployeeRecyclerActivity extends AppCompatActivity {
                 Toast.makeText(EmployeeRecyclerActivity.this,"Error", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void showSelectedPerson(person person){
+        Toast.makeText(this, "Kamu memilih "+person.getName(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(EmployeeRecyclerActivity.this, RemunerationActivity.class);
+        intent.putExtra("id", person.getId());
+        intent.putExtra("name", person.getName());
+        startActivity(intent);
     }
 }

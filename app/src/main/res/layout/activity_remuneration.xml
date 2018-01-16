@@ -23,14 +23,13 @@
                 android:id="@+id/textView17"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView"
+                android:text="REMUNERATION"
                 android:textAlignment="center"
                 android:textSize="30sp"
-                android:textStyle="bold"
-                tools:text="REMUNERATION" />
+                android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/editText3"
+                android:id="@+id/employee_id"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:ems="10"
@@ -39,7 +38,7 @@
                 android:textSize="15sp" />
 
             <EditText
-                android:id="@+id/editText4"
+                android:id="@+id/employee_name"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:ems="10"
