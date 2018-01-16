@@ -74,8 +74,19 @@ public class WorkhoursActivity extends AppCompatActivity
 
             if (workstartinterval_time < 0)
             {
-                keluar.setText(jam_pulang + ":" + menit_pulang);
                 kehadiran.setText("Terlambat " + telat_jam + " Jam : " + telat_menit + " Menit");
+                if (jam_pulang <10)
+                {
+                    keluar.setText("0" +jam_pulang + ":" + menit_pulang);
+                }
+                else if(menit_pulang < 10)
+                {
+                    keluar.setText(jam_pulang + ":0" + menit_pulang);
+                }
+                else
+                {
+                    keluar.setText(jam_pulang + ":" + menit_pulang);
+                }
             }
             else
             {
