@@ -13,6 +13,7 @@ import com.example.admin.program2.R;
 import com.example.admin.program2.model.person;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by admin on 1/15/2018.
@@ -20,14 +21,15 @@ import java.util.ArrayList;
 
 public class EmployeeAdapter  extends RecyclerView.Adapter<EmployeeAdapter.CategoryViewHolder>{
     private Context context;
+    private List<person>listPerson;
 
-    public ArrayList<person> getListPerson() {
+    public List<person> getListPerson() {
         return listPerson;
     }
-    public void setListPerson(ArrayList<person> listPresident) {
-        this.listPerson = listPresident;
+
+    public void setListPerson(List<person> listPerson) {
+        this.listPerson = listPerson;
     }
-    private ArrayList<person>listPerson;
 
     public EmployeeAdapter(Context context) {
         this.context = context;
@@ -42,8 +44,8 @@ public class EmployeeAdapter  extends RecyclerView.Adapter<EmployeeAdapter.Categ
     @Override
     public void onBindViewHolder(CategoryViewHolder holder, int position) {
 
-        holder.tvName.setText("test");
-        holder.tvRemarks.setText("test");
+        holder.tvName.setText(getListPerson().get(position).getId());
+        holder.tvRemarks.setText(getListPerson().get(position).getName());
 
         /*Glide.with(context)
                 .load(getListPresident().get(position).getPhoto())
@@ -53,7 +55,8 @@ public class EmployeeAdapter  extends RecyclerView.Adapter<EmployeeAdapter.Categ
     }
 
     @Override
-    public int getItemCount() {
+    public int getItemCount()
+    {
         return getListPerson().size();
     }
 

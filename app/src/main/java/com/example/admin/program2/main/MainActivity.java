@@ -189,9 +189,7 @@ public class MainActivity extends AppCompatActivity
                 kehadiran.setText(t.getMessage());
                 Toast.makeText(MainActivity.this,"Error", Toast.LENGTH_LONG).show();
             }
-
         });
-
     }
 
     private void workhour (final String persons, String id)
