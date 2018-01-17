@@ -37,5 +37,9 @@ public interface EmployeeService
 
     @PUT("persons/")
     Call<person> PutEmployee(@Header("person") String person,
-                             @Body RequestBody persons);
+                             @Body person persons);
+
+    @POST("persons/")
+    Call<person> PostEmployee(@Header("person") String person,
+                              @Body person persons);
 }

@@ -40,6 +40,16 @@
                     android:textSize="10sp" />
 
                 <Button
+                    android:id="@+id/add_employee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight=".40"
+                    android:drawableTop="@drawable/ic_add_person"
+                    android:text="Add Employee"
+                    android:textSize="10sp" />
+
+                <Button
                     android:id="@+id/remuneration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
