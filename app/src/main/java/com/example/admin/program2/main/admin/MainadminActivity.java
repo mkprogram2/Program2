@@ -17,6 +17,8 @@ public class MainadminActivity extends AppCompatActivity {
     Button remuneration;
     @BindView(R.id.employee)
     Button employee;
+    @BindView(R.id.add_employee)
+    Button add_employee;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,13 @@ public class MainadminActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainadminActivity.this, EmployeeRecyclerActivity.class);
                 intent.putExtra("activity", "employee");
                 startActivity(intent);
+            }
+        });
+
+        add_employee.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainadminActivity.this, AddEmployeeActivity.class));
             }
         });
     }

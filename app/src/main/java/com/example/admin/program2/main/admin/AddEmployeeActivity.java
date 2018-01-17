@@ -15,15 +15,12 @@ import android.widget.Toast;
 import com.example.admin.program2.R;
 import com.example.admin.program2.common.ClientService;
 import com.example.admin.program2.common.SharedPreferenceEditor;
-import com.example.admin.program2.main.MainActivity;
 import com.example.admin.program2.model.Role;
 import com.example.admin.program2.model.Shift;
 import com.example.admin.program2.model.person;
 import com.example.admin.program2.service.EmployeeService;
-import com.example.admin.program2.service.WorkhourService;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -32,25 +29,25 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EmployeeActivity extends AppCompatActivity {
+public class AddEmployeeActivity extends AppCompatActivity {
 
-    @BindView(R.id.employee_id)
-    EditText employee_id;
-    @BindView(R.id.employee_name)
-    EditText employee_name;
-    @BindView(R.id.role_spin)
-    Spinner role_spin;
-    @BindView(R.id.shift_spin)
-    Spinner shift_spin;
-    @BindView(R.id.shift_in)
-    TextView shift_in;
-    @BindView(R.id.shift_out)
-    TextView shift_out;
-    @BindView(R.id.save_employee)
-    Button save_employee;
+    @BindView(R.id.add_employee_name)
+    EditText add_employee_name;
+    @BindView(R.id.date_in)
+    EditText date_in;
+    @BindView(R.id.add_role_spin)
+    Spinner add_role_spin;
+    @BindView(R.id.add_shift_spin)
+    Spinner add_shift_spin;
+    @BindView(R.id.add_shift_in)
+    TextView add_shift_in;
+    @BindView(R.id.add_shift_out)
+    TextView add_shift_out;
+    @BindView(R.id.add_employee)
+    Button add_employee;
 
     private EmployeeService employeeService;
-    private String persons, shiftid, role;
+    private String persons;
     final List<String> list_shift = new ArrayList<String>();
     final List<String> list_role = new ArrayList<String>();
     private List<Shift> shifts;
@@ -60,71 +57,44 @@ public class EmployeeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_employee);
+        setContentView(R.layout.activity_add_employee);
 
         ButterKnife.bind(this);
-
-        employee_id.setText(getIntent().getExtras().getString("id"));
-        employee_name.setText(getIntent().getExtras().getString("name"));
 
         employeeService = ClientService.createService().create(EmployeeService.class);
         persons = SharedPreferenceEditor.LoadPreferences(this,"Persons","");
 
-        GetEmployee(persons, employee_id.getText().toString());
         GetShift();
         GetRole();
 
-        shift_spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
+        add_shift_spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 for(int i = 0; i < list_shift.size (); i++)
                 {
-                    if(list_shift.get(i).equals(shift_spin.getSelectedItem().toString()))
+                    if(list_shift.get(i).equals(add_shift_spin.getSelectedItem().toString()))
                     {
-                        shift_in.setText(shifts.get(i).getWorkstart());
-                        shift_out.setText(shifts.get(i).getWorkend());
-                        Toast.makeText(EmployeeActivity.this,shifts.get(i).getWorkstart(), Toast.LENGTH_LONG).show();
+                        add_shift_in.setText(shifts.get(i).getWorkstart());
+                        add_shift_out.setText(shifts.get(i).getWorkend());
                     }
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
 
-        save_employee.setOnClickListener(new View.OnClickListener() {
+        add_employee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dataperson.setName(employee_name.getText().toString());
-                SetRole();
-                SetShift();
-                PutEmployee(persons, dataperson);
-            }
-        });
-    }
-
-    private void GetEmployee (String persons, String id)
-    {
-        Call<person> call = employeeService.GetEmployee(persons, id);
-        call.enqueue(new Callback<person>()
-        {
-            @Override
-            public void onResponse(retrofit2.Call<person> call, Response<person> response)
-            {
-                dataperson = response.body();
-                Log.d("Data", dataperson.getName());
-                shiftid = dataperson.Shift.getId();
-                role = dataperson.Role.getName();
-            }
-
-            @Override
-            public void onFailure(retrofit2.Call<person> call, Throwable t)
-            {
-                Log.d("Error here", t.getMessage());
-                Toast.makeText(EmployeeActivity.this,"Error", Toast.LENGTH_LONG).show();
+                Toast.makeText(AddEmployeeActivity.this,add_employee_name.getText(), Toast.LENGTH_LONG).show();
+                dataperson.setName("asdasd");
+                dataperson.Shift.setId(add_shift_spin.getSelectedItem().toString());
+                SetRoleId();
+                Toast.makeText(AddEmployeeActivity.this,dataperson.getName().toString(), Toast.LENGTH_LONG).show();
+                //PostEmployee(persons, dataperson);
             }
         });
     }
@@ -149,7 +119,7 @@ public class EmployeeActivity extends AppCompatActivity {
             @Override
             public void onFailure(retrofit2.Call<List<Shift>> call, Throwable t)
             {
-                Toast.makeText(EmployeeActivity.this,"Error", Toast.LENGTH_LONG).show();
+                Toast.makeText(AddEmployeeActivity.this,"Error", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -174,7 +144,7 @@ public class EmployeeActivity extends AppCompatActivity {
             @Override
             public void onFailure(retrofit2.Call<List<Role>> call, Throwable t)
             {
-                Toast.makeText(EmployeeActivity.this,"Error", Toast.LENGTH_LONG).show();
+                Toast.makeText(AddEmployeeActivity.this,"Error", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -183,34 +153,19 @@ public class EmployeeActivity extends AppCompatActivity {
     {
         ArrayAdapter<String> adp1 = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list_shift);
         adp1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        shift_spin.setAdapter(adp1);
-
-        for(int i = 0; i < list_shift.size (); i++)
-        {
-            if(list_shift.get(i).equals(shiftid)) {
-                shift_spin.setSelection(i);
-            }
-        }
+        add_shift_spin.setAdapter(adp1);
     }
 
     private void SetRoleSpinner()
     {
         ArrayAdapter<String> adp1 = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list_role);
         adp1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        role_spin.setAdapter(adp1);
-
-        for(int i = 0; i < list_role.size (); i++)
-        {
-            if(list_role.get(i).equals(role))
-            {
-                role_spin.setSelection(i);
-            }
-        }
+        add_role_spin.setAdapter(adp1);
     }
 
-    private void PutEmployee(String person, person persons)
+    private void PostEmployee(String person, person persons)
     {
-        Call<person> call = employeeService.PutEmployee(person, persons);
+        Call<person> call = employeeService.PostEmployee(person, persons);
         call.enqueue(new Callback<person>()
         {
             @Override
@@ -218,41 +173,25 @@ public class EmployeeActivity extends AppCompatActivity {
             {
                 dataperson = response.body();
                 Log.d("Data", dataperson.getName());
-                Toast.makeText(EmployeeActivity.this,"Saving Success", Toast.LENGTH_LONG).show();
+                Toast.makeText(AddEmployeeActivity.this,"Saving Success", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailure(retrofit2.Call<person> call, Throwable t)
             {
                 Log.d("Error here", t.getMessage());
-                Toast.makeText(EmployeeActivity.this,"Error", Toast.LENGTH_LONG).show();
+                Toast.makeText(AddEmployeeActivity.this,"Error", Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    private void SetRole()
+    private void SetRoleId()
     {
         for (int i = 0; i < roles.size(); i++)
         {
-            if (roles.get(i).getName().equals(role_spin.getSelectedItem()))
+            if (roles.get(i).getName().equals(add_role_spin.getSelectedItem()))
             {
                 dataperson.Role.setId(roles.get(i).getId());
-                dataperson.Role.setName(roles.get(i).getName());
-                dataperson.Role.setMaxsalary(roles.get(i).getMaxsalary());
-                dataperson.Role.setMinsalary(roles.get(i).getMinsalary());
-            }
-        }
-    }
-
-    private void SetShift()
-    {
-        for (int i = 0; i < shifts.size(); i++)
-        {
-            if (shifts.get(i).getId().equals(shift_spin.getSelectedItem()))
-            {
-                dataperson.Shift.setId(shifts.get(i).getId());
-                dataperson.Shift.setWorkstart(shifts.get(i).getWorkstart());
-                dataperson.Shift.setWorkend(shifts.get(i).getWorkend());
             }
         }
     }

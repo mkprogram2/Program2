@@ -1,11 +1,6 @@
 package com.example.admin.program2.service;
 
-
-import com.example.admin.program2.model.Login;
 import com.example.admin.program2.model.person;
-
-import java.util.HashMap;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
