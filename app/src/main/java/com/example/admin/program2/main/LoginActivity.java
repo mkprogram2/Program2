@@ -46,7 +46,6 @@ public class LoginActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                //startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 person personlogin = setlogin();
                 postlogin(persons, personlogin);
             }
@@ -58,13 +57,10 @@ public class LoginActivity extends AppCompatActivity
         Call<person> call = service.postLogin(persons, logins);
         call.enqueue(new Callback<person>()
         {
-            private String responseCode, responseMessage;
-
             @Override
             public void onResponse(retrofit2.Call<person> call, Response<person> response)
             {
                 final person data = response.body();
-                //Toast.makeText(LoginActivity.this,data.getSalary().toString(), Toast.LENGTH_LONG).show();
 
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.putExtra("id", data.getId());

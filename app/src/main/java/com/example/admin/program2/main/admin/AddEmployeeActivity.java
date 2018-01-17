@@ -1,5 +1,6 @@
 package com.example.admin.program2.main.admin;
 
+import android.app.DatePickerDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -20,8 +22,18 @@ import com.example.admin.program2.model.Shift;
 import com.example.admin.program2.model.person;
 import com.example.admin.program2.service.EmployeeService;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,6 +45,8 @@ public class AddEmployeeActivity extends AppCompatActivity {
 
     @BindView(R.id.add_employee_name)
     EditText add_employee_name;
+    @BindView(R.id.add_password)
+    EditText add_password;
     @BindView(R.id.date_in)
     EditText date_in;
     @BindView(R.id.add_role_spin)
@@ -45,14 +59,17 @@ public class AddEmployeeActivity extends AppCompatActivity {
     TextView add_shift_out;
     @BindView(R.id.add_employee)
     Button add_employee;
+    @BindView(R.id.calendar_in)
+    Button calendar_in;
 
     private EmployeeService employeeService;
     private String persons;
     final List<String> list_shift = new ArrayList<String>();
     final List<String> list_role = new ArrayList<String>();
     private List<Shift> shifts;
-    private List<Role> roles;
-    private person dataperson;
+    private List<Role> roles; private DatePickerDialog datePickerDialog;
+    private SimpleDateFormat dateFormatter;
+    public Date dates;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +77,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_employee);
 
         ButterKnife.bind(this);
+        dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
         employeeService = ClientService.createService().create(EmployeeService.class);
         persons = SharedPreferenceEditor.LoadPreferences(this,"Persons","");
@@ -86,15 +104,17 @@ public class AddEmployeeActivity extends AppCompatActivity {
             }
         });
 
+        calendar_in.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDateDialog();
+            }
+        });
+
         add_employee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AddEmployeeActivity.this,add_employee_name.getText(), Toast.LENGTH_LONG).show();
-                dataperson.setName("asdasd");
-                dataperson.Shift.setId(add_shift_spin.getSelectedItem().toString());
-                SetRoleId();
-                Toast.makeText(AddEmployeeActivity.this,dataperson.getName().toString(), Toast.LENGTH_LONG).show();
-                //PostEmployee(persons, dataperson);
+                SetPerson();
             }
         });
     }
@@ -171,7 +191,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
             @Override
             public void onResponse(retrofit2.Call<person> call, Response<person> response)
             {
-                dataperson = response.body();
+                final person dataperson = response.body();
                 Log.d("Data", dataperson.getName());
                 Toast.makeText(AddEmployeeActivity.this,"Saving Success", Toast.LENGTH_LONG).show();
             }
@@ -185,14 +205,48 @@ public class AddEmployeeActivity extends AppCompatActivity {
         });
     }
 
-    private void SetRoleId()
+    private void SetPerson()
     {
+        person person = new person();
+        person.setName(add_employee_name.getText().toString());
+        person.setPassword(add_password.getText().toString());
+        person.Shift.setId(add_shift_spin.getSelectedItem().toString());
         for (int i = 0; i < roles.size(); i++)
         {
             if (roles.get(i).getName().equals(add_role_spin.getSelectedItem()))
             {
-                dataperson.Role.setId(roles.get(i).getId());
+                person.Role.setId(roles.get(i).getId());
             }
         }
+        String uniqueId = null;
+        if(uniqueId == null) {
+            uniqueId = UUID.randomUUID().toString();
+        }
+        person.setId(uniqueId);
+        person.assign_date = dateFormatter.format(dates);
+        PostEmployee(persons, person);
+    }
+
+    private void showDateDialog(){
+        Calendar newCalendar = Calendar.getInstance();
+        datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener()
+        {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
+            {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+                date_in.setText(dateFormatter.format(newDate.getTime()).toString());
+
+                try {
+                    dates = dateFormatter.parse(date_in.getText().toString());
+                    //System.out.println("Today = " + df.format(dates));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Log.d("date", dateFormatter.format(dates).toString());
+            }
+        },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.show();
     }
 }

@@ -1,5 +1,7 @@
 package com.example.admin.program2.model;
 
+import java.util.Date;
+
 /**
  * Created by admin on 1/9/2018.
  */
@@ -10,8 +12,9 @@ public class person
     public String name;
     public String password;
     public double salary;
-    public Shift Shift;
-    public Role Role;
+    public String assign_date;
+    public Shift Shift = new Shift();
+    public Role Role = new Role();
 
     public String getId() { return id; }
 
