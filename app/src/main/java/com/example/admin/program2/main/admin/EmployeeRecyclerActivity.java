@@ -67,9 +67,6 @@ public class EmployeeRecyclerActivity extends AppCompatActivity {
         Call<List<person>> call = employeeService.GetPerson(persons);
         call.enqueue(new Callback<List<person>>()
         {
-            private String responseCode;
-            private String responseMessage;
-
             @Override
             public void onResponse(retrofit2.Call<List<person>> call, Response<List<person>> response)
             {
