@@ -12,6 +12,7 @@ import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
 import com.mk.admin.payroll.common.SharedPreferenceEditor;
 import com.mk.admin.payroll.common.IDs;
+import com.mk.admin.payroll.model.Workhour;
 import com.mk.admin.payroll.service.CheckinService;
 import com.mk.admin.payroll.service.WorkhourService;
 
@@ -168,22 +169,34 @@ public class MainActivity extends AppCompatActivity
 
     private void checkOut(final String persons, RequestBody id)
     {
-        Call<HashMap<String, String>> call = service2.checkout(persons, id);
-        call.enqueue(new Callback<HashMap<String, String>>()
+        Call<Integer> call = service2.checkout(persons, id);
+        call.enqueue(new Callback<Integer>()
         {
-            private String responseCode;
-            private String responseMessage;
-
             @Override
-            public void onResponse(retrofit2.Call<HashMap<String, String>> call, Response<HashMap<String, String>> response)
+            public void onResponse(retrofit2.Call<Integer> call, Response<Integer> response)
             {
-                final HashMap<String, String> data = response.body();
+                final Integer data = response.body();
 
-                Log.d("Data",data.keySet().toString());
+                if (data == 1)
+                {
+                    workhour(persons, mid);
+                }
+                else if (data == 2)
+                {
+                    Toast.makeText(MainActivity.this,"Please Check In", Toast.LENGTH_LONG).show();
+                }
+                else if (data == 3)
+                {
+                    Toast.makeText(MainActivity.this,"You Have Been Checked Out", Toast.LENGTH_LONG).show();
+                }
+                else if (data == 4)
+                {
+                    Toast.makeText(MainActivity.this,"Cannot Check Out in 30 Minutes When Check In", Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
-            public void onFailure(retrofit2.Call<HashMap<String, String>> call, Throwable t)
+            public void onFailure(retrofit2.Call<Integer> call, Throwable t)
             {
                 kehadiran.setText(t.getMessage());
                 Toast.makeText(MainActivity.this,"Error", Toast.LENGTH_LONG).show();
@@ -193,17 +206,30 @@ public class MainActivity extends AppCompatActivity
 
     private void workhour (final String persons, String id)
     {
-        Call<HashMap<String, String>> call = service3.getCheckworkhour(persons, id);
-        call.enqueue(new Callback<HashMap<String, String>>()
+        Call<Workhour> call = service3.getCheckworkhour(persons, id);
+        call.enqueue(new Callback<Workhour>()
         {
             private String responseCode, responseMessage;
 
             @Override
-            public void onResponse(retrofit2.Call<HashMap<String, String>> call, Response<HashMap<String, String>> response)
+            public void onResponse(retrofit2.Call<Workhour> call, Response<Workhour> response)
             {
-                final HashMap<String, String> data = response.body();
+                final Workhour data = response.body();
 
-                Log.d("aaa",data.keySet().toString());
+                Intent intent = new Intent(MainActivity.this, WorkhoursActivity.class);
+                intent.putExtra("workstart", data.workstart.toString());
+                intent.putExtra("workstartinterval", data.workstartinterval.toString());
+                intent.putExtra("interval_work", interval_work);
+                if (data.workend == null)
+                {
+                    intent.putExtra("workend", "null_workend");
+                }
+                else
+                {
+                    intent.putExtra("workend", data.workend.toString());
+                }
+                startActivity(intent);
+                /*Log.d("aaa",data.keySet().toString());
 
                 Intent intent = new Intent(MainActivity.this, WorkhoursActivity.class);
 
@@ -232,13 +258,13 @@ public class MainActivity extends AppCompatActivity
                         }
                     }
                 }
-                startActivity(intent);
+                startActivity(intent);*/
             }
 
             @Override
-            public void onFailure(retrofit2.Call<HashMap<String, String>> call, Throwable t)
+            public void onFailure(retrofit2.Call<Workhour> call, Throwable t)
             {
-                Toast.makeText(MainActivity.this,"Silahkan CheckIn Terlebih Dahulu", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this,"Please Check In", Toast.LENGTH_LONG).show();
             }
 
         });

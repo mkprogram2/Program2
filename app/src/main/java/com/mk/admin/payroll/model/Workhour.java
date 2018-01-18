@@ -1,5 +1,7 @@
 package com.mk.admin.payroll.model;
 
+import java.sql.Timestamp;
+
 /**
  * Created by admin on 1/12/2018.
  */
@@ -7,13 +9,13 @@ package com.mk.admin.payroll.model;
 public class Workhour
 {
     public String personid;
-    public String workstart;
-    public String workend;
-    public String workstartinterval;
-    public String workendinterval;
-    public String workinterval;
+    public Timestamp workstart;
+    public Timestamp workend;
+    public Long workstartinterval;
+    public Long workendinterval;
+    public Long workinterval;
 
-    public String getPersonid () { return  personid; }
+   /* public String getPersonid () { return  personid; }
 
     public void setPersonid (String personid) { this.personid = personid; }
 
@@ -35,5 +37,5 @@ public class Workhour
 
     public String getWorkinterval () { return workinterval; }
 
-    public void setWorkinterval (String workinterval) { this.workinterval = workinterval; }
+    public void setWorkinterval (String workinterval) { this.workinterval = workinterval; }*/
 }
