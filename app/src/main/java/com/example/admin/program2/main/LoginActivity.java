@@ -12,12 +12,9 @@ import android.widget.Toast;
 import com.example.admin.program2.R;
 import com.example.admin.program2.common.ClientService;
 import com.example.admin.program2.common.SharedPreferenceEditor;
-import com.example.admin.program2.model.Login;
 import com.example.admin.program2.model.person;
 import com.example.admin.program2.service.LoginService;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
