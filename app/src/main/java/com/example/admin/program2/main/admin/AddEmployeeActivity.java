@@ -114,7 +114,14 @@ public class AddEmployeeActivity extends AppCompatActivity {
         add_employee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SetPerson();
+                if (add_employee_name.equals("") || add_password.equals("") || date_in.equals(""))
+                {
+                    Toast.makeText(AddEmployeeActivity.this,"Wrong Entries", Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    SetPerson();
+                }
             }
         });
     }
@@ -223,7 +230,8 @@ public class AddEmployeeActivity extends AppCompatActivity {
             uniqueId = UUID.randomUUID().toString();
         }
         person.setId(uniqueId);
-        person.assign_date = dateFormatter.format(dates);
+        person.assignwork = dateFormatter.format(dates);
+        //person.assignwork = dates;
         PostEmployee(persons, person);
     }
 
@@ -240,7 +248,6 @@ public class AddEmployeeActivity extends AppCompatActivity {
 
                 try {
                     dates = dateFormatter.parse(date_in.getText().toString());
-                    //System.out.println("Today = " + df.format(dates));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

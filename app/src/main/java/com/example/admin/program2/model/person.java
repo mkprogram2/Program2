@@ -12,7 +12,7 @@ public class person
     public String name;
     public String password;
     public double salary;
-    public String assign_date;
+    public String assignwork;
     public Shift Shift = new Shift();
     public Role Role = new Role();
 

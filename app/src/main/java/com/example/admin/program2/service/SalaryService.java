@@ -1,13 +1,17 @@
 package com.example.admin.program2.service;
 
 import com.example.admin.program2.model.Workhour;
+import com.example.admin.program2.model.person;
 
 import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 /**
@@ -32,4 +36,8 @@ public interface SalaryService
     Call<Integer> GetWorkdays (@Header("person") String person,
                                @Path("month") String month,
                                @Path("year") String year);
+
+    @PUT("remunerations/salary")
+    Call<person> PutSalary (@Header("person") String person,
+                            @Body person persons);
 }
