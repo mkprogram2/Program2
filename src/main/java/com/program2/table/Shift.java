@@ -14,4 +14,8 @@ public class Shift {
 	public Time workstart;
 	@Column(name = "work_end") 
 	public Time workend;
+	@Column (name = "break_start")
+	public Time breakstart;
+	@Column(name = "break_end") 
+	public Time breakend;
 }
