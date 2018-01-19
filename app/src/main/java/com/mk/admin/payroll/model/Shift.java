@@ -9,6 +9,8 @@ public class Shift
     public String id;
     public String workstart;
     public String workend;
+    public String breakstart;
+    public String breakend;
 
     public String getId () { return id; }
 

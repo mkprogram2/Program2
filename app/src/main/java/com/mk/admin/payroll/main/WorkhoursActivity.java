@@ -19,6 +19,7 @@ import com.mk.admin.payroll.service.WorkhourService;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,7 +30,7 @@ import retrofit2.Response;
 public class WorkhoursActivity extends AppCompatActivity
 {
 
-    private String workstart, workstartinterval, interval_work, workend, result, persons, personid, shifttime;
+    private String workstart, workstartinterval, interval_work, workend, result, result2, persons, personid, shifttime;
     private Long workstartinterval_time;
     private String[] waktu_shift, waktu_kerja, telat_s;
     private Integer jam_pulang_shift, menit_pulang_shift, jam_pulang, menit_pulang, telat_jam, telat_menit, check;
@@ -37,8 +38,7 @@ public class WorkhoursActivity extends AppCompatActivity
     private Person dataperson = new Person();
     private Handler handler = new Handler();
     private Runnable runnable;
-    private String EVENT_DATE_TIME = "2018-12-31 10:30:00";
-    private String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    private String EVENT_DATE_TIME;
 
     @BindView(R.id.masuk)
     Button masuk;
@@ -48,6 +48,8 @@ public class WorkhoursActivity extends AppCompatActivity
     Button shift_in;
     @BindView(R.id.shift_out)
     Button shift_out;
+    @BindView(R.id.break_time)
+    Button break_time;
     @BindView(R.id.kehadiran)
     TextView kehadiran;
     @BindView(R.id.checkout)
@@ -56,6 +58,10 @@ public class WorkhoursActivity extends AppCompatActivity
     TextView timeout;
     @BindView(R.id.tv_second)
     TextView tv_second;
+    @BindView(R.id.tv_hour)
+    TextView tv_hour;
+    @BindView(R.id.tv_minute)
+    TextView tv_minute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -84,15 +90,17 @@ public class WorkhoursActivity extends AppCompatActivity
         {
             workstartinterval_time = Long.parseLong(workstartinterval);
 
-            GetWorkend(workstart);
+            GetWorkstart(workstart);
 
-            masuk.setText(result.toString());
+            Log.d("WORKSTART", workstart);
+            Log.d("RESULT", result2.toString());
+            masuk.setText(result2.toString());
 
             waktu_shift = interval_work.split(":");
             jam_pulang_shift = Integer.parseInt(waktu_shift[0]);
             menit_pulang_shift = Integer.parseInt((waktu_shift[1]));
 
-            waktu_kerja = result.split(":");
+            waktu_kerja = result2.split(":");
             jam_pulang = Integer.parseInt(waktu_kerja[0]) + jam_pulang_shift;
             menit_pulang = Integer.parseInt(waktu_kerja[1]) + menit_pulang_shift;
 
@@ -107,14 +115,17 @@ public class WorkhoursActivity extends AppCompatActivity
                 if (jam_pulang <10)
                 {
                     timeout.setText("0" +jam_pulang + ":" + menit_pulang);
+                    EVENT_DATE_TIME = "0" + jam_pulang + ":" + menit_pulang;
                 }
                 else if(menit_pulang < 10)
                 {
                     timeout.setText(jam_pulang + ":0" + menit_pulang);
+                    EVENT_DATE_TIME =jam_pulang + ":0" + menit_pulang;
                 }
                 else
                 {
                     timeout.setText(jam_pulang + ":" + menit_pulang);
+                    EVENT_DATE_TIME = jam_pulang + ":" + menit_pulang;
                 }
             }
             else
@@ -150,6 +161,7 @@ public class WorkhoursActivity extends AppCompatActivity
                 Log.d("Data", dataperson.getName());
                 shift_in.setText(SetShiftTime(dataperson.Shift.getWorkstart()));
                 shift_out.setText(SetShiftTime(dataperson.Shift.getWorkend()));
+                break_time.setText(SetShiftTime(dataperson.Shift.breakstart) + " - " + SetShiftTime(dataperson.Shift.breakend));
             }
 
             @Override
@@ -163,12 +175,27 @@ public class WorkhoursActivity extends AppCompatActivity
 
     private void GetWorkend (String worktime)
     {
-        SimpleDateFormat formatterr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss");
+        SimpleDateFormat formatterr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
 
         try {
             Date dates = formatterr.parse(worktime);
             formatterr.applyPattern("HH:mm");
             result = formatterr.format(dates);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void GetWorkstart (String worktime)
+    {
+        SimpleDateFormat formatterr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+
+        try {
+            Date dates = formatterr.parse(worktime);
+            formatterr.applyPattern("HH:mm");
+            Log.d("Date", dates.toString());
+            result2 = formatterr.format(dates);
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -191,34 +218,26 @@ public class WorkhoursActivity extends AppCompatActivity
     }
 
 
-    private void countDownStart() {
-        runnable = new Runnable() {
+    private void countDownStart()
+    {
+        runnable = new Runnable()
+        {
             @Override
-            public void run() {
+            public void run()
+            {
                 try {
                     handler.postDelayed(this, 1000);
-                    SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
                     Date event_date = dateFormat.parse(EVENT_DATE_TIME);
-                    Date current_date = new Date();
-                    if (!current_date.after(event_date)) {
+                    Date current_date = dateFormat.parse(dateFormat.format(new Date()));
                         long diff = event_date.getTime() - current_date.getTime();
                         long Days = diff / (24 * 60 * 60 * 1000);
                         long Hours = diff / (60 * 60 * 1000) % 24;
                         long Minutes = diff / (60 * 1000) % 60;
                         long Seconds = diff / 1000 % 60;
 
-                        tv_second.setText(String.format("%02d", Seconds));
-                        //
-                        /*tv_days.setText(String.format("%02d", Days));
-                        tv_hour.setText(String.format("%02d", Hours));
-                        tv_minute.setText(String.format("%02d", Minutes));
-                        tv_second.setText(String.format("%02d", Seconds));*/
-
-                    } else {
-                        /*linear_layout_1.setVisibility(View.VISIBLE);
-                        linear_layout_2.setVisibility(View.GONE);*/
-                        handler.removeCallbacks(runnable);
-                    }
+                        tv_hour.setText(String.format("%02d", Hours) + " Hours");
+                        tv_minute.setText(String.format("%02d", Minutes) + " Minutes");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
