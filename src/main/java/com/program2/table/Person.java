@@ -1,5 +1,7 @@
 package com.program2.table;
 
+import java.sql.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,9 +17,13 @@ public class Person
 	public String id;
 	public String name;
 	public String password;
-	public int role;
 	public double salary;
+	@Column(name = "assign_work")
+	public Date assignwork;
+	@ManyToOne
+	@JoinColumn(name = "role_id", referencedColumnName = "id")
+	public Role Role = new Role();
 	@ManyToOne
 	@JoinColumn(name = "shift_id", referencedColumnName = "id")
-	public Shift Shift;
+	public Shift Shift = new Shift();
 }

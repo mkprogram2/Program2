@@ -24,7 +24,7 @@ public class ShiftController {
 	}
 	
 	@GetMapping("/{id}")
-	public Shift getPerson(@PathVariable("id") int id)
+	public Shift getShift(@PathVariable("id") int id)
 	{
 		return ShiftRepository.findById(id);
 	}

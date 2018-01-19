@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.program2.repository.WorkhourRepository;
 import com.program2.repository.ShiftRepository;
 import com.program2.repository.PersonRepository;
+import com.program2.repository.HolidayRepository;
 import com.program2.table.Workhour;
+
 import com.program2.table.Shift;
+import com.program2.table.Holiday;
 import com.program2.table.Person;
+import com.program2.table.Holiday;
 
 @RestController
 @RequestMapping(value = "/workhours")
@@ -41,6 +46,8 @@ public class WorkhourController {
 	private WorkhourRepository WorkhourRepository;
 	@Autowired
 	private PersonRepository PersonRepository;
+	@Autowired
+	private HolidayRepository HolidayRepository;
 	
 	
 	@PostMapping
@@ -56,6 +63,8 @@ public class WorkhourController {
 		return WorkhourRepository.findAll();
 		
 	}
+	
+	
 	
 	@GetMapping("/{month}/{year}/{id}")
 	public List<Workhour> getWorkhoursByMonthByYear(@PathVariable("month") double month, @PathVariable("year") double year, @PathVariable("id") String id)
@@ -87,7 +96,7 @@ public class WorkhourController {
 		return Interval;
 	}
 	
-	public Workhour getWorkhourOnlyByDate(String personid, Date Date) 
+	public Workhour WorkhourOnlyByDate(String personid, Date Date) 
 	{
 		Workhour WorkhourCheck = new Workhour();
 		Date DateNow = Date;
@@ -109,51 +118,73 @@ public class WorkhourController {
 	}
 	
 	@PostMapping("/checkin")
-	public Workhour Checkin(@RequestBody String personid)
+	public int Checkin(@RequestBody String personid)
 	{
-		Workhour Workhour = new Workhour();
 		Date DateNow = new Date();
-		Workhour WorkhourCheck = getWorkhourOnlyByDate(personid, DateNow);
-		if (WorkhourCheck == null)
-		{
-			Workhour insert = new Workhour();
-			insert.personid = personid;
-			insert.workstart = new Timestamp(DateNow.getTime());
-			insert.workstartinterval = (int)Interval(personid,DateNow,true);
-			Workhour = WorkhourRepository.save(insert);
-			return Workhour;
-		}
-		else 
-		{
-			WorkhourCheck.personid = null;
-			return WorkhourCheck;
-		}
+		Calendar CalendarNow = Calendar.getInstance();
+		CalendarNow.setTime(DateNow);
+		int day = CalendarNow.get(Calendar.DAY_OF_WEEK);
+		List<Holiday>  Holidays= HolidayRepository.findAllByMonthByYear(Calendar.MONTH + 1, Calendar.YEAR);
+		List<Date> HolidayDates = Holidays.stream()
+                .map(Holiday->Holiday.date)
+                .collect(Collectors.toList());
+        if (!HolidayDates.contains(CalendarNow.getTime()) && (day != Calendar.SATURDAY) && (day != Calendar.SUNDAY)) 
+        {
+        	Workhour WorkhourCheck = WorkhourOnlyByDate(personid, DateNow);
+    		if (WorkhourCheck == null)
+    		{
+    			Workhour insert = new Workhour();
+    			insert.personid = personid;
+    			insert.workstart = new Timestamp(DateNow.getTime());
+    			insert.workstartinterval = (int)Interval(personid,DateNow,true);
+    			WorkhourRepository.save(insert);
+    			return (1);
+    		}
+    		else
+    		{
+    			WorkhourCheck.personid = null;
+    			return (2);
+    		}
+        }
+        else {return (3);}
 		
 	}
 	
 	@PutMapping("/checkout")
-	public Workhour Checkout(@RequestBody String personid)
+	public int Checkout(@RequestBody String personid)
 	{
 		Date DateNow = new Date();
 		Workhour Workhour = new Workhour();
-		Workhour WorkhourCheck = getWorkhourOnlyByDate(personid, DateNow);
-		if (WorkhourCheck != null)
-		{
-			WorkhourCheck.workend = new Timestamp(DateNow.getTime());
-			WorkhourCheck.workendinterval = (int)Interval(personid,DateNow,false);
-			long work_interval = TimeUnit.MILLISECONDS.toSeconds(WorkhourCheck.workend.getTime() - WorkhourCheck.workstart.getTime());
-			WorkhourCheck.workinterval = (int) work_interval;
-			WorkhourRepository.save(WorkhourCheck);
-			Workhour = WorkhourCheck;
+		Workhour WorkhourCheck = WorkhourOnlyByDate(personid, DateNow);
+		
+		if (WorkhourCheck == null) {
+			return 2;
 		}
-		return Workhour;
+		else if (WorkhourCheck.workend != null) 
+		{
+			return 3;
+		}
+		else 
+		{
+			long interval = DateNow.getTime() - WorkhourCheck.workstart.getTime();
+			if (interval >= 1800000) 
+			{
+				WorkhourCheck.workend = new Timestamp(DateNow.getTime());
+				WorkhourCheck.workendinterval = (int)Interval(personid,DateNow,false);
+				long work_interval = TimeUnit.MILLISECONDS.toSeconds(WorkhourCheck.workend.getTime() - WorkhourCheck.workstart.getTime());
+				WorkhourCheck.workinterval = (int) work_interval;
+				WorkhourRepository.save(WorkhourCheck);
+				Workhour = WorkhourCheck;
+				return 1;
+			} else { return 4; }
+		}
 	}
 	
 	@GetMapping("/check/{id}")
 	public Workhour Check(@PathVariable("id") String personid)
 	{
 		Date DateNow = new Date();
-		Workhour Workhour =  getWorkhourOnlyByDate(personid, DateNow);
+		Workhour Workhour =  WorkhourOnlyByDate(personid, DateNow);
 		return Workhour;
 	}
 	
