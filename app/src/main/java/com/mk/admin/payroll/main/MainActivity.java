@@ -220,6 +220,7 @@ public class MainActivity extends AppCompatActivity
                 intent.putExtra("workstart", data.workstart.toString());
                 intent.putExtra("workstartinterval", data.workstartinterval.toString());
                 intent.putExtra("interval_work", interval_work);
+                intent.putExtra("personid", data.personid);
                 if (data.workend == null)
                 {
                     intent.putExtra("workend", "null_workend");
