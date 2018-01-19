@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 else if (data == 4)
                 {
-                    Toast.makeText(MainActivity.this,"Cannot Check Out in 30 Minutes When Check In", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this,"Cannot Check Out in 30 Minutes After Checked In", Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -229,36 +229,6 @@ public class MainActivity extends AppCompatActivity
                     intent.putExtra("workend", data.workend.toString());
                 }
                 startActivity(intent);
-                /*Log.d("aaa",data.keySet().toString());
-
-                Intent intent = new Intent(MainActivity.this, WorkhoursActivity.class);
-
-                for (String resultKey : data.keySet())
-                {
-                    responseCode = resultKey;
-                    responseMessage = data.get(resultKey);
-                    if (responseCode != null)
-                    {
-                        if (responseMessage != null)
-                        {
-                            String[] parts = responseMessage.split(";");
-                            Log.d("RESPONSE FROM LOGIN", responseMessage);
-                            Log.d("Response Code", responseCode);
-                            Log.d("walaaa", parts[0]);
-                            if (responseCode.equals("workstart"))
-                            {
-                                intent.putExtra("workstart", parts[0]);
-                                workstart = parts[0].toString();
-                            }
-                            else if(responseCode.equals("workstartinterval"))
-                            {
-                                workstart_interval = parts[0].toString();
-                                intent.putExtra("workstartinterval", parts[0]);
-                            }
-                        }
-                    }
-                }
-                startActivity(intent);*/
             }
 
             @Override

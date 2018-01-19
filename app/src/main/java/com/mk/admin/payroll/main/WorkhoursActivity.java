@@ -45,11 +45,6 @@ public class WorkhoursActivity extends AppCompatActivity
         interval_work = getIntent().getExtras().getString("interval_work");
         workend = getIntent().getExtras().getString("workend");
 
-        //MainActivity main = new MainActivity();
-        /*workstart = main.workstart;
-        //workstartinterval = main.workstart_interval;
-        interval_work = main.interval_work;*/
-
         if (workstart == null || workstartinterval == null)
         {
             kehadiran.setText("Please Check In");
@@ -58,16 +53,6 @@ public class WorkhoursActivity extends AppCompatActivity
         {
             workstartinterval_time = Long.parseLong(workstartinterval);
 
-            /*SimpleDateFormat formatterr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss");
-
-            try {
-                Date dates = formatterr.parse(workstart);
-                formatterr.applyPattern("HH:mm");
-                result = formatterr.format(dates);
-
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }*/
             GetWorkend(workstart);
 
             masuk.setText(result.toString());
@@ -84,15 +69,6 @@ public class WorkhoursActivity extends AppCompatActivity
             telat_jam = Integer.parseInt(telat_s[1]) / 3600;
             telat_menit = (Integer.parseInt(telat_s[1]) % 3600) / 60;
             check = Integer.parseInt(telat_s[1]);
-
-            Log.d("workstartinterval", workstartinterval);
-            Log.d("interval_work", interval_work);
-            Log.d("jam pulang", jam_pulang.toString());
-            Log.d("menit pulang", menit_pulang.toString());
-            Log.d("jam", telat_s[1].toString());
-            Log.d("telat jam", telat_jam.toString());
-            Log.d("telat menit", telat_menit.toString());
-            Log.d("cek", check.toString());
 
             if (workstartinterval_time < 0)
             {
