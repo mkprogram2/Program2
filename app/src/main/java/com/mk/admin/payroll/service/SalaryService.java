@@ -1,5 +1,6 @@
 package com.mk.admin.payroll.service;
 
+import com.mk.admin.payroll.model.Remuneration;
 import com.mk.admin.payroll.model.Workhour;
 import com.mk.admin.payroll.model.Person;
 
@@ -9,6 +10,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
@@ -38,4 +40,14 @@ public interface SalaryService
     @PUT("remunerations/salary")
     Call<Person> PutSalary (@Header("Person") String person,
                             @Body Person persons);
+
+    @GET("remunerations/{id}/{month}/{year}")
+    Call<Remuneration> GetRemuneration (@Header("person") String person,
+                                        @Path("id") String id,
+                                        @Path("month") Integer month,
+                                        @Path("year") Integer year);
+
+    @POST("remunerations/")
+    Call<Remuneration> PostRemuneration (@Header("person") String person,
+                                         @Body Remuneration remuneration);
 }

@@ -16,8 +16,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp">
 
             <TextView
                 android:id="@+id/textView17"
@@ -55,52 +57,193 @@
                 android:inputType="textPersonName"
                 android:textSize="15sp" />
 
-            <TableLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingBottom="30dp">
+                android:orientation="vertical">
 
-                <TableRow
+                <TextView
+                    android:id="@+id/textView52"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Range Salary"
+                    android:textAlignment="center"
+                    android:textSize="15sp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/textView19"
-                        android:layout_width="match_parent"
+                        android:id="@+id/range_salary"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Basic Salary"
-                        android:textSize="15sp"/>
+                        android:layout_weight="1"
+                        android:text="TextView"
+                        android:textAlignment="center"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/month_salary"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text=""
+                    android:textSize="15sp" />
+
+                <Button
+                    android:id="@+id/set_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Set Date" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginBottom="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView43"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Basic Salary" />
+
+                    <TextView
+                        android:id="@+id/textView44"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="Rp"
+                        android:textAlignment="textEnd" />
 
                     <EditText
                         android:id="@+id/basic_salary"
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:inputType="textPersonName" />
-                </TableRow>
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="number"/>
+                </LinearLayout>
 
-                <TableRow
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:paddingTop="10dp">
 
                     <TextView
                         android:id="@+id/textView20"
-                        android:layout_width="match_parent"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
-                        android:text="Transport Allowence"
-                        android:textSize="15sp"
-                        android:paddingTop="20dp"/>
+                        android:layout_weight="1"
+                        android:text="Transport Allowence" />
+
+                    <TextView
+                        android:id="@+id/textView45"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="Rp"
+                        android:textAlignment="textEnd" />
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:orientation="vertical">
 
                         <EditText
-                            android:id="@+id/editText7"
+                            android:id="@+id/trans"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:ems="10"
-                            android:inputType="textPersonName"
+                            android:inputType="number"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/radioButton3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:checked="true"
+                                android:text="Daily" />
+
+                            <RadioButton
+                                android:id="@+id/radioButton4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Fixed" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:id="@+id/textView21"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Meal Allowence" />
+
+                    <TextView
+                        android:id="@+id/textView19"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="Rp"
+                        android:textAlignment="textEnd"/>
+
+                    <LinearLayout
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:id="@+id/meal"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:ems="10"
+                            android:inputType="number"
                             android:text="" />
 
                         <LinearLayout
@@ -126,173 +269,203 @@
                         </LinearLayout>
 
                     </LinearLayout>
-                </TableRow>
+                </LinearLayout>
 
-                <TableRow
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
-
-                    <TextView
-                        android:id="@+id/textView21"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Meal Allowence"
-                        android:textSize="15sp"
-                        android:paddingTop="20dp"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <EditText
-                            android:id="@+id/editText8"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:ems="10"
-                            android:inputType="textPersonName" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal">
-
-                            <RadioButton
-                                android:id="@+id/radioButton3"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:checked="true"
-                                android:text="Daily" />
-
-                            <RadioButton
-                                android:id="@+id/radioButton4"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Fixed" />
-                        </LinearLayout>
-                    </LinearLayout>
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/textView22"
-                        android:layout_width="match_parent"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
-                        android:text="Communication Allowance"
-                        android:textSize="15sp" />
+                        android:layout_weight="1"
+                        android:text="Communication Allowance"/>
 
-                    <EditText
-                        android:id="@+id/editText9"
+                    <TextView
+                        android:id="@+id/textView46"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="textPersonName" />
-                </TableRow>
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="Rp"
+                        android:textAlignment="textEnd" />
 
-                <TableRow
+                    <EditText
+                        android:id="@+id/communication"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="number"/>
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/textView23"
-                        android:layout_width="match_parent"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
-                        android:text="Diligently Allowence"
-                        android:textSize="15sp" />
+                        android:layout_weight="1"
+                        android:text="Diligently Allowence" />
 
-                    <EditText
-                        android:id="@+id/editText11"
+                    <TextView
+                        android:id="@+id/textView47"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="textPersonName" />
-                </TableRow>
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="Rp"
+                        android:textAlignment="textEnd" />
 
-                <TableRow
+                    <EditText
+                        android:id="@+id/diligent"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="number"/>
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/textView24"
-                        android:layout_width="match_parent"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="Health or Insurence"
-                        android:textSize="15sp"/>
+                        android:textSize="15sp" />
 
-                    <EditText
-                        android:id="@+id/editText12"
+                    <TextView
+                        android:id="@+id/textView48"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="textPersonName"  />
-                </TableRow>
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="Rp"
+                        android:textAlignment="textEnd"/>
 
-                <TableRow
+                    <EditText
+                        android:id="@+id/health"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="number"/>
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/textView25"
-                        android:layout_width="match_parent"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="Overtime"
-                        android:textSize="15sp"/>
+                        android:textSize="15sp" />
 
-                    <EditText
-                        android:id="@+id/editText13"
+                    <TextView
+                        android:id="@+id/textView49"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="textPersonName" />
-                </TableRow>
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="Rp"
+                        android:textAlignment="textEnd"/>
 
-                <TableRow
+                    <EditText
+                        android:id="@+id/overtime"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="number"/>
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/textView26"
-                        android:layout_width="match_parent"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="Pension"
-                        android:textSize="15sp"/>
+                        android:textSize="15sp" />
 
-                    <EditText
-                        android:id="@+id/editText14"
+                    <TextView
+                        android:id="@+id/textView50"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="textPersonName" />
-                </TableRow>
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="Rp"
+                        android:textAlignment="textEnd"/>
 
-                <TableRow
+                    <EditText
+                        android:id="@+id/pension"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="number" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/textView27"
-                        android:layout_width="match_parent"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="Commision"
                         android:textSize="15sp" />
 
-                    <EditText
-                        android:id="@+id/editText10"
+                    <TextView
+                        android:id="@+id/textView51"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="Rp"
+                        android:textAlignment="textEnd"/>
+
+                    <EditText
+                        android:id="@+id/commision"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:ems="10"
-                        android:inputType="textPersonName" />
-                </TableRow>
-            </TableLayout>
+                        android:inputType="number"/>
+                </LinearLayout>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="80dp"
                 android:orientation="horizontal"
                 android:layout_marginBottom="16dp">
 
