@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,8 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.program2.repository.HolidayRepository;
 import com.program2.repository.WorkhourRepository;
 import com.program2.repository.PersonRepository;
+import com.program2.repository.RemunerationRepository;
 import com.program2.table.Holiday;
 import com.program2.table.Person;
+import com.program2.table.Remuneration;
 import com.program2.table.Shift;
 import com.program2.table.Workhour;
 
@@ -33,6 +36,8 @@ public class RemunerationController {
 	private HolidayRepository HolidayRepository;
 	@Autowired
 	private PersonRepository PersonRepository;
+	@Autowired
+	private RemunerationRepository RemunerationRepository;
 	
 	@GetMapping("/salary/{month}/{year}/{id}")
 	public Double Netsalary (@PathVariable("month") double month, @PathVariable("year") double year, @PathVariable("id") String id) 
@@ -42,6 +47,24 @@ public class RemunerationController {
 		double gross_salary =  PersonRepository.findById(id).salary;
 		double net_salary = gross_salary * attends / WorkhoursInMonth(month,year);
 		return net_salary;
+	}
+	
+	@PostMapping
+	public Remuneration saveRemun(@RequestBody Remuneration Remun)
+	{
+		return RemunerationRepository.save(Remun);
+	}
+	
+	@PutMapping
+	public Remuneration updateRemun(@RequestBody Remuneration Remun)
+	{
+		return RemunerationRepository.save(Remun);
+	}
+	
+	@GetMapping("/{id}/{month}/{year}")
+	public	Remuneration GetRemuneration (@PathVariable("id") String id, @PathVariable("month") int month, @PathVariable("year") int year) 
+	{
+		return  RemunerationRepository.findByPersonIdAndMonthAndYear(id, month, year);
 	}
 	
 	@GetMapping("/totalwim/{month}/{year}")
