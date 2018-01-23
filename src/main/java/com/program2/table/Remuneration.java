@@ -2,6 +2,8 @@ package com.program2.table;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -10,7 +12,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="remunerations", schema="mtr3")
 public class Remuneration {
-	@Id
+	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	public int id;
 	public Double salary;
 	public Double trans;
@@ -31,6 +33,8 @@ public class Remuneration {
 	public Double mindiligent;
 	@Column(name = "net_salary")
 	public Double netsalary;
+	public Double deduction;
+	public Double income;
 	public int month;
 	public int year;
 	@ManyToOne
