@@ -190,15 +190,15 @@
                             android:orientation="horizontal">
 
                             <RadioButton
-                                android:id="@+id/radioButton3"
+                                android:id="@+id/trans_daily"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:checked="true"
+                                android:checked="false"
                                 android:text="Daily" />
 
                             <RadioButton
-                                android:id="@+id/radioButton4"
+                                android:id="@+id/trans_fixed"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -252,16 +252,16 @@
                             android:orientation="horizontal">
 
                             <RadioButton
-                                android:id="@+id/radioButton"
+                                android:id="@+id/meal_daily"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:checked="true"
+                                android:checked="false"
                                 android:duplicateParentState="false"
                                 android:text="Daily" />
 
                             <RadioButton
-                                android:id="@+id/radioButton2"
+                                android:id="@+id/meal_fixed"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -479,8 +479,8 @@
                         android:id="@+id/textView28"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Total"
-                        android:textSize="15sp"/>
+                        android:text="Gross Salary"
+                        android:textSize="15sp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"

@@ -130,7 +130,9 @@ public class MainActivity extends AppCompatActivity
         salary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, SalaryActivity.class));
+                Intent intent = new Intent(MainActivity.this, SalaryActivity.class);
+                intent.putExtra("id", mid);
+                startActivity(intent);
             }
         });
     }

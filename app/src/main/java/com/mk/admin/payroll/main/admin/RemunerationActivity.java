@@ -1,5 +1,6 @@
 package com.mk.admin.payroll.main.admin;
 
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -69,6 +71,14 @@ public class RemunerationActivity extends AppCompatActivity {
     Button save_remuneration;
     @BindView(R.id.set_date)
     Button set_date;
+    @BindView(R.id.trans_daily)
+    RadioButton trans_daily;
+    @BindView(R.id.trans_fixed)
+    RadioButton trans_fixed;
+    @BindView(R.id.meal_daily)
+    RadioButton meal_daily;
+    @BindView(R.id.meal_fixed)
+    RadioButton meal_fixed;
 
     private EmployeeService employeeService;
     private SalaryService salaryService;
@@ -96,6 +106,7 @@ public class RemunerationActivity extends AppCompatActivity {
         EmptyUI();
         EdittextChange();
         GetEmployee(persons, mid);
+        CheckRadio();
 
         save_remuneration.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,8 +137,7 @@ public class RemunerationActivity extends AppCompatActivity {
                 employee_id.setText(dataperson.getId().toString());
                 employee_name.setText(dataperson.getName().toString());
                 employee_role.setText(dataperson.Role.getName().toString());
-                range_salary.setText("Rp." + dataperson.Role.minsalary + " - " + dataperson.Role.maxsalary);
-
+                range_salary.setText("Rp." + setString(dataperson.Role.minsalary) + " - Rp." + setString(dataperson.Role.maxsalary));
                 gross_salary.setText(basic_salary.getText());
             }
 
@@ -189,7 +199,7 @@ public class RemunerationActivity extends AppCompatActivity {
                 employee_id.setText(remuneration.person.id.toString());
                 employee_name.setText(remuneration.person.name.toString());
                 employee_role.setText(remuneration.person.Role.name.toString());
-                range_salary.setText("Rp." + remuneration.person.Role.minsalary + " - " + remuneration.person.Role.maxsalary);
+                range_salary.setText("Rp." + setString(remuneration.person.Role.minsalary) + " - Rp." + setString(remuneration.person.Role.maxsalary));
 
                 if (remuneration.salary != null)
                     basic_salary.setText(setString(remuneration.salary));
@@ -209,8 +219,8 @@ public class RemunerationActivity extends AppCompatActivity {
                     pension.setText(setString(remuneration.pension));
                 if (remuneration.commision != null)
                     commision.setText(setString(remuneration.commision));
-                if (remuneration.netsalary != null)
-                    gross_salary.setText(setString(remuneration.netsalary));
+                if (remuneration.income != null)
+                    gross_salary.setText(setString(remuneration.income));
             }
 
             @Override
@@ -234,10 +244,9 @@ public class RemunerationActivity extends AppCompatActivity {
         remuneration.overtime = Double.parseDouble(overtime.getText().toString());
         remuneration.pension = Double.parseDouble(pension.getText().toString());
         remuneration.commision = Double.parseDouble(commision.getText().toString());
-        remuneration.netsalary = Double.parseDouble(gross_salary.getText().toString());
+        remuneration.income = Double.parseDouble(gross_salary.getText().toString());
         remuneration.month = months;
         remuneration.year = yearss;
-
         PostRemuneration(persons, remuneration);
     }
 
@@ -250,6 +259,7 @@ public class RemunerationActivity extends AppCompatActivity {
             public void onResponse(retrofit2.Call<Remuneration> call, Response<Remuneration> response)
             {
                 remuneration = response.body();
+                startActivity(new Intent(RemunerationActivity.this, MainadminActivity.class));
                 Toast.makeText(RemunerationActivity.this,"Saving Remuneration Was Successfully", Toast.LENGTH_LONG).show();
             }
 
@@ -408,5 +418,81 @@ public class RemunerationActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void CheckRadio ()
+    {
+        trans_fixed.setChecked(true);
+        trans_fixed.setSelected(true);
+        meal_fixed.setChecked(true);
+        meal_fixed.setSelected(true);
+
+        trans_daily.setOnClickListener(new RadioButton.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if((trans_daily.isSelected())){
+                    trans_daily.setChecked(false);
+                    trans_daily.setSelected(false);
+                    trans_fixed.setChecked(true);
+                    trans_fixed.setSelected(true);
+                } else {
+                    trans_daily.setChecked(true);
+                    trans_daily.setSelected(true);
+                    trans_fixed.setChecked(false);
+                    trans_fixed.setSelected(false);
+                }
+            }
+        });
+
+        trans_fixed.setOnClickListener(new RadioButton.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if((trans_fixed.isSelected())){
+                    trans_daily.setChecked(true);
+                    trans_daily.setSelected(true);
+                    trans_fixed.setChecked(false);
+                    trans_fixed.setSelected(false);
+                } else {
+                    trans_daily.setChecked(false);
+                    trans_daily.setSelected(false);
+                    trans_fixed.setChecked(true);
+                    trans_fixed.setSelected(true);
+                }
+            }
+        });
+
+        meal_daily.setOnClickListener(new RadioButton.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if((meal_daily.isSelected())){
+                    meal_daily.setChecked(false);
+                    meal_daily.setSelected(false);
+                    meal_fixed.setChecked(true);
+                    meal_fixed.setSelected(true);
+                } else {
+                    meal_daily.setChecked(true);
+                    meal_daily.setSelected(true);
+                    meal_fixed.setChecked(false);
+                    meal_fixed.setSelected(false);
+                }
+            }
+        });
+
+        meal_fixed.setOnClickListener(new RadioButton.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if((meal_fixed.isSelected())){
+                    meal_daily.setChecked(true);
+                    meal_daily.setSelected(true);
+                    meal_fixed.setChecked(false);
+                    meal_fixed.setSelected(false);
+                } else {
+                    meal_daily.setChecked(false);
+                    meal_daily.setSelected(false);
+                    meal_fixed.setChecked(true);
+                    meal_fixed.setSelected(true);
+                }
+            }
+        });
     }
 }

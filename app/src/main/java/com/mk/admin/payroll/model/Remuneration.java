@@ -21,6 +21,8 @@ public class Remuneration
     public Double minmeal;
     public Double mindiligent;
     public Double netsalary;
+    public Double income;
+    public Double deduction;
     public Integer month;
     public Integer year;
     public Person person = new Person();

@@ -17,7 +17,7 @@
     <color name="red500">#f44336</color>
     <color name="red400">#F44336</color>
 
-    <color name="teal">#1DE9B6</color>
+    <color name="teal">#1de9b6</color>
     <color name="light_green">#00E676</color>
     <color name="blue">#4fc3f7</color>
     <color name="blue_gray">#90A4AE</color>
@@ -31,7 +31,7 @@
     <color name="deepOrange700">#E64A19</color>
     <color name="deepOrange500">#FF5722</color>
     <color name="deepOrange400">#FF7043</color>
-    <color name="deepOrange300">#FF8A65</color>
+    <color name="deepOrange300">#ff8a65</color>
 
     <color name="test1">#FFD54F</color>
     <color name="test2">#FFA726</color>
