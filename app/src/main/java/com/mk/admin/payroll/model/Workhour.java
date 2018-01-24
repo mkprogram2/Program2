@@ -14,4 +14,5 @@ public class Workhour
     public Long workstartinterval;
     public Long workendinterval;
     public Long workinterval;
+    public Integer status;
 }

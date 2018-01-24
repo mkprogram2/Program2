@@ -1,5 +1,6 @@
 package com.mk.admin.payroll.main;
 
+import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,7 +31,7 @@ import retrofit2.Response;
 public class WorkhoursActivity extends AppCompatActivity
 {
 
-    private String workstart, workstartinterval, interval_work, workend, result, result2, persons, personid, shifttime;
+    private String workstart, workstartinterval, interval_work, workend, result, result2, persons, personid, shifttime, checkout_status;
     private Long workstartinterval_time;
     private String[] waktu_shift, waktu_kerja, telat_s;
     private Integer jam_pulang_shift, menit_pulang_shift, jam_pulang, menit_pulang, telat_jam, telat_menit, check;
@@ -55,13 +56,9 @@ public class WorkhoursActivity extends AppCompatActivity
     @BindView(R.id.checkout)
     TextView checkout;
     @BindView(R.id.timeout)
-    TextView timeout;
-    @BindView(R.id.tv_second)
-    TextView tv_second;
+    Button timeout;
     @BindView(R.id.tv_hour)
     TextView tv_hour;
-    @BindView(R.id.tv_minute)
-    TextView tv_minute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -79,6 +76,7 @@ public class WorkhoursActivity extends AppCompatActivity
         interval_work = getIntent().getExtras().getString("interval_work");
         workend = getIntent().getExtras().getString("workend");
         personid = getIntent().getExtras().getString("personid");
+        checkout_status = getIntent().getExtras().getString("checkout_status");
 
         GetPerson(persons, personid);
 
@@ -92,8 +90,6 @@ public class WorkhoursActivity extends AppCompatActivity
 
             GetWorkstart(workstart);
 
-            Log.d("WORKSTART", workstart);
-            Log.d("RESULT", result2.toString());
             masuk.setText(result2.toString());
 
             waktu_shift = interval_work.split(":");
@@ -115,17 +111,17 @@ public class WorkhoursActivity extends AppCompatActivity
                 if (jam_pulang <10)
                 {
                     timeout.setText("0" +jam_pulang + ":" + menit_pulang);
-                    EVENT_DATE_TIME = "0" + jam_pulang + ":" + menit_pulang;
+                    EVENT_DATE_TIME = "0" + jam_pulang + ":" + menit_pulang + ":00";
                 }
                 else if(menit_pulang < 10)
                 {
                     timeout.setText(jam_pulang + ":0" + menit_pulang);
-                    EVENT_DATE_TIME =jam_pulang + ":0" + menit_pulang;
+                    EVENT_DATE_TIME =jam_pulang + ":0" + menit_pulang + ":00";
                 }
                 else
                 {
                     timeout.setText(jam_pulang + ":" + menit_pulang);
-                    EVENT_DATE_TIME = jam_pulang + ":" + menit_pulang;
+                    EVENT_DATE_TIME = jam_pulang + ":" + menit_pulang + ":00";
                 }
             }
             else
@@ -143,7 +139,10 @@ public class WorkhoursActivity extends AppCompatActivity
         {
             GetWorkend(workend);
             keluar.setText(result);
-            checkout.setText("You Have Been Checked Out");
+            if (checkout_status.equals("1"))
+                checkout.setText("You Have Been Checked Out");
+            else if (checkout_status.equals("2"))
+                checkout.setText("You Have Been Checked Out By System");
         }
 
         countDownStart();
@@ -217,7 +216,6 @@ public class WorkhoursActivity extends AppCompatActivity
         return shifttime;
     }
 
-
     private void countDownStart()
     {
         runnable = new Runnable()
@@ -227,7 +225,7 @@ public class WorkhoursActivity extends AppCompatActivity
             {
                 try {
                     handler.postDelayed(this, 1000);
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
                     Date event_date = dateFormat.parse(EVENT_DATE_TIME);
                     Date current_date = dateFormat.parse(dateFormat.format(new Date()));
                         long diff = event_date.getTime() - current_date.getTime();
@@ -236,8 +234,9 @@ public class WorkhoursActivity extends AppCompatActivity
                         long Minutes = diff / (60 * 1000) % 60;
                         long Seconds = diff / 1000 % 60;
 
-                        tv_hour.setText(String.format("%02d", Hours) + " Hours");
-                        tv_minute.setText(String.format("%02d", Minutes) + " Minutes");
+                        tv_hour.setText(String.format("%02d", Hours) + " : " + String.format("%02d", Minutes) + " : " + String.format("%02d", Seconds));
+                        /*tv_minute.setText(String.format("%02d", Minutes) + " Minutes");
+                        tv_second.setText(String.format("02d", Seconds) + " ");*/
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -246,7 +245,8 @@ public class WorkhoursActivity extends AppCompatActivity
         handler.postDelayed(runnable, 0);
     }
 
-    protected void onStop() {
+    protected void onStop()
+    {
         super.onStop();
         handler.removeCallbacks(runnable);
     }

@@ -17,157 +17,270 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp">
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Welcome"
-                android:textAlignment="center"
-                android:textSize="40sp" />
-
-            <TextView
-                android:id="@+id/employee_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
-                android:text="Employee name"
-                android:textAlignment="center"
-                android:textSize="30sp" />
-
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="MENU"
-                android:textAlignment="center"
-                android:textSize="30sp"
-                android:textStyle="bold" />
+            android:layout_marginBottom="16dp"
+            android:paddingBottom="30dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginBottom="10dp">
 
-                <Button
-                    android:id="@+id/checkin"
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight=".40"
-                    android:drawableTop="@drawable/ic_action_name"
-                    android:text="Check In"
-                    android:textAllCaps="false" />
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:text="Payroll"
+                    android:textAlignment="center"
+                    android:textSize="40sp" />
 
-                <Button
-                    android:id="@+id/user"
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight=".40"
-                    android:drawableTop="@drawable/ic_user"
-                    android:text="User"
-                    android:textAllCaps="false" />
+                <TextView
+                    android:id="@+id/employee_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="10dp"
+                    android:text="Name"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/checkout"
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight=".40"
-                    android:drawableTop="@drawable/ic_checkout"
-                    android:text="Check Out"
-                    android:textAllCaps="false" />
+                <TextView
+                    android:id="@+id/employee_role"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Role"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/attendance"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView55"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Attendance"
+                    android:textStyle="bold"
+                    android:textColor="@color/blue"
+                    android:textAlignment="center"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/checkin"
+                        android:layout_width="100dp"
+                        android:layout_height="fill_parent"
+                        android:layout_margin="5dp"
+                        android:drawableTop="@drawable/ic_action_name"
+                        android:text="Check In"
+                        android:textAllCaps="false" />
+
+                    <Button
+                        android:id="@+id/workhours"
+                        android:layout_width="100dp"
+                        android:layout_height="fill_parent"
+                        android:layout_margin="5dp"
+                        android:drawableTop="@drawable/ic_workhours"
+                        android:text="Work Hours"
+                        android:textAllCaps="false" />
+
+                    <Button
+                        android:id="@+id/checkout"
+                        android:layout_width="100dp"
+                        android:layout_height="fill_parent"
+                        android:layout_margin="5dp"
+                        android:drawableTop="@drawable/ic_checkout"
+                        android:text="Check Out"
+                        android:textAllCaps="false" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/working"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView54"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Working"
+                    android:textStyle="bold"
+                    android:textColor="@color/blue"
+                    android:textAlignment="center"/>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/user"
+                            android:layout_width="100dp"
+                            android:layout_height="fill_parent"
+                            android:layout_margin="5dp"
+                            android:drawableTop="@drawable/ic_user"
+                            android:text="User"
+                            android:textAllCaps="false" />
+
+                        <Button
+                            android:id="@+id/overtime"
+                            android:layout_width="100dp"
+                            android:layout_height="fill_parent"
+                            android:layout_margin="5dp"
+                            android:drawableTop="@drawable/ic_overtime"
+                            android:text="Overtime"
+                            android:textAllCaps="false" />
+
+                        <Button
+                            android:id="@+id/calendar"
+                            android:layout_width="100dp"
+                            android:layout_height="fill_parent"
+                            android:layout_margin="5dp"
+                            android:drawableTop="@drawable/ic_calendar"
+                            android:text="Calendar"
+                            android:textAllCaps="false" />
+
+                        <Button
+                            android:id="@+id/salary"
+                            android:layout_width="100dp"
+                            android:layout_height="fill_parent"
+                            android:layout_margin="5dp"
+                            android:drawableTop="@drawable/ic_payments"
+                            android:text="Salary"
+                            android:textAllCaps="false" />
+
+                        <Button
+                            android:id="@+id/button6"
+                            android:layout_width="100dp"
+                            android:layout_height="fill_parent"
+                            android:layout_margin="5dp"
+                            android:drawableTop="@drawable/ic_paid"
+                            android:text="Paid Leave"
+                            android:textAllCaps="false" />
+
+                        <Button
+                            android:id="@+id/button7"
+                            android:layout_width="100dp"
+                            android:layout_height="fill_parent"
+                            android:layout_margin="5dp"
+                            android:drawableTop="@drawable/ic_report"
+                            android:text="Report"
+                            android:textAllCaps="false" />
+
+                    </LinearLayout>
+
+                </HorizontalScrollView>
 
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/human_resource"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/workhours"
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight=".40"
-                    android:drawableTop="@drawable/ic_workhours"
-                    android:text="Work Hours"
-                    android:textAllCaps="false" />
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Human Resource"
+                    android:textStyle="bold"
+                    android:textColor="@color/blue"
+                    android:textAlignment="center"/>
 
-                <Button
-                    android:id="@+id/overtime"
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight=".40"
-                    android:drawableTop="@drawable/ic_overtime"
-                    android:text="Overtime"
-                    android:textAllCaps="false" />
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                <Button
-                    android:id="@+id/calendar"
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight=".40"
-                    android:drawableTop="@drawable/ic_calendar"
-                    android:text="Calendar"
-                    android:textAllCaps="false" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/employee"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:drawableTop="@drawable/ic_person"
+                            android:text="Employee"
+                            android:textSize="10sp" />
+
+                        <Button
+                            android:id="@+id/add_employee"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:drawableTop="@drawable/ic_add_person"
+                            android:text="Add Employee"
+                            android:textSize="10sp" />
+
+                        <Button
+                            android:id="@+id/remuneration"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:drawableTop="@drawable/ic_payments"
+                            android:text="Remuneration"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                </HorizontalScrollView>
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/salary"
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight=".40"
-                    android:drawableTop="@drawable/ic_payments"
-                    android:text="Salary"
-                    android:textAllCaps="false" />
-
-                <Button
-                    android:id="@+id/button6"
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight=".40"
-                    android:drawableTop="@drawable/ic_paid"
-                    android:text="Paid Leave"
-                    android:textAllCaps="false" />
-
-                <Button
-                    android:id="@+id/button7"
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight=".40"
-                    android:drawableTop="@drawable/ic_report"
-                    android:text="Report"
-                    android:textAllCaps="false" />
-
-            </LinearLayout>
-
-            <LinearLayout
+                android:id="@+id/manage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/kehadiran"
+                    android:id="@+id/textView58"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="10dp"
-                    android:textAlignment="center"
-                    android:textSize="30sp" />
+                    android:text="Manage"
+                    android:textStyle="bold"
+                    android:textColor="@color/blue"
+                    android:textAlignment="center"/>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/req_overtime"
+                            android:layout_width="100dp"
+                            android:layout_height="fill_parent"
+                            android:layout_margin="5dp"
+                            android:drawableTop="@drawable/ic_overtime"
+                            android:text="Overtime"
+                            android:textAllCaps="false" />
+                    </LinearLayout>
+
+                </HorizontalScrollView>
+
             </LinearLayout>
 
         </LinearLayout>

@@ -37,6 +37,11 @@ public interface SalaryService
                                @Path("month") Integer month,
                                @Path("year") Integer year);
 
+    @GET("remunerations/totalwfy/{month}/{year}")
+    Call<Integer> GetWorkdaysToday (@Header("Person") String person,
+                               @Path("month") Integer month,
+                               @Path("year") Integer year);
+
     @PUT("remunerations/salary")
     Call<Person> PutSalary (@Header("Person") String person,
                             @Body Person persons);

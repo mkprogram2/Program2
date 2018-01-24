@@ -22,15 +22,64 @@
             android:paddingBottom="40dp"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textView8"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
-                android:text="Salary"
-                android:textAlignment="center"
-                android:textSize="40sp"
-                android:textStyle="bold" />
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp">
+
+                <LinearLayout
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/employee_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingBottom="5dp"
+                        android:text="Name"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/employee_role"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_weight="1"
+                        android:text="Role"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView41"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Net Salary"
+                        android:textColor="@color/blue"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/net_salary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -49,17 +98,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Net Salary"
+                        android:text="Period"
                         android:textColor="@color/blue"
                         android:textSize="15sp"
-                        android:textStyle="bold"  />
+                        android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/net_salary"
+                        android:id="@+id/period"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textSize="15sp" />
+                        android:textSize="10sp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -84,7 +133,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textAlignment="center" />
+                        android:textAlignment="center"
+                        android:textSize="10sp"/>
                 </LinearLayout>
 
                 <Button
@@ -204,7 +254,8 @@
                         android:layout_weight="1"
                         android:textSize="15sp"
                         android:textAlignment="textEnd"
-                        android:layout_gravity="end"/>
+                        android:layout_gravity="end"
+                        android:textStyle="bold"/>
                 </LinearLayout>
 
                 <View
@@ -433,7 +484,8 @@
                         android:layout_gravity="end"
                         android:layout_weight="1"
                         android:textAlignment="textEnd"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        android:textStyle="bold"/>
                 </LinearLayout>
 
                 <View

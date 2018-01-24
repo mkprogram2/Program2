@@ -3,6 +3,7 @@ package com.mk.admin.payroll.main;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,6 +21,7 @@ import com.rackspira.kristiawan.rackmonthpicker.listener.OnCancelMonthDialogList
 
 import org.w3c.dom.Text;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -29,10 +31,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SalaryActivity extends AppCompatActivity {
-
+public class SalaryActivity extends AppCompatActivity
+{
     private SalaryService service4;
     private String persons, mid;
+    private Integer present_days, work_days, months, years, month_now;
     private Remuneration remuneration = new Remuneration();
     private RackMonthPicker rackMonthPicker;
     private String[] monthinyear = new String[]{"January" , "February", "Maret", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
@@ -77,6 +80,12 @@ public class SalaryActivity extends AppCompatActivity {
     TextView diligent_deduction;
     @BindView(R.id.deduction)
     TextView deduction;
+    @BindView(R.id.employee_name)
+    TextView employee_name;
+    @BindView(R.id.employee_role)
+    TextView employee_role;
+    @BindView(R.id.period)
+    TextView period;
     @BindView(R.id.salary)
     Button salary;
 
@@ -91,6 +100,8 @@ public class SalaryActivity extends AppCompatActivity {
         persons = SharedPreferenceEditor.LoadPreferences(this,"Persons","");
 
         mid = getIntent().getExtras().getString("id");
+        employee_name.setText(getIntent().getExtras().getString("name"));
+        employee_role.setText(getIntent().getExtras().getString("role_name"));
 
         EmptyUI();
         RackMonth();
@@ -133,7 +144,26 @@ public class SalaryActivity extends AppCompatActivity {
             public void onResponse(retrofit2.Call<List<Workhour>> call, Response<List<Workhour>> response)
             {
                 final List<Workhour> workhours = response.body();
-                present_day.setText(String.valueOf(workhours.size()));
+                //present_days = workhours.size();
+                Integer temp = 0;
+                for (int i = 0; i < workhours.size(); i++)
+                {
+                    if (workhours.get(i).workend != null)
+                    {
+                        temp++;
+                    }
+                }
+                present_days = temp;
+                Log.d("PRESENT", present_days.toString());
+                present_day.setText(String.valueOf(present_days));
+                if (months == month_now)
+                {
+                    GetWorkdaysToday(persons, months, years);
+                }
+                else
+                {
+                    GetWorkdays(persons, months, years);
+                }
             }
 
             @Override
@@ -154,6 +184,41 @@ public class SalaryActivity extends AppCompatActivity {
             public void onResponse(retrofit2.Call<Integer> call, Response<Integer> response)
             {
                 final Integer workhours = response.body();
+                work_days = workhours;
+                if (present_days == null)
+                {
+                    present_days = 0;
+                }
+                absent_day.setText(String.valueOf(work_days - present_days));
+                workdays.setText(workhours.toString());
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<Integer> call, Throwable t)
+            {
+                Toast.makeText(SalaryActivity.this,t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+
+        });
+    }
+
+    private void GetWorkdaysToday (final String persons, Integer month, Integer year)
+    {
+        Call<Integer> call = service4.GetWorkdaysToday(persons, month, year);
+        call.enqueue(new Callback<Integer>()
+        {
+            @Override
+            public void onResponse(retrofit2.Call<Integer> call, Response<Integer> response)
+            {
+                final Integer workhours = response.body();
+                work_days = workhours;
+                if (present_days == null)
+                {
+                    present_days = 0;
+                }
+                Log.d("WORK DAYS", work_days.toString());
+                Log.d("PRESENT DAYS", present_days.toString());
+                absent_day.setText(String.valueOf(work_days - present_days));
                 workdays.setText(workhours.toString());
             }
 
@@ -215,7 +280,7 @@ public class SalaryActivity extends AppCompatActivity {
         else
             net_salary.setText("-");
         if (remuneration.minsalary != null)
-            basic_deduction.setText("Rp." + setString(remuneration.salary));
+            basic_deduction.setText("Rp." + setString(remuneration.minsalary));
         else
             basic_deduction.setText("-");
         if (remuneration.mintrans != null)
@@ -230,6 +295,14 @@ public class SalaryActivity extends AppCompatActivity {
             diligent_deduction.setText("Rp." + setString(remuneration.mindiligent));
         else
             diligent_deduction.setText("-");
+        if (remuneration.income != null)
+            gross_salary.setText("Rp. " + setString(remuneration.income));
+        else
+            gross_salary.setText("-");
+        if (remuneration.deduction != null)
+            deduction.setText("Rp. " + setString(remuneration.deduction));
+        else
+            deduction.setText("-");
     }
 
     private void RackMonth ()
@@ -239,17 +312,32 @@ public class SalaryActivity extends AppCompatActivity {
                 .setPositiveButton(new DateMonthDialogListener() {
                     @Override
                     public void onDateMonth(int month, int startDate, int endDate, int year, String monthLabel) {
-                        getSalary(persons, mid, month, year);
-                        getPresent(persons, month, year, mid);
-                        GetWorkdays(persons, month, year);
+
+                        Calendar instance = Calendar.getInstance();
+                        Integer currentMonth = instance.get(Calendar.MONTH);
+                        Integer currentYear = instance.get(Calendar.YEAR);
+                        Integer currentDay = instance.get(Calendar.DATE);
 
                         for (int i = 0; i < monthinyear.length; i++)
                         {
                             if ((i + 1) == month)
                             {
                                 paid_month.setText(monthinyear[i] + " , " + year);
+                                if (currentDay == 1)
+                                    period.setText("-");
+                                else
+                                    period.setText("1 " + " - " + (currentDay - 1) + " " + monthinyear[i] + " " + currentYear);
                             }
                         }
+
+
+                        months = month;
+                        years = year;
+                        month_now = currentMonth + 1;
+
+                        getPresent(persons, month, year, mid);
+
+                        getSalary(persons, mid, month, year);
                     }
                 })
                 .setNegativeButton(new OnCancelMonthDialogListener()

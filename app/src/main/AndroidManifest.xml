@@ -24,19 +24,19 @@
         <activity android:name="com.mk.admin.payroll.main.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name="com.mk.admin.payroll.main.MainActivity" />
         <activity android:name="com.mk.admin.payroll.main.WorkhoursActivity" />
         <activity android:name="com.mk.admin.payroll.main.CalendarActivity" />
-        <activity android:name="com.mk.admin.payroll.main.SalaryActivity" />
-        <activity android:name="com.mk.admin.payroll.main.admin.MainadminActivity" />
+        <activity
+            android:name="com.mk.admin.payroll.main.SalaryActivity"
+            android:label="@string/salary"/>
         <activity android:name="com.mk.admin.payroll.main.admin.RemunerationActivity" />
         <activity android:name="com.mk.admin.payroll.main.admin.EmployeeRecyclerActivity" />
         <activity android:name="com.mk.admin.payroll.main.admin.EmployeeActivity" />
-        <activity android:name="com.mk.admin.payroll.main.admin.AddEmployeeActivity"></activity>
+        <activity android:name="com.mk.admin.payroll.main.admin.AddEmployeeActivity" />
     </application>
 
 </manifest>

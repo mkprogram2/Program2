@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
 import com.mk.admin.payroll.common.SharedPreferenceEditor;
-import com.mk.admin.payroll.main.admin.MainadminActivity;
 import com.mk.admin.payroll.model.Person;
 import com.mk.admin.payroll.service.LoginService;
 
@@ -65,22 +64,13 @@ public class LoginActivity extends AppCompatActivity
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.putExtra("id", data.getId());
                 intent.putExtra("name", data.getName());
-                intent.putExtra("role", data.Role.getId());
+                intent.putExtra("role", data.Role.getId().toString());
+                intent.putExtra("role_name", data.Role.name);
                 intent.putExtra("salary", data.getSalary());
                 intent.putExtra("shiftid", data.Shift.getId());
                 intent.putExtra("shift_workstart",data.Shift.getWorkstart());
                 intent.putExtra("shift_workend", data.Shift.getWorkend());
-
-                if (data.Role.getId() != 1)
-                {
-                    startActivity(intent);
-                }
-                else if (data.Role.getId() == 1)
-                {
-                    startActivity(new Intent(LoginActivity.this, MainadminActivity.class));
-                }
-
-                Log.d("data",data.toString());
+                startActivity(intent);
             }
 
             @Override

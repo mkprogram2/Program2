@@ -5,7 +5,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -18,7 +17,7 @@ import android.widget.Toast;
 import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
 import com.mk.admin.payroll.common.SharedPreferenceEditor;
-import com.mk.admin.payroll.main.SalaryActivity;
+import com.mk.admin.payroll.main.MainActivity;
 import com.mk.admin.payroll.model.Person;
 import com.mk.admin.payroll.model.Remuneration;
 import com.mk.admin.payroll.service.EmployeeService;
@@ -228,6 +227,12 @@ public class RemunerationActivity extends AppCompatActivity {
             {
                 EmptyUI();
                 remuneration.id = null;
+                remuneration.income = null;
+                remuneration.minsalary = null;
+                remuneration.mintrans = null;
+                remuneration.minmeal = null;
+                remuneration.mindiligent = null;
+                remuneration.deduction = null;
                 Toast.makeText(RemunerationActivity.this,"Make New Remuneration!", Toast.LENGTH_LONG).show();
             }
         });
@@ -259,7 +264,7 @@ public class RemunerationActivity extends AppCompatActivity {
             public void onResponse(retrofit2.Call<Remuneration> call, Response<Remuneration> response)
             {
                 remuneration = response.body();
-                startActivity(new Intent(RemunerationActivity.this, MainadminActivity.class));
+                startActivity(new Intent(RemunerationActivity.this, MainActivity.class));
                 Toast.makeText(RemunerationActivity.this,"Saving Remuneration Was Successfully", Toast.LENGTH_LONG).show();
             }
 
