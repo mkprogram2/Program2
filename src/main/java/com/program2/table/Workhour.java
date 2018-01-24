@@ -40,6 +40,7 @@ public class Workhour {
 	@Column(name = "work_start_interval",nullable = true) @Type(type = "interval") public int workstartinterval;
 	@Column(name = "work_end_interval",nullable = true) @Type(type = "interval") public int workendinterval;
 	@Column(name = "work_interval",nullable = true) @Type(type = "interval")public int workinterval;
+	public int status;
 }
 
 class WorkhourId implements Serializable

@@ -16,7 +16,6 @@ public class SalarySchedule {
 
 	    public void startScheduleTask() 
 	    {
-	    	 LocalDateTime localNow = LocalDateTime.now();
 	         
 	         LocalDateTime date= LocalDateTime.now();
 	         LocalDateTime date5= date.withHour(23).withMinute(59).withSecond(0);

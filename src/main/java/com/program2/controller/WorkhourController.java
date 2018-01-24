@@ -69,9 +69,7 @@ public class WorkhourController {
 	@GetMapping("/{month}/{year}/{id}")
 	public List<Workhour> getWorkhoursByMonthByYear(@PathVariable("month") double month, @PathVariable("year") double year, @PathVariable("id") String id)
 	{
-		
 		return WorkhourRepository.findAllByMonthByYearById(month, year,id);
-		
 	}
 	
 	
@@ -83,7 +81,8 @@ public class WorkhourController {
 		if (checkin) 
 		{
 			SDatefull = DateFormat1.format(DateNow)+" "+shift.Shift.workstart;
-		}else 
+		}
+		else 
 		{
 			SDatefull = DateFormat1.format(DateNow)+" "+shift.Shift.workend;
 		}
@@ -116,6 +115,8 @@ public class WorkhourController {
 		catch(Exception w) {}
 		return WorkhourCheck;
 	}
+	
+	
 	
 	@PostMapping("/checkin")
 	public int Checkin(@RequestBody String personid)
@@ -154,13 +155,12 @@ public class WorkhourController {
 	public int Checkout(@RequestBody String personid)
 	{
 		Date DateNow = new Date();
-		Workhour Workhour = new Workhour();
 		Workhour WorkhourCheck = WorkhourOnlyByDate(personid, DateNow);
 		
 		if (WorkhourCheck == null) {
 			return 2;
 		}
-		else if (WorkhourCheck.workend != null) 
+		else if (WorkhourCheck.workend != null && WorkhourCheck.status == 1) 
 		{
 			return 3;
 		}
@@ -173,8 +173,8 @@ public class WorkhourController {
 				WorkhourCheck.workendinterval = (int)Interval(personid,DateNow,false);
 				long work_interval = TimeUnit.MILLISECONDS.toSeconds(WorkhourCheck.workend.getTime() - WorkhourCheck.workstart.getTime());
 				WorkhourCheck.workinterval = (int) work_interval;
+				WorkhourCheck.status = 1;
 				WorkhourRepository.save(WorkhourCheck);
-				Workhour = WorkhourCheck;
 				return 1;
 			} else { return 4; }
 		}

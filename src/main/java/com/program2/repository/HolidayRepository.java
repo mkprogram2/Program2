@@ -1,5 +1,6 @@
 package com.program2.repository;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,6 +17,8 @@ public interface HolidayRepository extends JpaRepository<Holiday, String>
 	
 	@Query(value = "SELECT * FROM mtr3.holidays WHERE EXTRACT(month FROM date) = ? AND EXTRACT(year FROM date) = ?",  nativeQuery = true)
 	public List<Holiday> findAllByMonthByYear(double month, double year);
+	
+	public List<Holiday> findByDateBetween(Date start, Date end);
 	
 //	@Query("SELECT * FROM mtr3.holidays WHERE EXTRACT(month FROM 'date') = ? AND EXTRACT(year FROM 'date') = ?")
 //	public List<Holiday> findAllByMonth(String month, String year);
