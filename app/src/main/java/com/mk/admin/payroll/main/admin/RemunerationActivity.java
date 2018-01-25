@@ -227,12 +227,14 @@ public class RemunerationActivity extends AppCompatActivity {
             {
                 EmptyUI();
                 remuneration.id = null;
-                remuneration.income = null;
-                remuneration.minsalary = null;
-                remuneration.mintrans = null;
-                remuneration.minmeal = null;
-                remuneration.mindiligent = null;
-                remuneration.deduction = null;
+                remuneration.income = 0.0;
+                remuneration.minsalary = 0.0;
+                remuneration.mintrans = 0.0;
+                remuneration.minmeal = 0.0;
+                remuneration.mindiligent = 0.0;
+                remuneration.deduction = 0.0;
+                remuneration.netsalary = 0.0;
+                remuneration.person.id = mid;
                 Toast.makeText(RemunerationActivity.this,"Make New Remuneration!", Toast.LENGTH_LONG).show();
             }
         });
@@ -264,7 +266,6 @@ public class RemunerationActivity extends AppCompatActivity {
             public void onResponse(retrofit2.Call<Remuneration> call, Response<Remuneration> response)
             {
                 remuneration = response.body();
-                startActivity(new Intent(RemunerationActivity.this, MainActivity.class));
                 Toast.makeText(RemunerationActivity.this,"Saving Remuneration Was Successfully", Toast.LENGTH_LONG).show();
             }
 
