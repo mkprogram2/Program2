@@ -16,7 +16,8 @@ import com.program2.table.Workhour;
 public interface WorkhourRepository extends JpaRepository<Workhour,String>
 {
 	public Workhour findByPersonidAndWorkstartBetween(String personid, Timestamp workstart1,Timestamp workstart2); 
-	public List<Workhour> findByPersonid(String personid); 
+	public List<Workhour> findByWorkstartBetween(Timestamp workstart1,Timestamp workstart2); 
+	public List<Workhour> findByPersonid(String personid);
 	
 	@Query(value = "SELECT * FROM mtr3.workhours WHERE EXTRACT(month FROM work_start) = ? AND EXTRACT(year FROM work_start) = ? AND person_id = ?",  nativeQuery = true)
 	public List<Workhour> findAllByMonthByYearById(double month, double year, String id);
