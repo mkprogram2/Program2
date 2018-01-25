@@ -2,13 +2,13 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#ff4081</color>
 
     <!--Gray-->
     <color name="gray100">#f5f5f5</color>
     <color name="gray200">#eeeeee</color>
     <color name="gray300">#e0e0e0</color>
-    <color name="gray400">#BDBDBD</color>
+    <color name="gray400">#bdbdbd</color>
     <color name="gray500">#9E9E9E</color>
     <color name="gray600">#757575</color>
     <color name="gray700">#616161</color>
