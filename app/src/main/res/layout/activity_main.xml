@@ -254,6 +254,15 @@
                         android:drawableTop="@drawable/ic_report"
                         android:text="Report"
                         android:textAllCaps="false" />
+
+                    <Button
+                        android:id="@+id/button"
+                        android:layout_width="100dp"
+                        android:layout_height="fill_parent"
+                        android:layout_margin="5dp"
+                        android:drawableTop="@drawable/ic_setting_day"
+                        android:text="Holiday"
+                        android:textAllCaps="false" />
                 </LinearLayout>
 
             </LinearLayout>
