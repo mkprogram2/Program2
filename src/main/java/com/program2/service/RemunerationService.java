@@ -31,6 +31,34 @@ public class RemunerationService {
 	SimpleDateFormat DateFormat = new SimpleDateFormat("M-yyyy");
 	SimpleDateFormat DateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
 	
+	public	void NextMonthRemunerationSystem () 
+	{
+		Date date= new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		int month = cal.get(Calendar.MONTH)+1;
+		int year = cal.get(Calendar.YEAR);
+		List<Remuneration> Remun = RemunerationRepository.findByMonthAndYear(month, year);
+		
+		cal.add(Calendar.MONTH, 1);
+		month = cal.get(Calendar.MONTH)+1;
+		year = cal.get(Calendar.YEAR);
+		for (Remuneration temp : Remun) {
+			temp.id = null;
+			temp.year = year;
+			temp.month = month;
+			temp.overtime = 0.0;
+			temp.commision = 0.0;
+			temp.minsalary = temp.salary;
+			temp.minmeal = temp.meal;
+			temp.mintrans = temp.trans;
+			temp.mindiligent = temp.diligent;
+			temp.deduction = temp.minsalary+temp.minmeal+temp.mintrans+temp.mindiligent;
+			temp.netsalary = 0.0;
+			RemunerationRepository.save(temp);
+		}
+	}
+	
 	public	void RenewRemunerationSystem () 
 	{
 		Date date= new Date();

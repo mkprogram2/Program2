@@ -13,7 +13,7 @@ import javax.persistence.Table;
 @Table(name="remunerations", schema="mtr3")
 public class Remuneration {
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
-	public int id;
+	public Integer id;
 	public Double salary;
 	public Double trans;
 	public Double meal;

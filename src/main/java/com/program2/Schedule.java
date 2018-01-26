@@ -1,9 +1,11 @@
 package com.program2;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import static java.time.temporal.TemporalAdjusters.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -27,7 +29,7 @@ public class Schedule {
 	             date5 = date5.plusDays(1);
 
 	         java.time.Duration duration = java.time.Duration.between(date, date5);
-	         long initalDelay = duration.getSeconds();
+	         long InitDelay = duration.getSeconds();
 
 	         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);            
 	         scheduler.scheduleAtFixedRate( new Runnable() {
@@ -36,12 +38,15 @@ public class Schedule {
 	                 {
 	                	 WorkhourService.CheckoutSystem();
 	                	 RemunerationService.RenewRemunerationSystem();
+	                	 if(LocalDate.now().getDayOfMonth() == LocalDate.now().with(lastDayOfMonth()).getDayOfMonth()) {
+	                		 RemunerationService.NextMonthRemunerationSystem();
+	                	 }
 	                 }
 	                 catch(Exception ex) {
 	                     ex.printStackTrace();
 	                 }
 	             }
-	         }, initalDelay, 24*60*60, TimeUnit.SECONDS);
+	         }, InitDelay, 24*60*60, TimeUnit.SECONDS);
 	    }
 
 //	    private void getDataFromDatabase() {
