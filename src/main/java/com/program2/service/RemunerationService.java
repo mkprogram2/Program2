@@ -38,7 +38,7 @@ public class RemunerationService {
 		cal.setTime(date);
 		int month = cal.get(Calendar.MONTH)+1;
 		int year = cal.get(Calendar.YEAR);
-		List<Remuneration> Remun = RemunerationRepository.findMonthAndYear(month, year);
+		List<Remuneration> Remun = RemunerationRepository.findByMonthAndYear(month, year);
 		for (Remuneration temp : Remun) {
 			List<Workhour>  Workhours= WorkhourRepository.findAllByMonthByYearById(month, year,temp.person.id);
 			int attends = Workhours.size();
