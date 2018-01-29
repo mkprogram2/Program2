@@ -66,6 +66,7 @@ public class RemunerationService {
 		cal.setTime(date);
 		int month = cal.get(Calendar.MONTH)+1;
 		int year = cal.get(Calendar.YEAR);
+		System.out.println(month+" - "+year);
 		List<Remuneration> Remun = RemunerationRepository.findByMonthAndYear(month, year);
 		for (Remuneration temp : Remun) {
 			List<Workhour>  Workhours= WorkhourRepository.findAllByMonthByYearById(month, year,temp.person.id);

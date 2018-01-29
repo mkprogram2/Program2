@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -32,10 +33,14 @@ public class WorkhourService {
 	private SimpleDateFormat DateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 	private SimpleDateFormat DateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
 	
+	
+	
 	public void CheckoutSystem ()
 	{
+		System.out.println("Asd");
 		List<Workhour> Workhour = WorkhourOnlyByDate(new Date());
 		for (Workhour temp : Workhour) {
+			System.out.println(temp.personid);
 			if(temp.workend==null) {
 				Checkout(new Date(),temp,2);
 			}
@@ -165,7 +170,7 @@ public class WorkhourService {
 			Timestamp Timestamp2 = new Timestamp(DateS2.getTime());
 			WorkhourCheck = WorkhourRepository.findByWorkstartBetween(Timestamp1,Timestamp2);
 		}
-		catch(Exception w) {}
+		catch(Exception w) {w.printStackTrace();}
 		return WorkhourCheck;
 	}
 }
