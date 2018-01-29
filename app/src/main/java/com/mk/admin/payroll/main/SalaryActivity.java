@@ -216,8 +216,6 @@ public class SalaryActivity extends AppCompatActivity
                 {
                     present_days = 0;
                 }
-                Log.d("WORK DAYS", work_days.toString());
-                Log.d("PRESENT DAYS", present_days.toString());
                 absent_day.setText(String.valueOf(work_days - present_days));
                 workdays.setText(workhours.toString());
             }

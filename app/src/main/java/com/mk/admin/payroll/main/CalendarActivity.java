@@ -1,10 +1,13 @@
 package com.mk.admin.payroll.main;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,7 +21,12 @@ import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
 import com.mk.admin.payroll.common.SharedPreferenceEditor;
 import com.mk.admin.payroll.main.adapter.CalendarAdapter;
+import com.mk.admin.payroll.main.adapter.EventAdapter;
+import com.mk.admin.payroll.main.admin.EmployeeActivity;
 import com.mk.admin.payroll.main.admin.EmployeeRecyclerActivity;
+import com.mk.admin.payroll.main.admin.RemunerationActivity;
+import com.mk.admin.payroll.main.admin.adapter.EmployeeAdapter;
+import com.mk.admin.payroll.main.admin.adapter.ItemClickSupport;
 import com.mk.admin.payroll.model.Holiday;
 import com.mk.admin.payroll.model.Person;
 import com.mk.admin.payroll.service.CalendarService;
@@ -27,6 +35,7 @@ import com.mk.admin.payroll.service.EmployeeService;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
@@ -44,9 +53,14 @@ public class CalendarActivity extends AppCompatActivity {
     public CalendarAdapter adapter;
     public Handler handler;
     public ArrayList<String> items;
-    private List<Holiday> holidays = new ArrayList<>();
+    private List<Holiday> holidays = new ArrayList();
     private CalendarService calendarService;
     private String persons;
+    private Integer currentDay, currentMonth, currentYear;
+    private RecyclerView rvEvent;
+
+    @BindView(R.id.no_event)
+    TextView no_event;
 
     public Runnable calendarUpdater = new Runnable() {
         @SuppressLint("WrongConstant")
@@ -57,15 +71,8 @@ public class CalendarActivity extends AppCompatActivity {
             for(int i = 0; i < 7; ++i) {
                 df.format(itemmonth.getTime());
                 itemmonth.add(5, 1);
-                items.add("2018-01-12");
-                items.add("2018-01-07");
-                items.add("2018-01-15");
-                items.add("2018-01-20");
-                items.add("2018-02-01");
-                items.add("2018-02-02");
             }
-            adapter.setItems(items);
-            adapter.notifyDataSetChanged();
+            GetHolidays(persons, currentMonth, currentYear);
         }
     };
 
@@ -88,6 +95,11 @@ public class CalendarActivity extends AppCompatActivity {
         items = new ArrayList();
         adapter = new CalendarAdapter(this, month);
 
+        Calendar instance = Calendar.getInstance();
+        currentMonth = instance.get(Calendar.MONTH) + 1;
+        currentYear = instance.get(Calendar.YEAR);
+        currentDay = instance.get(Calendar.DATE);
+
         GridView gridview = (GridView)this.findViewById(R.id.gridview);
         gridview.setAdapter(adapter);
         handler = new Handler();
@@ -95,6 +107,9 @@ public class CalendarActivity extends AppCompatActivity {
 
         TextView title = (TextView) findViewById(R.id.title_calendar);
         title.setText(android.text.format.DateFormat.format("MMMM yyyy", month));
+
+        rvEvent = (RecyclerView)findViewById(R.id.rv_event);
+        rvEvent.setHasFixedSize(true);
 
         RelativeLayout previous = (RelativeLayout)findViewById(R.id.previous);
         previous.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +146,31 @@ public class CalendarActivity extends AppCompatActivity {
 
                 ((CalendarAdapter)parent.getAdapter()).setSelected(v);
                 Toast.makeText(CalendarActivity.this, selectedGridDate, Toast.LENGTH_LONG).show();
+
+                int temp = 0;
+
+                for (int i = 0; i < holidays.size(); i++)
+                {
+                    if (holidays.get(i).date.equals(selectedGridDate))
+                    {
+                        if (holidays.size() > 0)
+                        {
+                            rvEvent.setVisibility(View.VISIBLE);
+                            no_event.setVisibility(View.GONE);
+                            showRecyclerList();
+                            temp = 1;
+                        }
+                        else
+                        {
+                            Toast.makeText(CalendarActivity.this, "Server Failed!", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }
+                if (temp != 1)
+                {
+                    rvEvent.setVisibility(View.GONE);
+                    no_event.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
@@ -156,9 +196,12 @@ public class CalendarActivity extends AppCompatActivity {
     public void refreshCalendar() {
         TextView title = (TextView)this.findViewById(R.id.title_calendar);
         adapter.refreshDays();
+        currentMonth = Integer.parseInt(android.text.format.DateFormat.format("M", month).toString());
+        currentYear = Integer.parseInt(android.text.format.DateFormat.format("yyyy", month).toString());
         adapter.notifyDataSetChanged();
         handler.post(this.calendarUpdater);
         title.setText(android.text.format.DateFormat.format("MMMM yyyy", month));
+        Log.d("TEST MONTH", android.text.format.DateFormat.format("M yyyy", month).toString());
     }
 
     private void GetHolidays (String persons, Integer month, Integer year)
@@ -170,6 +213,12 @@ public class CalendarActivity extends AppCompatActivity {
             public void onResponse(retrofit2.Call<List<Holiday>> call, Response<List<Holiday>> response)
             {
                 holidays = response.body();
+                for (int i = 0; i < holidays.size(); i++)
+                {
+                    items.add(holidays.get(i).date);
+                }
+                adapter.setItems(items);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -178,5 +227,24 @@ public class CalendarActivity extends AppCompatActivity {
                 Toast.makeText(CalendarActivity.this,"Error", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+
+    private void showRecyclerList(){
+        rvEvent.setLayoutManager(new LinearLayoutManager(this));
+        EventAdapter EventAdapter = new EventAdapter(this);
+        EventAdapter.setHolidays(holidays);
+        rvEvent.setAdapter(EventAdapter);
+
+        ItemClickSupport.addTo(rvEvent).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                showSelectedPerson(holidays.get(position));
+            }
+        });
+    }
+
+    private void showSelectedPerson(Holiday holiday){
+        Toast.makeText(this, "Event :  "+ holiday.name, Toast.LENGTH_SHORT).show();
     }
 }

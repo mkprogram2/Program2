@@ -39,7 +39,8 @@
         <activity android:name=".main.admin.EmployeeActivity" />
         <activity android:name=".main.admin.AddEmployeeActivity" />
         <activity android:name=".main.manage.OvertimeRequestActivity" />
-        <activity android:name=".main.admin.HolidayActivity"></activity>
+        <activity android:name=".main.admin.HolidayActivity" />
+        <activity android:name=".main.adapter.EventsAdapter"></activity>
     </application>
 
 </manifest>

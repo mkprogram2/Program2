@@ -15,6 +15,7 @@ import com.mk.admin.payroll.common.SharedPreferenceEditor;
 import com.mk.admin.payroll.common.IDs;
 import com.mk.admin.payroll.main.admin.AddEmployeeActivity;
 import com.mk.admin.payroll.main.admin.EmployeeRecyclerActivity;
+import com.mk.admin.payroll.main.manage.OvertimeRequestActivity;
 import com.mk.admin.payroll.model.Workhour;
 import com.mk.admin.payroll.service.CheckinService;
 import com.mk.admin.payroll.service.WorkhourService;
@@ -63,6 +64,10 @@ public class MainActivity extends AppCompatActivity
     Button employee;
     @BindView(R.id.add_employee)
     Button add_employee;
+    @BindView(R.id.overtime)
+    Button overtime;
+    @BindView(R.id.req_overtime)
+    Button reqovertime;
     @BindView(R.id.human_resource)
     LinearLayout human_resource;
     @BindView(R.id.manage)
@@ -178,6 +183,13 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, AddEmployeeActivity.class));
+            }
+        });
+
+        reqovertime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, OvertimeRequestActivity.class));
             }
         });
     }

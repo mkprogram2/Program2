@@ -17,7 +17,7 @@ import java.util.List;
  * Created by admin on 1/15/2018.
  */
 
-public class EmployeeAdapter  extends RecyclerView.Adapter<EmployeeAdapter.CategoryViewHolder>{
+public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.CategoryViewHolder>{
     private Context context;
     private List<Person>listPerson;
 
