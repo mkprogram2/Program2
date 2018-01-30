@@ -9,7 +9,8 @@ import java.util.Date;
 public class Overtime
 {
     public Integer id;
-    public Date date;
+    public String date;
     public String information;
     public Integer duration;
+    public Person person = new Person();
 }
