@@ -14,6 +14,7 @@ import com.mk.admin.payroll.common.ClientService;
 import com.mk.admin.payroll.common.SharedPreferenceEditor;
 import com.mk.admin.payroll.main.admin.adapter.EmployeeAdapter;
 import com.mk.admin.payroll.main.admin.adapter.ItemClickSupport;
+import com.mk.admin.payroll.main.manage.OvertimeRequestActivity;
 import com.mk.admin.payroll.model.Person;
 import com.mk.admin.payroll.service.EmployeeService;
 
@@ -81,7 +82,7 @@ public class EmployeeRecyclerActivity extends AppCompatActivity {
     }
 
     private void showSelectedPerson(Person person){
-        Toast.makeText(this, "Kamu memilih "+person.getName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "You Choose "+person.getName(), Toast.LENGTH_SHORT).show();
 
         activity = getIntent().getExtras().getString("activity");
 
@@ -97,6 +98,14 @@ public class EmployeeRecyclerActivity extends AppCompatActivity {
             Intent intent = new Intent(EmployeeRecyclerActivity.this, RemunerationActivity.class);
             intent.putExtra("id", person.getId());
             intent.putExtra("name", person.getName());
+            startActivity(intent);
+        }
+        else if (activity.equals("reqovertime"))
+        {
+            Intent intent = new Intent(EmployeeRecyclerActivity.this, OvertimeRequestActivity.class);
+            intent.putExtra("id", person.getId());
+            intent.putExtra("name", person.getName());
+            intent.putExtra("role", person.Role.name);
             startActivity(intent);
         }
     }

@@ -189,7 +189,9 @@ public class MainActivity extends AppCompatActivity
         reqovertime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, OvertimeRequestActivity.class));
+                Intent intent = new Intent(MainActivity.this, EmployeeRecyclerActivity.class);
+                intent.putExtra("activity", "reqovertime");
+                startActivity(intent);
             }
         });
     }
