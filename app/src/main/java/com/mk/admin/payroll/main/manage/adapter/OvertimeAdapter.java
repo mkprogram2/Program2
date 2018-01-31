@@ -2,6 +2,7 @@ package com.mk.admin.payroll.main.manage.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +37,7 @@ public class OvertimeAdapter  extends RecyclerView.Adapter<OvertimeAdapter.Categ
 
     @Override
     public OvertimeAdapter.CategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemRow = LayoutInflater.from(parent.getContext()).inflate(R.layout.employee_adapter, parent, false);
+        View itemRow = LayoutInflater.from(parent.getContext()).inflate(R.layout.overtime_adapter, parent, false);
         return new OvertimeAdapter.CategoryViewHolder(itemRow);
     }
 

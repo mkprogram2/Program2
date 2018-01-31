@@ -1,6 +1,7 @@
 package com.mk.admin.payroll.main.manage;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
 import com.mk.admin.payroll.common.IDs;
 import com.mk.admin.payroll.common.SharedPreferenceEditor;
+import com.mk.admin.payroll.main.admin.EmployeeRecyclerActivity;
 import com.mk.admin.payroll.model.Overtime;
 import com.mk.admin.payroll.service.OvertimeService;
 
@@ -61,8 +63,8 @@ public class AddOvertimeActivity extends AppCompatActivity {
         overtimeService = ClientService.createService().create(OvertimeService.class);
         persons = SharedPreferenceEditor.LoadPreferences(this,"Persons","");
 
-        mid = IDs.getIdUser();
-        mname = IDs.getLoginUser();
+        mid = getIntent().getExtras().getString("id");
+        mname = getIntent().getExtras().getString("name");
 
         employee_name.setText(mname);
 
@@ -118,6 +120,10 @@ public class AddOvertimeActivity extends AppCompatActivity {
             public void onResponse(retrofit2.Call<Overtime> call, Response<Overtime> response)
             {
                 overtime = response.body();
+                Intent intent = new Intent(AddOvertimeActivity.this, EmployeeRecyclerActivity.class);
+                intent.putExtra("activity", "reqovertime");
+                startActivity(intent);
+                Toast.makeText(AddOvertimeActivity.this,"Saving Success!", Toast.LENGTH_LONG).show();
             }
             @Override
             public void onFailure(retrofit2.Call<Overtime> call, Throwable t)
@@ -132,7 +138,8 @@ public class AddOvertimeActivity extends AppCompatActivity {
         overtime.date = date_overtime.getText().toString();
         overtime.duration = Integer.parseInt(duration.getText().toString()) * 3600;
         overtime.information = information.getText().toString();
-        overtime.person.id = mid;
+        overtime.personid = mid;
+        overtime.status = 0;
 
         PostOvertime(persons, overtime);
     }

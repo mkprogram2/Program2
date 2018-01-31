@@ -24,6 +24,6 @@ public interface OvertimeService
 
     @GET("overtimes/{id}")
     Call<List<Overtime>> GetOvertime(@Header("persons") String persons,
-                                     @Path("id") RequestBody id);
+                                     @Path("id") String id);
 
 }

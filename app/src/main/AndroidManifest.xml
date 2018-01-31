@@ -3,6 +3,9 @@
     package="com.mk.admin.payroll">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -40,8 +43,12 @@
         <activity android:name=".main.admin.AddEmployeeActivity" />
         <activity android:name=".main.manage.OvertimeRequestActivity" />
         <activity android:name=".main.admin.HolidayActivity" />
-        <activity android:name=".main.adapter.EventsAdapter" />
-        <activity android:name=".main.manage.AddOvertimeActivity"></activity>
+        <activity android:name=".main.manage.AddOvertimeActivity" />
+
+        <service
+            android:name=".common.PayrollService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

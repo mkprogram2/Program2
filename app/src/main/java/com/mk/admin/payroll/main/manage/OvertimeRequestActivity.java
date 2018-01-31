@@ -72,25 +72,28 @@ public class OvertimeRequestActivity extends AppCompatActivity {
         rvOvertime = (RecyclerView)findViewById(R.id.rv_overtime);
         rvOvertime.setHasFixedSize(true);
 
-        mid = IDs.getIdUser();
-        mname = IDs.getLoginUser();
+        mid = getIntent().getExtras().getString("id");
+        mname = getIntent().getExtras().getString("name");
 
         String strRequestBody = mid;
         final RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"),strRequestBody);
 
-        GetOvertime(persons, requestBody);
+        GetOvertime(persons, mid);
 
         add_overtime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(OvertimeRequestActivity.this, AddOvertimeActivity.class));
+                Intent intent = new Intent(OvertimeRequestActivity.this, AddOvertimeActivity.class);
+                intent.putExtra("id", mid);
+                intent.putExtra("name", mname);
+                startActivity(intent);
             }
         });
     }
 
-    private void GetOvertime (String persons, RequestBody requestBody)
+    private void GetOvertime (String persons, String id)
     {
-        Call<List<Overtime>> call = overtimeService.GetOvertime(persons, requestBody);
+        Call<List<Overtime>> call = overtimeService.GetOvertime(persons, id);
         call.enqueue(new Callback<List<Overtime>>()
         {
             @Override
@@ -112,6 +115,7 @@ public class OvertimeRequestActivity extends AppCompatActivity {
         OvertimeAdapter OvertimeAdapter = new OvertimeAdapter(this);
         OvertimeAdapter.setOvertimes(overtimes);
         rvOvertime.setAdapter(OvertimeAdapter);
+        Log.d("OVERTIMEEEE", overtimes.get(0).date);
 
         ItemClickSupport.addTo(rvOvertime).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
