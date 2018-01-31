@@ -8,10 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.program2.table.Holiday;
-import com.program2.table.Workhour;
 
 @Repository
-public interface HolidayRepository extends JpaRepository<Holiday, String>
+public interface HolidayRepository extends JpaRepository<Holiday, Integer>
 {
 	public List<Holiday> findAllByOrderByIdAsc();
 	

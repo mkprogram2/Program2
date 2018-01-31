@@ -41,7 +41,7 @@ public class HolidayController {
 	}
 	
 	@DeleteMapping
-	public void DeleteHoliday(@RequestBody String id)
+	public void DeleteHoliday(@RequestBody Integer id)
 	{
 		HolidayRepository.delete(id);
 	}

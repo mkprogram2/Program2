@@ -32,7 +32,7 @@ public class Schedule {
 	    public void startScheduleTask() 
 	    {
 	         LocalDateTime date= LocalDateTime.now();
-	         LocalDateTime date5= date.withHour(17).withMinute(17).withSecond(0);
+	         LocalDateTime date5= date.withHour(servercheck).withMinute(17).withSecond(0);
 	         if(date.compareTo(date5) > 0)
 	             date5 = date5.plusDays(1);
 
