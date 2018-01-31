@@ -37,8 +37,7 @@ public class PersonController
 	public Person login(@RequestBody Person in)
 	{
 		System.out.println(in.name);
-		System.out.println(in.password);
-		Person Login = PersonRepository.findByNameAndPassword(in.name, in.password);
+		Person Login = PersonRepository.findByNameAndApppassword(in.name, in.apppassword);
 		return Login;
 	}
 	

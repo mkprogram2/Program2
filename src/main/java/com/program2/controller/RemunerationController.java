@@ -32,16 +32,6 @@ public class RemunerationController {
 	@Autowired
 	private RemunerationService RemunerationService;
 	
-	@GetMapping("/salary/{month}/{year}/{id}")
-	public Double Netsalary (@PathVariable("month") double month, @PathVariable("year") double year, @PathVariable("id") String id) 
-	{
-		List<Workhour>  Workhours= WorkhourRepository.findAllByMonthByYearById(month, year,id);
-		int attends = Workhours.size();
-		double gross_salary =  PersonRepository.findById(id).salary;
-		double net_salary = gross_salary * attends / RemunerationService.TotalWorkDaysInMonth(month,year);
-		return net_salary;
-	}
-	
 	@PostMapping
 	public Remuneration saveRemun(@RequestBody Remuneration Remun)
 	{

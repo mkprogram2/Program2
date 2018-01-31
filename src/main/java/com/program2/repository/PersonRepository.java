@@ -18,7 +18,7 @@ public interface PersonRepository extends JpaRepository<Person, String>
 	public Person findById(String id);
 	
 	public List<Person> findAllByOrderByIdAsc();
-	public Person findByNameAndPassword(String name, String password);
+	public Person findByNameAndApppassword(String name, String password);
 	
 	
 }

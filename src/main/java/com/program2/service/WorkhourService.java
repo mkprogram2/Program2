@@ -138,11 +138,11 @@ public class WorkhourService {
 		Date DateNow = Date;
 		if (checkin) 
 		{
-			SDatefull = DateFormat1.format(DateNow)+" "+shift.Shift.workstart;
+			SDatefull = DateFormat1.format(DateNow)+" "+shift.PersonDetail.Shift.workstart;
 		}
 		else 
 		{
-			SDatefull = DateFormat1.format(DateNow)+" "+shift.Shift.workend;
+			SDatefull = DateFormat1.format(DateNow)+" "+shift.PersonDetail.Shift.workend;
 		}
 		try
 		{
