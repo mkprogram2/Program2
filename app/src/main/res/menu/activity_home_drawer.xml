@@ -26,12 +26,10 @@
     <group
         android:id="@+id/human_resource_menu"
         android:checkableBehavior="single">
-        <item android:title="@string/human_reources">
+        <item
+            android:id="@+id/item_human_resource"
+            android:title="@string/human_reources">
             <menu>
-                <item
-                    android:id="@+id/add_employee_menu"
-                    android:icon="@drawable/ic_add_person"
-                    android:title="Add Employee" />
                 <item
                     android:id="@+id/employee_menu"
                     android:icon="@drawable/ic_person"
@@ -47,7 +45,9 @@
     <group
         android:id="@+id/manage_menu"
         android:checkableBehavior="single">
-        <item android:title="@string/manage">
+        <item
+            android:id="@+id/item_manage"
+            android:title="@string/manage">
             <menu>
                 <item
                     android:id="@+id/req_overtime_menu"

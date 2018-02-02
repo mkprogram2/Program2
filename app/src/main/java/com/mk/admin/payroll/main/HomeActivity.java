@@ -1,12 +1,16 @@
 package com.mk.admin.payroll.main;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,6 +21,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,40 +38,54 @@ import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
 import com.mk.admin.payroll.common.IDs;
 import com.mk.admin.payroll.common.PayrollService;
+import com.mk.admin.payroll.common.Session;
 import com.mk.admin.payroll.common.SharedPreferenceEditor;
 import com.mk.admin.payroll.main.admin.AddEmployeeActivity;
+import com.mk.admin.payroll.main.admin.EmployeeActivity;
 import com.mk.admin.payroll.main.admin.EmployeeRecyclerActivity;
+import com.mk.admin.payroll.main.admin.RemunerationActivity;
+import com.mk.admin.payroll.main.admin.adapter.EmployeeAdapter;
+import com.mk.admin.payroll.main.admin.adapter.ItemClickSupport;
+import com.mk.admin.payroll.model.Person;
 import com.mk.admin.payroll.model.Workhour;
 import com.mk.admin.payroll.service.CheckinService;
+import com.mk.admin.payroll.service.EmployeeService;
+import com.mk.admin.payroll.service.LoginService;
 import com.mk.admin.payroll.service.WorkhourService;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private EmployeeService employeeService;
     private CheckinService service2;
     private WorkhourService service3;
-    public String mid, mname, shift_workstart, shift_workend, interval_work, role_name, role_id;
+    private String mid, mname, shift_workstart, shift_workend, interval_work, mshiftid,  role_name;
     public double gross_salary;
-    public Integer mshiftid;
+    public Integer role_id;
     private String persons;
     private NavigationView navigationView;
+    private Session session;
+    private RequestBody requestBody;
+    private RecyclerView rvCategory;
+    private List<Person> list;
 
     @BindView(R.id.employee_name)
     TextView employee_name;
     @BindView(R.id.employee_role)
     TextView employee_role;
-    @BindView(R.id.calendar)
-    Button calendar;
     @BindView(R.id.checkin)
     Button checkin;
     @BindView(R.id.workhours)
     Button workhours;
     @BindView(R.id.checkout)
     Button checkout;
+    /*@BindView(R.id.calendar)
+    Button calendar;
     @BindView(R.id.salary)
     Button salary;
     @BindView(R.id.remuneration)
@@ -79,86 +98,41 @@ public class HomeActivity extends AppCompatActivity
     Button overtime;
     @BindView(R.id.req_overtime)
     Button reqovertime;
+    @BindView(R.id.user)
+    Button user;
     @BindView(R.id.human_resource)
     LinearLayout human_resource;
     @BindView(R.id.manage)
-    LinearLayout manage;
-    @Override
+    LinearLayout manage;*/
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         ButterKnife.bind(this);
 
-        mid = getIntent().getExtras().getString("id");
-        mname = getIntent().getExtras().getString("name");
-        role_name = getIntent().getExtras().getString("role_name");
-        role_id = getIntent().getExtras().getString("role");
-        gross_salary = getIntent().getExtras().getDouble("salary");
-        mshiftid = Integer.parseInt(getIntent().getExtras().getString("shiftid")) ;
-        shift_workstart = getIntent().getExtras().getString("shift_workstart");
-        shift_workend = getIntent().getExtras().getString("shift_workend");
+        employeeService = ClientService.createService().create(EmployeeService.class);
+        service2 = ClientService.createService().create(CheckinService.class);
+        service3 = ClientService.createService().create(WorkhourService.class);
+        persons = SharedPreferenceEditor.LoadPreferences(this,"Persons","");
+        session = new Session(this);
 
-
+        GetEmployee(persons, session.getId());
+        Log.d("tes","1");
         startService(new Intent(HomeActivity.this, PayrollService.class));
-
-        employee_name.setText(mname);
-        employee_role.setText(role_name);
-        IDs.setIdUser(mid);
-        IDs.setLoginUser(mname);
-
+        Log.d("tes","1");
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        View headerLayout = navigationView.getHeaderView(0);
-        TextView textViewUser = (TextView) headerLayout.findViewById(R.id.employee_name);
-        textViewUser.setText(mname);
-        TextView textViewCompany = (TextView) headerLayout.findViewById(R.id.employee_role);
-        textViewCompany.setText(role_name);
-        
-        GetIntervalWork();
-
-        service2 = ClientService.createService().create(CheckinService.class);
-        service3 = ClientService.createService().create(WorkhourService.class);
-        persons = SharedPreferenceEditor.LoadPreferences(this,"Persons","");
-
-        String strRequestBody = mid;
-        final RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"),strRequestBody);
-
-        if (role_id.equals("1"))
-        {
-            manage.setVisibility(View.GONE);
-        }
-        else if (role_id.equals("2"))
-        {
-            human_resource.setVisibility(View.GONE);
-        }
-        else
-        {
-            human_resource.setVisibility(View.GONE);
-            manage.setVisibility(View.GONE);
-        }
 
         checkin.setOnClickListener (new View.OnClickListener()
         {
@@ -169,12 +143,12 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
-        calendar.setOnClickListener(new View.OnClickListener() {
+        /*calendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(HomeActivity.this,CalendarActivity.class));
             }
-        });
+        });*/
 
         workhours.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,7 +164,7 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
-        salary.setOnClickListener(new View.OnClickListener()
+        /*salary.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -215,9 +189,7 @@ public class HomeActivity extends AppCompatActivity
         employee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, EmployeeRecyclerActivity.class);
-                intent.putExtra("activity", "employee");
-                startActivity(intent);
+                startActivity(new Intent(HomeActivity.this, EmployeeActivity.class));
             }
         });
 
@@ -236,10 +208,59 @@ public class HomeActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
+
+        user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                GetPerson(persons);
+            }
+        });*/
+    }
+
+    private void GetPerson (String persons)
+    {
+        Call<List<Person>> call = employeeService.GetPerson(persons);
+        call.enqueue(new Callback<List<Person>>()
+        {
+            @Override
+            public void onResponse(retrofit2.Call<List<Person>> call, Response<List<Person>> response)
+            {
+                list = response.body();
+                Log.d("Data",list.get(0).name);
+                Log.d("Size", String.valueOf(list.size()));
+                showRecyclerList();
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<List<Person>> call, Throwable t)
+            {
+                Toast.makeText(HomeActivity.this,"Error", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+
+    private void showRecyclerList()
+    {
+        // custom dialog
+        final Dialog dialog = new Dialog(HomeActivity.this);
+        dialog.setContentView(R.layout.employee_list_dialog);
+        dialog.setTitle("Title...");
+
+        dialog.show();
+
+        rvCategory = (RecyclerView)dialog.findViewById(R.id.rv_employees);
+        rvCategory.setHasFixedSize(true);
+        rvCategory.setLayoutManager(new LinearLayoutManager(HomeActivity.this));
+        EmployeeAdapter EmployeeAdapter = new EmployeeAdapter(HomeActivity.this);
+        EmployeeAdapter.setListPerson(list);
+        rvCategory.setAdapter(EmployeeAdapter);
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed()
+    {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -249,14 +270,16 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -272,7 +295,8 @@ public class HomeActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(MenuItem item)
+    {
         // Handle navigation view item clicks here.
 
         int id = item.getItemId();
@@ -299,13 +323,7 @@ public class HomeActivity extends AppCompatActivity
         }
         else if ( id == R.id.employee_menu)
         {
-            Intent intent = new Intent(HomeActivity.this, EmployeeRecyclerActivity.class);
-            intent.putExtra("activity", "employee");
-            startActivity(intent);
-        }
-        else if ( id == R.id.add_employee_menu)
-        {
-            startActivity(new Intent(HomeActivity.this, AddEmployeeActivity.class));
+            startActivity(new Intent(HomeActivity.this, EmployeeActivity.class));
         }
         else if ( id == R.id.req_overtime_menu)
         {
@@ -313,15 +331,12 @@ public class HomeActivity extends AppCompatActivity
             intent.putExtra("activity", "reqovertime");
             startActivity(intent);
         }
-        else if ( id == R.id.workhours_menu)
-        {
-            workhour(persons, mid);
-        }
         else if (id == R.id.remuneration_menu)
         {
-            Intent intent = new Intent(HomeActivity.this, EmployeeRecyclerActivity.class);
+            /*Intent intent = new Intent(HomeActivity.this, EmployeeRecyclerActivity.class);
             intent.putExtra("activity", "remuneration");
-            startActivity(intent);
+            startActivity(intent);*/
+            startActivity(new Intent(HomeActivity.this, RemunerationActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -330,6 +345,52 @@ public class HomeActivity extends AppCompatActivity
         return true;
     }
 
+    private void CheckRole ()
+    {
+        Menu menu = navigationView.getMenu();
+        if (role_id == 1)
+        {
+            for (int menuItemIndex = 0; menuItemIndex < menu.size(); menuItemIndex++)
+            {
+                MenuItem menuItem= menu.getItem(menuItemIndex);
+
+                if(menuItem.getItemId() == R.id.item_manage)
+                {
+                    menuItem.setVisible(false);
+                    break;
+                }
+            }
+        }
+        else if (role_id == 2)
+        {
+            for (int menuItemIndex = 0; menuItemIndex < menu.size(); menuItemIndex++)
+            {
+                MenuItem menuItem= menu.getItem(menuItemIndex);
+
+                if(menuItem.getItemId() == R.id.item_human_resource)
+                {
+                    menuItem.setVisible(false);
+                    break;
+                }
+            }
+        }
+        else
+        {
+            for (int menuItemIndex = 0; menuItemIndex < menu.size(); menuItemIndex++)
+            {
+                MenuItem menuItem= menu.getItem(menuItemIndex);
+
+                if(menuItem.getItemId() == R.id.item_human_resource)
+                {
+                    menuItem.setVisible(false);
+                }
+                if (menuItem.getItemId() == R.id.item_manage);
+                {
+                    menuItem.setVisible(false);
+                }
+            }
+        }
+    }
 
     private void Logout()
     {
@@ -477,6 +538,53 @@ public class HomeActivity extends AppCompatActivity
                 Toast.makeText(HomeActivity.this,"Please Check In", Toast.LENGTH_LONG).show();
             }
 
+        });
+    }
+
+    private void GetEmployee (String persons, String id)
+    {
+        Call<Person> call = employeeService.GetEmployee(persons, id);
+        call.enqueue(new Callback<Person>()
+        {
+            @Override
+            public void onResponse(retrofit2.Call<Person> call, Response<Person> response)
+            {
+                if (response.isSuccessful())
+                {
+                    final Person dataperson = response.body();
+                    Log.d("Data", dataperson.name);
+                    mid = dataperson.id;
+                    mname = dataperson.name;
+                    role_name = dataperson.Role.name;
+                    role_id = dataperson.Role.id;
+                    mshiftid = dataperson.PersonDetail.Shift.id ;
+                    shift_workstart = dataperson.PersonDetail.Shift.workstart;
+                    shift_workend = dataperson.PersonDetail.Shift.workend;
+
+                    employee_name.setText(mname);
+                    employee_role.setText(role_name);
+
+                    View headerLayout = navigationView.getHeaderView(0);
+                    TextView textViewUser = (TextView) headerLayout.findViewById(R.id.employee_name);
+                    textViewUser.setText(mname);
+                    TextView textViewCompany = (TextView) headerLayout.findViewById(R.id.employee_role);
+                    textViewCompany.setText(role_name);
+
+                    CheckRole();
+
+                    GetIntervalWork();
+
+                    String strRequestBody = mid;
+                    requestBody = RequestBody.create(MediaType.parse("text/plain"),strRequestBody);
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<Person> call, Throwable t)
+            {
+                Log.d("Error here", t.getMessage());
+                Toast.makeText(HomeActivity.this,"Error", Toast.LENGTH_LONG).show();
+            }
         });
     }
 }

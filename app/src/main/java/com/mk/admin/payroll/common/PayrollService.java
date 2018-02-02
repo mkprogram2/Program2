@@ -52,7 +52,9 @@ public class PayrollService extends Service {
         IntentFilter filters = new IntentFilter();
         filters.addAction("android.net.wifi.WIFI_STATE_CHANGED");
         filters.addAction("android.net.wifi.STATE_CHANGE");
+        Log.d("tes","3");
         super.registerReceiver(receiver, filters);
+        Log.d("tes","4");
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -66,8 +68,8 @@ public class PayrollService extends Service {
         public void onReceive(Context context, Intent intent) {
             WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             WifiInfo wifiInfo;
-
             wifiInfo = wifiManager.getConnectionInfo();
+            Log.d("tes","5");
             if (wifiInfo.getSupplicantState() == SupplicantState.COMPLETED) {
                 String ssid = wifiInfo.getSSID();
                 Log.d("SSID", ssid);
@@ -98,9 +100,12 @@ public class PayrollService extends Service {
             {
                 final Integer data = response.body();
 
-                if (data == 1)
+                if (response.isSuccessful())
                 {
-                    workhour(persons, mid);
+                    if (data == 1)
+                    {
+                        workhour(persons, mid);
+                    }
                 }
             }
             @Override

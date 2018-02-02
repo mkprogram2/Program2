@@ -75,23 +75,13 @@ public class LoginActivity extends AppCompatActivity
                 if (response.isSuccessful())
                 {
                     final Person data = response.body();
-
                     session.setId(data.id);
-                    Log.d("Session", session.getId());
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                    intent.putExtra("id", data.id);
-                    intent.putExtra("name", data.name);
-                    intent.putExtra("role", data.Role.id.toString());
-                    intent.putExtra("role_name", data.Role.name.toString());
-                    intent.putExtra("shiftid", data.PersonDetail.Shift.id.toString());
-                    intent.putExtra("shift_workstart",data.PersonDetail.Shift.workstart.toString());
-                    intent.putExtra("shift_workend", data.PersonDetail.Shift.workend.toString());
-                    startActivity(intent);
+                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                     //setFocus();
                 }
                 else
                 {
-                    Toast.makeText(LoginActivity.this, "Server Failed!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "Username Or Password Are Wrong!", Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -100,7 +90,7 @@ public class LoginActivity extends AppCompatActivity
             {
                 //setFocus();
                 Log.d("ERROR", t.getMessage());
-                Toast.makeText(LoginActivity.this, "Username Atau Password Salah", Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "Server Failed", Toast.LENGTH_LONG).show();
             }
 
         });

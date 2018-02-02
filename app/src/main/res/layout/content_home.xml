@@ -115,7 +115,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
+            <!--<LinearLayout
                 android:id="@+id/working"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -227,15 +227,6 @@
                         android:textSize="10sp" />
 
                     <Button
-                        android:id="@+id/add_employee"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:drawableTop="@drawable/ic_add_person"
-                        android:text="Add Employee"
-                        android:textSize="10sp" />
-
-                    <Button
                         android:id="@+id/remuneration"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
@@ -243,6 +234,16 @@
                         android:drawableTop="@drawable/ic_payments"
                         android:text="Remuneration"
                         android:textSize="10sp" />
+
+                    <Button
+                        android:id="@+id/button"
+                        android:layout_width="100dp"
+                        android:layout_height="fill_parent"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:drawableTop="@drawable/ic_setting_day"
+                        android:text="Holiday"
+                        android:textAllCaps="false" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -259,14 +260,6 @@
                         android:text="Report"
                         android:textAllCaps="false" />
 
-                    <Button
-                        android:id="@+id/button"
-                        android:layout_width="100dp"
-                        android:layout_height="fill_parent"
-                        android:layout_margin="5dp"
-                        android:drawableTop="@drawable/ic_setting_day"
-                        android:text="Holiday"
-                        android:textAllCaps="false" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -309,7 +302,7 @@
 
                 </HorizontalScrollView>
 
-            </LinearLayout>
+            </LinearLayout>-->
 
         </LinearLayout>
 

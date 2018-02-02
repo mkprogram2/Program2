@@ -1,13 +1,18 @@
 package com.mk.admin.payroll.main.admin;
 
+import android.app.Dialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,6 +20,10 @@ import android.widget.Toast;
 import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
 import com.mk.admin.payroll.common.SharedPreferenceEditor;
+import com.mk.admin.payroll.main.HomeActivity;
+import com.mk.admin.payroll.main.admin.adapter.EmployeeAdapter;
+import com.mk.admin.payroll.main.admin.adapter.ItemClickSupport;
+import com.mk.admin.payroll.main.manage.OvertimeRequestActivity;
 import com.mk.admin.payroll.model.Person;
 import com.mk.admin.payroll.model.Role;
 import com.mk.admin.payroll.model.Shift;
@@ -44,15 +53,25 @@ public class EmployeeActivity extends AppCompatActivity {
     @BindView(R.id.shift_out)
     TextView shift_out;
     @BindView(R.id.save_employee)
-    Button save_employee;
+    ImageView save_employee;
+    @BindView(R.id.edit_employee)
+    ImageView edit_employee;
+    @BindView(R.id.cancel_edit)
+    ImageView cancel_edit;
+    @BindView(R.id.select_employee)
+    Button select_employee;
+    @BindView(R.id.add_employee)
+    Button add_employee;
 
     private EmployeeService employeeService;
-    private String persons, shiftid, role;
+    private String persons, shiftid, role, mid, mname;
     final List<String> list_shift = new ArrayList<String>();
     final List<String> list_role = new ArrayList<String>();
-    private List<Shift> shifts;
-    private List<Role> roles;
+    private List<Shift> shifts = new ArrayList<>();
+    private List<Role> roles = new ArrayList<>();
     private Person dataperson;
+    private RecyclerView rvCategory;
+    private List<Person> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -62,15 +81,10 @@ public class EmployeeActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        employee_id.setText(getIntent().getExtras().getString("id"));
-        employee_name.setText(getIntent().getExtras().getString("name"));
+        DisableUI();
 
         employeeService = ClientService.createService().create(EmployeeService.class);
         persons = SharedPreferenceEditor.LoadPreferences(this,"Persons","");
-
-        GetEmployee(persons, employee_id.getText().toString());
-        GetShift();
-        GetRole();
 
         shift_spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
@@ -96,10 +110,45 @@ public class EmployeeActivity extends AppCompatActivity {
         save_employee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dataperson.name = employee_name.getText().toString();
-                SetRole();
-                SetShift();
-                PutEmployee(persons, dataperson);
+                if (mid == null)
+                {
+                    select_employee.setError("Please Select Employee");
+                }
+                else
+                {
+                    dataperson.name = employee_name.getText().toString();
+                    SetRole();
+                    SetShift();
+                    PutEmployee(persons, dataperson);
+                }
+            }
+        });
+
+        edit_employee.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EnableUI();
+            }
+        });
+
+        cancel_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DisableUI();
+            }
+        });
+
+        select_employee.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GetPerson(persons);
+            }
+        });
+
+        add_employee.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(EmployeeActivity.this, AddEmployeeActivity.class));
             }
         });
     }
@@ -116,6 +165,8 @@ public class EmployeeActivity extends AppCompatActivity {
                 Log.d("Data", dataperson.name);
                 shiftid = dataperson.PersonDetail.Shift.id;
                 role = dataperson.Role.name;
+                GetShift();
+                GetRole();
             }
 
             @Override
@@ -135,6 +186,8 @@ public class EmployeeActivity extends AppCompatActivity {
             @Override
             public void onResponse(retrofit2.Call<List<Shift>> call, Response<List<Shift>> response)
             {
+                shifts.clear();
+                list_shift.clear();
                 shifts = response.body();
                 Log.d("Shift", shifts.get(0).workstart);
                 for (int i = 0; i < shifts.size(); i++)
@@ -160,6 +213,8 @@ public class EmployeeActivity extends AppCompatActivity {
             @Override
             public void onResponse(retrofit2.Call<List<Role>> call, Response<List<Role>> response)
             {
+                roles.clear();
+                list_role.clear();
                 roles = response.body();
                 Log.d("Role", roles.get(0).name);
                 for (int i = 0; i < roles.size(); i++)
@@ -217,6 +272,7 @@ public class EmployeeActivity extends AppCompatActivity {
                 dataperson = response.body();
                 Log.d("Data", dataperson.name);
                 Toast.makeText(EmployeeActivity.this,"Saving Success", Toast.LENGTH_LONG).show();
+                DisableUI();
             }
 
             @Override
@@ -253,5 +309,83 @@ public class EmployeeActivity extends AppCompatActivity {
                 dataperson.PersonDetail.Shift.workend = shifts.get(i).workend;
             }
         }
+    }
+
+    private void GetPerson (String persons)
+    {
+        Call<List<Person>> call = employeeService.GetPerson(persons);
+        call.enqueue(new Callback<List<Person>>()
+        {
+            @Override
+            public void onResponse(retrofit2.Call<List<Person>> call, Response<List<Person>> response)
+            {
+                list = response.body();
+                Log.d("Data",list.get(0).name);
+                Log.d("Size", String.valueOf(list.size()));
+                showRecyclerList();
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<List<Person>> call, Throwable t)
+            {
+                Toast.makeText(EmployeeActivity.this,"Error", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void showRecyclerList()
+    {
+        // custom dialog
+        final Dialog dialog = new Dialog(EmployeeActivity.this);
+        dialog.setContentView(R.layout.employee_list_dialog);
+        dialog.setTitle("Employee");
+
+        dialog.show();
+
+        rvCategory = (RecyclerView)dialog.findViewById(R.id.rv_employees);
+        rvCategory.setHasFixedSize(true);
+        rvCategory.setLayoutManager(new LinearLayoutManager(EmployeeActivity.this));
+        EmployeeAdapter EmployeeAdapter = new EmployeeAdapter(EmployeeActivity.this);
+        EmployeeAdapter.setListPerson(list);
+        rvCategory.setAdapter(EmployeeAdapter);
+
+        ItemClickSupport.addTo(rvCategory).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                showSelectedPerson(list.get(position));
+                dialog.dismiss();
+            }
+        });
+    }
+
+    private void showSelectedPerson(Person person)
+    {
+        mid = person.id;
+        mname = person.name;
+
+        employee_id.setText(mid);
+        employee_name.setText(mname);
+
+        GetEmployee(persons, mid);
+    }
+
+    private void DisableUI ()
+    {
+        employee_id.setEnabled(false);
+        employee_name.setEnabled(false);
+        role_spin.setEnabled(false);
+        shift_spin.setEnabled(false);
+        save_employee.setVisibility(View.GONE);
+        cancel_edit.setVisibility(View.GONE);
+        edit_employee.setVisibility(View.VISIBLE);
+    }
+
+    private void EnableUI ()
+    {
+        edit_employee.setVisibility(View.GONE);
+        save_employee.setVisibility(View.VISIBLE);
+        cancel_edit.setVisibility(View.VISIBLE);
+        role_spin.setEnabled(true);
+        shift_spin.setEnabled(true);
     }
 }

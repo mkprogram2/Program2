@@ -343,6 +343,7 @@ public class SalaryActivity extends AppCompatActivity
                     @Override
                     public void onCancel(AlertDialog dialog)
                     {
+                        rackMonthPicker.dismiss();
                     }
                 });
     }

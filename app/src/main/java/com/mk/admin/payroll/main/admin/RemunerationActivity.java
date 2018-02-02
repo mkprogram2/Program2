@@ -1,8 +1,11 @@
 package com.mk.admin.payroll.main.admin;
 
+import android.app.Dialog;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -18,6 +21,8 @@ import android.widget.Toast;
 import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
 import com.mk.admin.payroll.common.SharedPreferenceEditor;
+import com.mk.admin.payroll.main.admin.adapter.EmployeeAdapter;
+import com.mk.admin.payroll.main.admin.adapter.ItemClickSupport;
 import com.mk.admin.payroll.model.Person;
 import com.mk.admin.payroll.model.Remuneration;
 import com.mk.admin.payroll.service.EmployeeService;
@@ -26,6 +31,7 @@ import com.rackspira.kristiawan.rackmonthpicker.RackMonthPicker;
 import com.rackspira.kristiawan.rackmonthpicker.listener.DateMonthDialogListener;
 import com.rackspira.kristiawan.rackmonthpicker.listener.OnCancelMonthDialogListener;
 
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -67,7 +73,9 @@ public class RemunerationActivity extends AppCompatActivity {
     @BindView(R.id.range_salary)
     TextView range_salary;
     @BindView(R.id.save_remuneration)
-    Button save_remuneration;
+    ImageView save_remuneration;
+    @BindView(R.id.cancel_remuneration)
+    ImageView cancel_remuneration;
     @BindView(R.id.set_date)
     ImageView set_date;
     @BindView(R.id.trans_daily)
@@ -78,15 +86,19 @@ public class RemunerationActivity extends AppCompatActivity {
     RadioButton meal_daily;
     @BindView(R.id.meal_fixed)
     RadioButton meal_fixed;
+    @BindView(R.id.select_employee)
+    Button select_employee;
 
     private EmployeeService employeeService;
     private SalaryService salaryService;
-    private String persons, mid;
+    private String persons, mid, mname;
     private Integer months, yearss;
     private Person dataperson = new Person();
     private Remuneration remuneration = new Remuneration();
     private RackMonthPicker rackMonthPicker;
     private String[] monthinyear = new String[]{"January" , "February", "Maret", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+    private RecyclerView rvCategory;
+    private List<Person> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -100,14 +112,16 @@ public class RemunerationActivity extends AppCompatActivity {
         salaryService = ClientService.createService().create(SalaryService.class);
         persons = SharedPreferenceEditor.LoadPreferences(this,"Persons","");
 
-        mid = getIntent().getExtras().getString("id").toString();
+        //mid = getIntent().getExtras().getString("id").toString();
         employee_id.setEnabled(false);
         employee_name.setEnabled(false);
         employee_role.setEnabled(false);
+        save_remuneration.setVisibility(View.GONE);
+        cancel_remuneration.setVisibility(View.GONE);
 
         EmptyUI();
-        EdittextChange();
-        GetEmployee(persons, mid);
+        /*EdittextChange();
+        GetEmployee(persons, mid);*/
         CheckRadio();
 
         save_remuneration.setOnClickListener(new View.OnClickListener() {
@@ -132,6 +146,21 @@ public class RemunerationActivity extends AppCompatActivity {
                 rackMonthPicker.show();
             }
         });
+
+        select_employee.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GetPerson(persons);
+            }
+        });
+
+        cancel_remuneration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(getIntent());
+            }
+        });
     }
 
     private void GetEmployee (String persons, String id)
@@ -149,6 +178,8 @@ public class RemunerationActivity extends AppCompatActivity {
                 employee_role.setText(dataperson.Role.name.toString());
                 range_salary.setText("Rp." + setString(dataperson.Role.RoleDetail.minsalary) + " - Rp." + setString(dataperson.Role.RoleDetail.maxsalary));
                 gross_salary.setText(basic_salary.getText());
+
+                EdittextChange();
             }
 
             @Override
@@ -300,6 +331,7 @@ public class RemunerationActivity extends AppCompatActivity {
             overtime.setText("0");
             pension.setText("0");
             commision.setText("0");
+            gross_salary.setText("0");
     }
 
     private Integer GrossSalary ()
@@ -511,5 +543,65 @@ public class RemunerationActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void GetPerson (String persons)
+    {
+        Call<List<Person>> call = employeeService.GetPerson(persons);
+        call.enqueue(new Callback<List<Person>>()
+        {
+            @Override
+            public void onResponse(retrofit2.Call<List<Person>> call, Response<List<Person>> response)
+            {
+                list = response.body();
+                Log.d("Data",list.get(0).name);
+                Log.d("Size", String.valueOf(list.size()));
+                showRecyclerList();
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<List<Person>> call, Throwable t)
+            {
+                Toast.makeText(RemunerationActivity.this,"Error", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void showRecyclerList()
+    {
+        // custom dialog
+        final Dialog dialog = new Dialog(RemunerationActivity.this);
+        dialog.setContentView(R.layout.employee_list_dialog);
+        dialog.setTitle("Employee");
+
+        dialog.show();
+
+        rvCategory = (RecyclerView)dialog.findViewById(R.id.rv_employees);
+        rvCategory.setHasFixedSize(true);
+        rvCategory.setLayoutManager(new LinearLayoutManager(RemunerationActivity.this));
+        EmployeeAdapter EmployeeAdapter = new EmployeeAdapter(RemunerationActivity.this);
+        EmployeeAdapter.setListPerson(list);
+        rvCategory.setAdapter(EmployeeAdapter);
+
+        ItemClickSupport.addTo(rvCategory).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                showSelectedPerson(list.get(position));
+                dialog.dismiss();
+            }
+        });
+    }
+
+    private void showSelectedPerson(Person person)
+    {
+        mid = person.id;
+        mname = person.name;
+
+        employee_id.setText(mid);
+        employee_name.setText(mname);
+        save_remuneration.setVisibility(View.VISIBLE);
+        cancel_remuneration.setVisibility(View.VISIBLE);
+
+        GetEmployee(persons, mid);
     }
 }
