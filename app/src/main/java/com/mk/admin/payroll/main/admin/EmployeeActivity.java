@@ -55,7 +55,8 @@ public class EmployeeActivity extends AppCompatActivity {
     private Person dataperson;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employee);
 
@@ -80,9 +81,9 @@ public class EmployeeActivity extends AppCompatActivity {
                 {
                     if(list_shift.get(i).equals(shift_spin.getSelectedItem().toString()))
                     {
-                        shift_in.setText(shifts.get(i).getWorkstart());
-                        shift_out.setText(shifts.get(i).getWorkend());
-                        Toast.makeText(EmployeeActivity.this,shifts.get(i).getWorkstart(), Toast.LENGTH_LONG).show();
+                        shift_in.setText(shifts.get(i).workstart);
+                        shift_out.setText(shifts.get(i).workend);
+                        Toast.makeText(EmployeeActivity.this,shifts.get(i).workstart, Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -95,7 +96,7 @@ public class EmployeeActivity extends AppCompatActivity {
         save_employee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dataperson.setName(employee_name.getText().toString());
+                dataperson.name = employee_name.getText().toString();
                 SetRole();
                 SetShift();
                 PutEmployee(persons, dataperson);
@@ -112,9 +113,9 @@ public class EmployeeActivity extends AppCompatActivity {
             public void onResponse(retrofit2.Call<Person> call, Response<Person> response)
             {
                 dataperson = response.body();
-                Log.d("Data", dataperson.getName());
-                shiftid = dataperson.Shift.getId();
-                role = dataperson.Role.getName();
+                Log.d("Data", dataperson.name);
+                shiftid = dataperson.PersonDetail.Shift.id;
+                role = dataperson.Role.name;
             }
 
             @Override
@@ -135,10 +136,10 @@ public class EmployeeActivity extends AppCompatActivity {
             public void onResponse(retrofit2.Call<List<Shift>> call, Response<List<Shift>> response)
             {
                 shifts = response.body();
-                Log.d("Shift", shifts.get(0).getWorkstart());
+                Log.d("Shift", shifts.get(0).workstart);
                 for (int i = 0; i < shifts.size(); i++)
                 {
-                    list_shift.add(shifts.get(i).getId());
+                    list_shift.add(shifts.get(i).id);
                 }
                 SetShiftSpinner();
             }
@@ -160,10 +161,10 @@ public class EmployeeActivity extends AppCompatActivity {
             public void onResponse(retrofit2.Call<List<Role>> call, Response<List<Role>> response)
             {
                 roles = response.body();
-                Log.d("Role", roles.get(0).getName());
+                Log.d("Role", roles.get(0).name);
                 for (int i = 0; i < roles.size(); i++)
                 {
-                    list_role.add(roles.get(i).getName());
+                    list_role.add(roles.get(i).name);
                 }
                 SetRoleSpinner();
             }
@@ -214,7 +215,7 @@ public class EmployeeActivity extends AppCompatActivity {
             public void onResponse(retrofit2.Call<Person> call, Response<Person> response)
             {
                 dataperson = response.body();
-                Log.d("Data", dataperson.getName());
+                Log.d("Data", dataperson.name);
                 Toast.makeText(EmployeeActivity.this,"Saving Success", Toast.LENGTH_LONG).show();
             }
 
@@ -231,12 +232,12 @@ public class EmployeeActivity extends AppCompatActivity {
     {
         for (int i = 0; i < roles.size(); i++)
         {
-            if (roles.get(i).getName().equals(role_spin.getSelectedItem()))
+            if (roles.get(i).name.equals(role_spin.getSelectedItem()))
             {
-                dataperson.Role.setId(roles.get(i).getId());
-                dataperson.Role.setName(roles.get(i).getName());
-                dataperson.Role.setMaxsalary(roles.get(i).getMaxsalary());
-                dataperson.Role.setMinsalary(roles.get(i).getMinsalary());
+                dataperson.Role.id = roles.get(i).id;
+                dataperson.Role.name = roles.get(i).name;
+                dataperson.Role.RoleDetail.maxsalary = roles.get(i).RoleDetail.maxsalary;
+                dataperson.Role.RoleDetail.minsalary = roles.get(i).RoleDetail.minsalary;
             }
         }
     }
@@ -245,11 +246,11 @@ public class EmployeeActivity extends AppCompatActivity {
     {
         for (int i = 0; i < shifts.size(); i++)
         {
-            if (shifts.get(i).getId().equals(shift_spin.getSelectedItem()))
+            if (shifts.get(i).id.equals(shift_spin.getSelectedItem()))
             {
-                dataperson.Shift.setId(shifts.get(i).getId());
-                dataperson.Shift.setWorkstart(shifts.get(i).getWorkstart());
-                dataperson.Shift.setWorkend(shifts.get(i).getWorkend());
+                dataperson.PersonDetail.Shift.id = shifts.get(i).id;
+                dataperson.PersonDetail.Shift.workstart = shifts.get(i).workstart;
+                dataperson.PersonDetail.Shift.workend = shifts.get(i).workend;
             }
         }
     }

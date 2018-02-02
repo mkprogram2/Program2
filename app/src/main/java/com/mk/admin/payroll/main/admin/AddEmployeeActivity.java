@@ -88,8 +88,8 @@ public class AddEmployeeActivity extends AppCompatActivity {
                 {
                     if(list_shift.get(i).equals(add_shift_spin.getSelectedItem().toString()))
                     {
-                        add_shift_in.setText(shifts.get(i).getWorkstart());
-                        add_shift_out.setText(shifts.get(i).getWorkend());
+                        add_shift_in.setText(shifts.get(i).workstart);
+                        add_shift_out.setText(shifts.get(i).workend);
                     }
                 }
             }
@@ -131,10 +131,10 @@ public class AddEmployeeActivity extends AppCompatActivity {
             public void onResponse(retrofit2.Call<List<Shift>> call, Response<List<Shift>> response)
             {
                 shifts = response.body();
-                Log.d("Shift", shifts.get(0).getWorkstart());
+                Log.d("Shift", shifts.get(0).workstart);
                 for (int i = 0; i < shifts.size(); i++)
                 {
-                    list_shift.add(shifts.get(i).getId());
+                    list_shift.add(shifts.get(i).id);
                 }
                 SetShiftSpinner();
             }
@@ -156,10 +156,10 @@ public class AddEmployeeActivity extends AppCompatActivity {
             public void onResponse(retrofit2.Call<List<Role>> call, Response<List<Role>> response)
             {
                 roles = response.body();
-                Log.d("Role", roles.get(0).getName());
+                Log.d("Role", roles.get(0).name);
                 for (int i = 0; i < roles.size(); i++)
                 {
-                    list_role.add(roles.get(i).getName());
+                    list_role.add(roles.get(i).name);
                 }
                 SetRoleSpinner();
             }
@@ -195,7 +195,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
             public void onResponse(retrofit2.Call<Person> call, Response<Person> response)
             {
                 final Person dataperson = response.body();
-                Log.d("Data", dataperson.getName());
+                Log.d("Data", dataperson.name);
                 Toast.makeText(AddEmployeeActivity.this,"Saving Success", Toast.LENGTH_LONG).show();
             }
 
@@ -211,27 +211,28 @@ public class AddEmployeeActivity extends AppCompatActivity {
     private void SetPerson()
     {
         Person person = new Person();
-        person.setName(add_employee_name.getText().toString());
-        person.setPassword(add_password.getText().toString());
-        person.Shift.setId(add_shift_spin.getSelectedItem().toString());
+        person.name = add_employee_name.getText().toString();
+        person.apppassword = add_password.getText().toString();
+        person.PersonDetail.Shift.id = add_shift_spin.getSelectedItem().toString();
         for (int i = 0; i < roles.size(); i++)
         {
-            if (roles.get(i).getName().equals(add_role_spin.getSelectedItem()))
+            if (roles.get(i).name.equals(add_role_spin.getSelectedItem()))
             {
-                person.Role.setId(roles.get(i).getId());
+                person.Role.id = roles.get(i).id;
             }
         }
         String uniqueId = null;
         if(uniqueId == null) {
             uniqueId = UUID.randomUUID().toString();
         }
-        person.setId(uniqueId);
-        person.assignwork = dateFormatter.format(dates);
+        person.id = uniqueId;
+        person.PersonDetail.assignwork = dateFormatter.format(dates);
         //Person.assignwork = dates;
         PostEmployee(persons, person);
     }
 
-    private void showDateDialog(){
+    private void showDateDialog()
+    {
         Calendar newCalendar = Calendar.getInstance();
         datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener()
         {

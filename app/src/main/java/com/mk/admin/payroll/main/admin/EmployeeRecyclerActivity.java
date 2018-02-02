@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
 import com.mk.admin.payroll.common.SharedPreferenceEditor;
+//import com.mk.admin.payroll.main.admin.adapter.EmployeeAdapter;
 import com.mk.admin.payroll.main.admin.adapter.EmployeeAdapter;
 import com.mk.admin.payroll.main.admin.adapter.ItemClickSupport;
 import com.mk.admin.payroll.main.manage.OvertimeRequestActivity;
@@ -32,7 +33,8 @@ public class EmployeeRecyclerActivity extends AppCompatActivity {
     private String persons, activity;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employee_recycler);
 
@@ -45,7 +47,8 @@ public class EmployeeRecyclerActivity extends AppCompatActivity {
         GetPerson(persons);
     }
 
-    private void showRecyclerList(){
+    private void showRecyclerList()
+    {
         rvCategory.setLayoutManager(new LinearLayoutManager(this));
         EmployeeAdapter EmployeeAdapter = new EmployeeAdapter(this);
         EmployeeAdapter.setListPerson(list);
@@ -68,7 +71,7 @@ public class EmployeeRecyclerActivity extends AppCompatActivity {
             public void onResponse(retrofit2.Call<List<Person>> call, Response<List<Person>> response)
             {
                 list = response.body();
-                Log.d("Data",list.get(0).getName());
+                Log.d("Data",list.get(0).name);
                 Log.d("Size", String.valueOf(list.size()));
                 showRecyclerList();
             }
@@ -81,30 +84,31 @@ public class EmployeeRecyclerActivity extends AppCompatActivity {
         });
     }
 
-    private void showSelectedPerson(Person person){
-        Toast.makeText(this, "You Choose "+person.getName(), Toast.LENGTH_SHORT).show();
+    private void showSelectedPerson(Person person)
+    {
+        Toast.makeText(this, "You Choose "+person.name, Toast.LENGTH_SHORT).show();
 
         activity = getIntent().getExtras().getString("activity");
 
         if (activity.equals("employee"))
         {
             Intent intent = new Intent(EmployeeRecyclerActivity.this, EmployeeActivity.class);
-            intent.putExtra("id", person.getId());
-            intent.putExtra("name", person.getName());
+            intent.putExtra("id", person.id);
+            intent.putExtra("name", person.name);
             startActivity(intent);
         }
         else if(activity.equals("remuneration"))
         {
             Intent intent = new Intent(EmployeeRecyclerActivity.this, RemunerationActivity.class);
-            intent.putExtra("id", person.getId());
-            intent.putExtra("name", person.getName());
+            intent.putExtra("id", person.id);
+            intent.putExtra("name", person.name);
             startActivity(intent);
         }
         else if (activity.equals("reqovertime"))
         {
             Intent intent = new Intent(EmployeeRecyclerActivity.this, OvertimeRequestActivity.class);
-            intent.putExtra("id", person.getId());
-            intent.putExtra("name", person.getName());
+            intent.putExtra("id", person.id);
+            intent.putExtra("name", person.name);
             intent.putExtra("role", person.Role.name);
             startActivity(intent);
         }

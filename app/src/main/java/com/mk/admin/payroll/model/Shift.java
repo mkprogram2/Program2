@@ -12,7 +12,7 @@ public class Shift
     public String breakstart;
     public String breakend;
 
-    public String getId () { return id; }
+    /*public String getId () { return id; }
 
     public void setId (String id) { this.id = id; }
 
@@ -22,5 +22,5 @@ public class Shift
 
     public String getWorkend () { return workend; }
 
-    public void setWorkend (String workend) { this.workend = workend; }
+    public void setWorkend (String workend) { this.workend = workend; }*/
 }

@@ -8,7 +8,11 @@ public class Role
 {
     public Integer id;
     public String name;
-    public Double maxsalary;
+    public String permissions;
+    public Integer rightslevel;
+    public RoleDetail RoleDetail = new RoleDetail();
+
+    /*public Double maxsalary;
     public Double minsalary;
 
     public Integer getId() { return id; }
@@ -25,5 +29,5 @@ public class Role
 
     public Double getMinsalary() { return minsalary; }
 
-    public void setMinsalary(Double minsalary) { this.minsalary = minsalary; }
+    public void setMinsalary(Double minsalary) { this.minsalary = minsalary; }*/
 }

@@ -1,15 +1,16 @@
 package com.mk.admin.payroll.main.admin;
 
-import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,7 +18,6 @@ import android.widget.Toast;
 import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
 import com.mk.admin.payroll.common.SharedPreferenceEditor;
-import com.mk.admin.payroll.main.MainActivity;
 import com.mk.admin.payroll.model.Person;
 import com.mk.admin.payroll.model.Remuneration;
 import com.mk.admin.payroll.service.EmployeeService;
@@ -69,7 +69,7 @@ public class RemunerationActivity extends AppCompatActivity {
     @BindView(R.id.save_remuneration)
     Button save_remuneration;
     @BindView(R.id.set_date)
-    Button set_date;
+    ImageView set_date;
     @BindView(R.id.trans_daily)
     RadioButton trans_daily;
     @BindView(R.id.trans_fixed)
@@ -101,6 +101,9 @@ public class RemunerationActivity extends AppCompatActivity {
         persons = SharedPreferenceEditor.LoadPreferences(this,"Persons","");
 
         mid = getIntent().getExtras().getString("id").toString();
+        employee_id.setEnabled(false);
+        employee_name.setEnabled(false);
+        employee_role.setEnabled(false);
 
         EmptyUI();
         EdittextChange();
@@ -110,7 +113,15 @@ public class RemunerationActivity extends AppCompatActivity {
         save_remuneration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SetRemuneration();
+                if (TextUtils.isEmpty(month_salary.getText()))
+                {
+                    month_salary.setError("Please Select Date");
+                    Toast.makeText(RemunerationActivity.this, "Please Select Date", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    SetRemuneration();
+                }
             }
         });
 
@@ -132,11 +143,11 @@ public class RemunerationActivity extends AppCompatActivity {
             public void onResponse(retrofit2.Call<Person> call, Response<Person> response)
             {
                 dataperson = response.body();
-                Log.d("Data", dataperson.getName());
-                employee_id.setText(dataperson.getId().toString());
-                employee_name.setText(dataperson.getName().toString());
-                employee_role.setText(dataperson.Role.getName().toString());
-                range_salary.setText("Rp." + setString(dataperson.Role.minsalary) + " - Rp." + setString(dataperson.Role.maxsalary));
+                Log.d("Data", dataperson.name);
+                employee_id.setText(dataperson.id.toString());
+                employee_name.setText(dataperson.name.toString());
+                employee_role.setText(dataperson.Role.name.toString());
+                range_salary.setText("Rp." + setString(dataperson.Role.RoleDetail.minsalary) + " - Rp." + setString(dataperson.Role.RoleDetail.maxsalary));
                 gross_salary.setText(basic_salary.getText());
             }
 
@@ -198,7 +209,7 @@ public class RemunerationActivity extends AppCompatActivity {
                 employee_id.setText(remuneration.person.id.toString());
                 employee_name.setText(remuneration.person.name.toString());
                 employee_role.setText(remuneration.person.Role.name.toString());
-                range_salary.setText("Rp." + setString(remuneration.person.Role.minsalary) + " - Rp." + setString(remuneration.person.Role.maxsalary));
+                range_salary.setText("Rp." + setString(remuneration.person.Role.RoleDetail.minsalary) + " - Rp." + setString(remuneration.person.Role.RoleDetail.maxsalary));
 
                 if (remuneration.salary != null)
                     basic_salary.setText(setString(remuneration.salary));

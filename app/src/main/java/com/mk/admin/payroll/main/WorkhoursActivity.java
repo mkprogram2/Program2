@@ -157,10 +157,10 @@ public class WorkhoursActivity extends AppCompatActivity
             public void onResponse(retrofit2.Call<Person> call, Response<Person> response)
             {
                 dataperson = response.body();
-                Log.d("Data", dataperson.getName());
-                shift_in.setText(SetShiftTime(dataperson.Shift.getWorkstart()));
-                shift_out.setText(SetShiftTime(dataperson.Shift.getWorkend()));
-                break_time.setText(SetShiftTime(dataperson.Shift.breakstart) + " - " + SetShiftTime(dataperson.Shift.breakend));
+                Log.d("Data", dataperson.name);
+                shift_in.setText(SetShiftTime(dataperson.PersonDetail.Shift.workstart));
+                shift_out.setText(SetShiftTime(dataperson.PersonDetail.Shift.workend));
+                break_time.setText(SetShiftTime(dataperson.PersonDetail.Shift.breakstart) + " - " + SetShiftTime(dataperson.PersonDetail.Shift.breakend));
             }
 
             @Override
@@ -235,8 +235,7 @@ public class WorkhoursActivity extends AppCompatActivity
                         long Seconds = diff / 1000 % 60;
 
                         tv_hour.setText(String.format("%02d", Hours) + " : " + String.format("%02d", Minutes) + " : " + String.format("%02d", Seconds));
-                        /*tv_minute.setText(String.format("%02d", Minutes) + " Minutes");
-                        tv_second.setText(String.format("02d", Seconds) + " ");*/
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

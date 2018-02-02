@@ -31,7 +31,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".main.MainActivity" />
         <activity android:name=".main.WorkhoursActivity" />
         <activity android:name=".main.CalendarActivity" />
         <activity
@@ -48,7 +47,13 @@
         <service
             android:name=".common.PayrollService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+        <activity
+            android:name=".main.HomeActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="Payroll"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

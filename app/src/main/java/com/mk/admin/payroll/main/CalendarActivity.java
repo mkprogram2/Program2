@@ -21,11 +21,12 @@ import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
 import com.mk.admin.payroll.common.SharedPreferenceEditor;
 import com.mk.admin.payroll.main.adapter.CalendarAdapter;
+//import com.mk.admin.payroll.main.adapter.EventAdapter;
 import com.mk.admin.payroll.main.adapter.EventAdapter;
 import com.mk.admin.payroll.main.admin.EmployeeActivity;
 import com.mk.admin.payroll.main.admin.EmployeeRecyclerActivity;
 import com.mk.admin.payroll.main.admin.RemunerationActivity;
-import com.mk.admin.payroll.main.admin.adapter.EmployeeAdapter;
+//import com.mk.admin.payroll.main.admin.adapter.EmployeeAdapter;
 import com.mk.admin.payroll.main.admin.adapter.ItemClickSupport;
 import com.mk.admin.payroll.model.Holiday;
 import com.mk.admin.payroll.model.Person;
@@ -228,7 +229,6 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void showRecyclerList(){
         rvEvent.setLayoutManager(new LinearLayoutManager(this));

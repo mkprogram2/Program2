@@ -1,41 +1,24 @@
 package com.mk.admin.payroll.main.manage;
 
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.DialogFragment;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
-import com.mk.admin.payroll.common.IDs;
 import com.mk.admin.payroll.common.SharedPreferenceEditor;
-import com.mk.admin.payroll.main.MainActivity;
-import com.mk.admin.payroll.main.admin.EmployeeActivity;
-import com.mk.admin.payroll.main.admin.EmployeeRecyclerActivity;
-import com.mk.admin.payroll.main.admin.RemunerationActivity;
-import com.mk.admin.payroll.main.admin.adapter.EmployeeAdapter;
+//import com.mk.admin.payroll.main.admin.adapter.EmployeeAdapter;
 import com.mk.admin.payroll.main.admin.adapter.ItemClickSupport;
+//import com.mk.admin.payroll.main.manage.adapter.OvertimeAdapter;
 import com.mk.admin.payroll.main.manage.adapter.OvertimeAdapter;
 import com.mk.admin.payroll.model.Overtime;
-import com.mk.admin.payroll.model.Person;
 import com.mk.admin.payroll.service.OvertimeService;
-import com.mk.admin.payroll.service.WorkhourService;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -110,12 +93,12 @@ public class OvertimeRequestActivity extends AppCompatActivity {
         });
     }
 
-    private void showRecyclerList(){
+    private void showRecyclerList()
+    {
         rvOvertime.setLayoutManager(new LinearLayoutManager(this));
         OvertimeAdapter OvertimeAdapter = new OvertimeAdapter(this);
         OvertimeAdapter.setOvertimes(overtimes);
         rvOvertime.setAdapter(OvertimeAdapter);
-        Log.d("OVERTIMEEEE", overtimes.get(0).date);
 
         ItemClickSupport.addTo(rvOvertime).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
@@ -125,7 +108,8 @@ public class OvertimeRequestActivity extends AppCompatActivity {
         });
     }
 
-    private void showSelectedPerson(Overtime overtime){
+    private void showSelectedPerson(Overtime overtime)
+    {
         Toast.makeText(this, "You Choose "+overtime.date.toString(), Toast.LENGTH_SHORT).show();
     }
 }

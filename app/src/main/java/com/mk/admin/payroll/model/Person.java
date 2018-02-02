@@ -1,5 +1,7 @@
 package com.mk.admin.payroll.model;
 
+import java.util.Date;
+
 /**
  * Created by admin on 1/9/2018.
  */
@@ -8,11 +10,23 @@ public class Person
 {
     public String id;
     public String name;
-    public String password;
+    public String apppassword;
+    public Date birthdate;
+    public String card;
+    public Date created;
+    public String email;
+    public String gender;
+    public String image;
+    public String npwp;
+    public String phone;
+    public Role Role = new Role();
+    public Place Place = new Place();
+    public PersonsDetail PersonDetail = new PersonsDetail();
+
+    /*public String password;
     public double salary;
     public String assignwork;
     public Shift Shift = new Shift();
-    public Role Role = new Role();
 
     public String getId() { return id; }
 
@@ -28,5 +42,5 @@ public class Person
 
     public double getSalary () { return salary; }
 
-    public void setSalary (double salary) { this.salary = salary;}
+    public void setSalary (double salary) { this.salary = salary;}*/
 }

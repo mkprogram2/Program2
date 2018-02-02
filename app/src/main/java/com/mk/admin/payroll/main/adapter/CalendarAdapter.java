@@ -48,7 +48,8 @@ public class CalendarAdapter extends BaseAdapter {
     private View previousView;
 
     @SuppressLint("WrongConstant")
-    public CalendarAdapter(Context c, GregorianCalendar monthCalendar) {
+    public CalendarAdapter(Context c, GregorianCalendar monthCalendar)
+    {
         dayString = new ArrayList();
         Locale.setDefault(Locale.US);
         month = monthCalendar;
@@ -61,7 +62,8 @@ public class CalendarAdapter extends BaseAdapter {
         refreshDays();
     }
 
-    public void setItems(ArrayList<String> items) {
+    public void setItems(ArrayList<String> items)
+    {
         for(int i = 0; i != items.size(); ++i) {
             if(((String)items.get(i)).length() == 1) {
                 items.set(i, "0" + (String)items.get(i));
@@ -83,7 +85,8 @@ public class CalendarAdapter extends BaseAdapter {
     }
 
     @SuppressLint("ResourceType")
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
         View v = convertView;
         if(convertView == null) {
             @SuppressLint("WrongConstant") LayoutInflater vi = (LayoutInflater)mContext.getSystemService("layout_inflater");
@@ -133,7 +136,8 @@ public class CalendarAdapter extends BaseAdapter {
         return v;
     }
 
-    public View setSelected(View view) {
+    public View setSelected(View view)
+    {
         if(previousView != null) {
             previousView.setBackgroundResource(R.drawable.list_item_background);
         }
@@ -144,7 +148,8 @@ public class CalendarAdapter extends BaseAdapter {
     }
 
     @SuppressLint("WrongConstant")
-    public void refreshDays() {
+    public void refreshDays()
+    {
         items.clear();
         dayString.clear();
         Locale.setDefault(Locale.US);
@@ -166,7 +171,8 @@ public class CalendarAdapter extends BaseAdapter {
     }
 
     @SuppressLint("WrongConstant")
-    private int getMaxP() {
+    private int getMaxP()
+    {
         if(month.get(2) == month.getActualMinimum(2)) {
             pmonth.set(month.get(1) - 1, month.getActualMaximum(2), 1);
         } else {

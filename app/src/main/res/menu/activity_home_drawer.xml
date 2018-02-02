@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+
+        <item android:title="@string/working">
+            <menu>
+                <item
+                    android:id="@+id/workhours_menu"
+                    android:icon="@drawable/ic_workhours"
+                    android:title="Workhours" />
+                <item
+                    android:id="@+id/calendar_menu"
+                    android:icon="@drawable/ic_calendar"
+                    android:title="Calendar" />
+                <item
+                    android:id="@+id/salary_menu"
+                    android:icon="@drawable/ic_payments"
+                    android:title="Salary" />
+            </menu>
+        </item>
+    </group>
+
+    <group
+        android:id="@+id/human_resource_menu"
+        android:checkableBehavior="single">
+        <item android:title="@string/human_reources">
+            <menu>
+                <item
+                    android:id="@+id/add_employee_menu"
+                    android:icon="@drawable/ic_add_person"
+                    android:title="Add Employee" />
+                <item
+                    android:id="@+id/employee_menu"
+                    android:icon="@drawable/ic_person"
+                    android:title="Employee" />
+                <item
+                    android:id="@+id/remuneration_menu"
+                    android:icon="@drawable/ic_payments"
+                    android:title="Remuneration" />
+            </menu>
+        </item>
+    </group>
+
+    <group
+        android:id="@+id/manage_menu"
+        android:checkableBehavior="single">
+        <item android:title="@string/manage">
+            <menu>
+                <item
+                    android:id="@+id/req_overtime_menu"
+                    android:icon="@drawable/ic_overtime"
+                    android:title="Overtime" />
+            </menu>
+        </item>
+    </group>
+
+    <item android:title="Logout">
+        <menu>
+            <item
+                android:id="@+id/menu_logout"
+                android:icon="@drawable/ic_overtime"
+                android:title="Logout" />
+        </menu>
+    </item>
+
+</menu>

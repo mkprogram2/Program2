@@ -54,7 +54,8 @@ public class OvertimeAdapter  extends RecyclerView.Adapter<OvertimeAdapter.Categ
         return getOvertimes().size();
     }
 
-    class CategoryViewHolder extends RecyclerView.ViewHolder{
+    class CategoryViewHolder extends RecyclerView.ViewHolder
+    {
         TextView overtime_date;
         TextView overtime_duration;
 

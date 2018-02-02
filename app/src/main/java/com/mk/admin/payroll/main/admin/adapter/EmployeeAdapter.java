@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.model.Person;
 
@@ -42,14 +43,15 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Catego
     @Override
     public void onBindViewHolder(CategoryViewHolder holder, int position) {
 
-        holder.tvName.setText(getListPerson().get(position).getId());
-        holder.tvRemarks.setText(getListPerson().get(position).getName());
+        holder.tvName.setText(getListPerson().get(position).name);
+        holder.tvRemarks.setText(getListPerson().get(position).Role.name);
 
-        /*Glide.with(context)
+/*Glide.with(context)
                 .load(getListPresident().get(position).getPhoto())
                 .override(55, 55)
                 .crossFade()
                 .into(holder.imgPhoto);*/
+
     }
 
     @Override

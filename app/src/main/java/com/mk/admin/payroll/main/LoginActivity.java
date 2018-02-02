@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
 import com.mk.admin.payroll.common.PayrollService;
+import com.mk.admin.payroll.common.Session;
 import com.mk.admin.payroll.common.SharedPreferenceEditor;
 import com.mk.admin.payroll.model.Person;
 import com.mk.admin.payroll.service.LoginService;
@@ -40,6 +41,7 @@ public class LoginActivity extends AppCompatActivity
     private LoginService service;
     private String persons, mUsername, mPassword;
     private ProgressDialog progressDialog;
+    private Session session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -51,6 +53,7 @@ public class LoginActivity extends AppCompatActivity
 
         service = ClientService.createService().create(LoginService.class);
         persons = SharedPreferenceEditor.LoadPreferences(this, "Persons", "");
+        session = new Session(this);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,8 +62,6 @@ public class LoginActivity extends AppCompatActivity
                 attempLogin();
             }
         });
-
-        startService(new Intent(LoginActivity.this, PayrollService.class));
     }
 
     private void postlogin(String persons, Person logins)
@@ -75,16 +76,18 @@ public class LoginActivity extends AppCompatActivity
                 {
                     final Person data = response.body();
 
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.putExtra("id", data.getId());
-                    intent.putExtra("name", data.getName());
-                    intent.putExtra("role", data.Role.getId().toString());
-                    intent.putExtra("role_name", data.Role.name);
-                    intent.putExtra("salary", data.getSalary());
-                    intent.putExtra("shiftid", data.Shift.getId());
-                    intent.putExtra("shift_workstart",data.Shift.getWorkstart());
-                    intent.putExtra("shift_workend", data.Shift.getWorkend());
+                    session.setId(data.id);
+                    Log.d("Session", session.getId());
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                    intent.putExtra("id", data.id);
+                    intent.putExtra("name", data.name);
+                    intent.putExtra("role", data.Role.id.toString());
+                    intent.putExtra("role_name", data.Role.name.toString());
+                    intent.putExtra("shiftid", data.PersonDetail.Shift.id.toString());
+                    intent.putExtra("shift_workstart",data.PersonDetail.Shift.workstart.toString());
+                    intent.putExtra("shift_workend", data.PersonDetail.Shift.workend.toString());
                     startActivity(intent);
+                    //setFocus();
                 }
                 else
                 {
@@ -96,6 +99,7 @@ public class LoginActivity extends AppCompatActivity
             public void onFailure(retrofit2.Call<Person> call, Throwable t)
             {
                 //setFocus();
+                Log.d("ERROR", t.getMessage());
                 Toast.makeText(LoginActivity.this, "Username Atau Password Salah", Toast.LENGTH_LONG).show();
             }
 
@@ -105,8 +109,8 @@ public class LoginActivity extends AppCompatActivity
     private Person setlogin()
     {
         Person person = new Person();
-        person.setName(username.getText().toString());
-        person.setPassword(password.getText().toString());
+        person.name = username.getText().toString();
+        person.apppassword = password.getText().toString();
         return person;
     }
 
@@ -147,15 +151,13 @@ public class LoginActivity extends AppCompatActivity
         }
         else
         {
-            progressDialog.setMessage(this.getString(R.string.progress_message));
+            /*progressDialog.setMessage(this.getString(R.string.progress_message));
             progressDialog.setCancelable(false);
-            progressDialog.show();
+            progressDialog.show();*/
 
-            SharedPreferenceEditor.SavePreferences(LoginActivity.this, "Person", mUsername);
             Person personlogin = setlogin();
             postlogin(persons, personlogin);
 
-            setFocus();
         }
     }
 }
