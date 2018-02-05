@@ -22,7 +22,6 @@ public class Person
 	@Column(name = "birth_date")
 	public Date birthdate;
 	public String card;
-	public Date created;
 	@Column(name = "e_mail")
 	public String email;
 	public char gender;
