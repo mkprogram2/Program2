@@ -63,11 +63,11 @@ public class WorkhourController {
 		return WorkhourService.Checkin(personid);
 	}
 	
-	@PutMapping("/checkout")
-	public int CheckoutUser(@RequestBody String personid)
-	{
-		return WorkhourService.CheckoutUser(personid);
-	}
+//	@PutMapping("/checkout")
+//	public int CheckoutUser(@RequestBody String personid)
+//	{
+//		return WorkhourService.CheckoutUser(personid);
+//	}
 	
 	@GetMapping("/check/{id}")
 	public Workhour Check(@PathVariable("id") String personid)

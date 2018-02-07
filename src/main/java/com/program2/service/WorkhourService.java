@@ -33,38 +33,49 @@ public class WorkhourService {
 	private SimpleDateFormat DateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 	private SimpleDateFormat DateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
 	
-	public void CheckoutSystem ()
-	{
-		List<Workhour> Workhour = WorkhourOnlyByDate(new Date());
-		for (Workhour temp : Workhour) {
-			System.out.println(temp.personid);
-			if(temp.workend==null) {
-				Checkout(new Date(),temp,2);
-			}
-		}
-	}
+//	public void CheckoutSystem ()
+//	{
+//		List<Workhour> Workhour = WorkhourOnlyByDate(new Date());
+//		for (Workhour temp : Workhour) {
+//			System.out.println(temp.personid);
+//			if(temp.workend==null) {
+//				Checkout(new Date(),temp,2);
+//			}
+//		}
+//	}
+//	
+//	public int CheckoutUser(String personid)
+//	{
+//		Date DateNow = new Date();
+//		Workhour WorkhourCheck = WorkhourByDateById(personid, DateNow);
+//		
+//		if (WorkhourCheck == null) {
+//			return 2;
+//		}
+//		else if (WorkhourCheck.workend != null && WorkhourCheck.status == 1) 
+//		{
+//			return 3;
+//		}
+//		else 
+//		{
+//			long interval = DateNow.getTime() - WorkhourCheck.workstart.getTime();
+//			if (interval >= 1800000) 
+//			{
+//				Checkout(DateNow,WorkhourCheck,1);
+//				return 1;
+//			} else { return 4; }
+//		}
+//	}
 	
-	public int CheckoutUser(@RequestBody String personid)
+	public void CheckoutUser(String personid)
 	{
 		Date DateNow = new Date();
 		Workhour WorkhourCheck = WorkhourByDateById(personid, DateNow);
 		
-		if (WorkhourCheck == null) {
-			return 2;
+		if (WorkhourCheck != null) {
+			Checkout(DateNow,WorkhourCheck,1);
 		}
-		else if (WorkhourCheck.workend != null && WorkhourCheck.status == 1) 
-		{
-			return 3;
-		}
-		else 
-		{
-			long interval = DateNow.getTime() - WorkhourCheck.workstart.getTime();
-			if (interval >= 1800000) 
-			{
-				Checkout(DateNow,WorkhourCheck,1);
-				return 1;
-			} else { return 4; }
-		}
+		
 	}
 	
 	public void Checkout(Date DateNow, Workhour Workhour, int status) {
