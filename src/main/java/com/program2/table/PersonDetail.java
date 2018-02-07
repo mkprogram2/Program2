@@ -17,6 +17,8 @@ public class PersonDetail {
 	public String personid;
 	@Column(name = "assign_work")
 	public Date assignwork;
+	@Column(name = "serial_key")
+	public String serialkey;
 	@ManyToOne
 	@JoinColumn(name = "shift_id", referencedColumnName = "id")
 	public Shift Shift = new Shift();

@@ -33,11 +33,8 @@ public class WorkhourService {
 	private SimpleDateFormat DateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 	private SimpleDateFormat DateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
 	
-	
-	
 	public void CheckoutSystem ()
 	{
-		System.out.println("Asd");
 		List<Workhour> Workhour = WorkhourOnlyByDate(new Date());
 		for (Workhour temp : Workhour) {
 			System.out.println(temp.personid);
@@ -112,6 +109,9 @@ public class WorkhourService {
 	
 	public Workhour WorkhourByDateById(String personid, Date Date) 
 	{
+
+		
+			
 		Workhour WorkhourCheck = new Workhour();
 		Date DateNow = Date;
 		Calendar Cal = Calendar.getInstance();
@@ -138,11 +138,11 @@ public class WorkhourService {
 		Date DateNow = Date;
 		if (checkin) 
 		{
-			SDatefull = DateFormat1.format(DateNow)+" "+shift.PersonDetail.Shift.workstart;
+			SDatefull = DateFormat1.format(DateNow)+" "+shift.persondetail.Shift.workstart;
 		}
 		else 
 		{
-			SDatefull = DateFormat1.format(DateNow)+" "+shift.PersonDetail.Shift.workend;
+			SDatefull = DateFormat1.format(DateNow)+" "+shift.persondetail.Shift.workend;
 		}
 		try
 		{

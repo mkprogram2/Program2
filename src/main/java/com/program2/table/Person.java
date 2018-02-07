@@ -37,5 +37,5 @@ public class Person
 	public Place Place = new Place();
 	@OneToOne
 	@JoinColumn(name = "id", referencedColumnName = "person_id")
-	public PersonDetail PersonDetail = new PersonDetail();
+	public PersonDetail persondetail = new PersonDetail();
 }

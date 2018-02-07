@@ -6,11 +6,11 @@
 
 spring:
   profiles:
-    active: de
+    active: develop
 
 ---
 spring:
-  profiles: dev
+  profiles: server
   datasource:
     url: jdbc:postgresql://localhost:5432/alapos_dev
     username: alapos
@@ -21,23 +21,23 @@ spring:
   show-sql: true
 #  jackson:
 #    property-naming-strategy: CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: debug
-      springframework:
-        web: debug  
+#logging:
+#  level:
+#    org:
+#      hibernate:
+#        SQL: debug
+#      springframework:
+#        web: debug  
 server:
   port: 8083
 security:
   oauth2:
     resource:
-      userInfoUri: https://192.168.71.120:8084/me
+      userInfoUri: https://192.168.71.120:8082/me
       
 ---
 spring:
-  profiles: de
+  profiles: develop
   datasource:
     url: jdbc:postgresql://192.168.70.40:5432/alapos_dev
     username: alapos
@@ -48,16 +48,16 @@ spring:
   show-sql: true
 #  jackson:
 #    property-naming-strategy: CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: debug
-      springframework:
-        web: debug  
+#logging:
+#  level:
+#    org:
+#      hibernate:
+#        SQL: debug
+#      springframework:
+#        web: debug  
 server:
   port: 8083
 security:
   oauth2:
     resource:
-      userInfoUri: http://192.168.71.120:8084/me
+      userInfoUri: http://192.168.71.120:8082/me

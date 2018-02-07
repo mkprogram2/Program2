@@ -3,6 +3,7 @@ package com.program2.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.program2.table.Person;
@@ -34,17 +36,16 @@ public class PersonController
 	}
 	
 	@PostMapping("/login")
-	public Person login(@RequestBody Person in)
+	public Person login(@RequestParam("email") String email, @RequestParam("serial_key") String serial_key)
 	{
-		System.out.println(in.name);
-		Person Login = PersonRepository.findByNameAndApppassword(in.name, in.apppassword);
+		System.out.println(serial_key);
+		Person Login = PersonRepository.findByEmailAndPersondetailSerialkey(email, serial_key);
 		return Login;
 	}
 	
 	@GetMapping("/name")
 	public List<String> getPersonNames()
 	{
-		
 		return PersonRepository.findAllName();
 	}
 	
