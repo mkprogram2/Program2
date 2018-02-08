@@ -11,9 +11,10 @@ public class RestVariable
     //public static final String SERVER_URL = "http://54.179.195.87:8083/";
     //public static final String SERVER_LOGIN = "http://54.179.195.87:8084/";
 
-    public static final String SERVER_LOGIN = "http://192.168.71.120:8087/api/auth/";
-    public static final String SERVER_URL = "http://192.168.71.120:8087/api/hr/";
-    //public static final String SERVER_URL = "http://192.168.71.60:8083/";
+    //public static final String SERVER_LOGIN = "http://192.168.71.120:8087/api/auth/";
+    //public static final String SERVER_URL = "http://192.168.71.120:8087/api/hr/";
+    public static final String SERVER_LOGIN = "http://192.168.71.60:8087/api/auth/";
+    public static final String SERVER_URL = "http://192.168.71.60:8087/api/hr/";
 
     //public static final String SERVER_LOGIN = "http://192.168.71.120:8084/";
 

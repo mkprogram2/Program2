@@ -88,11 +88,18 @@ public class LoginActivity extends AppCompatActivity
                 {
                     final Person data = response.body();
                     session.setId(data.id);
-                    if (PayrollService.status == false)
+                    if (data.id != null)
                     {
-                        startService(new Intent(LoginActivity.this, PayrollService.class));
+                        if (PayrollService.status == false)
+                        {
+                            startService(new Intent(LoginActivity.this, PayrollService.class));
+                        }
+                        startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                     }
-                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                    else
+                    {
+                        Toast.makeText(LoginActivity.this, "E-mail Or Password Are Wrong2!", Toast.LENGTH_LONG).show();
+                    }
                     //setFocus();
                 }
                 else

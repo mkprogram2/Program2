@@ -10,6 +10,10 @@
             android:title="@string/working">
             <menu>
                 <item
+                    android:id="@+id/profile_menu"
+                    android:icon="@drawable/ic_profile"
+                    android:title="@string/profile"/>
+                <item
                     android:id="@+id/workhours_menu"
                     android:icon="@drawable/ic_workhours"
                     android:title="Workhours" />

@@ -8,8 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.mk.admin.payroll.R;
-import com.mk.admin.payroll.main.fragment.ListOvertimeFragment;
-import com.mk.admin.payroll.main.fragment.MyOvertimeFragment;
+import com.mk.admin.payroll.main.employee.fragment.MyOvertimeFragment;
 import com.mk.admin.payroll.main.manage.fragment.AddEmployeeOvertime;
 import com.mk.admin.payroll.main.manage.fragment.ListEmployeeOvertime;
 
@@ -35,7 +34,8 @@ public class EmployeeOvertimeActivity extends AppCompatActivity implements View.
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(View v)
+    {
         switch (v.getId()){
             case R.id.list_employee_over:
                 list_employee_over.setColorFilter(getBaseContext().getResources().getColor(R.color.blue));
@@ -43,7 +43,7 @@ public class EmployeeOvertimeActivity extends AppCompatActivity implements View.
                 ListEmployeeOvertime listEmployeeOvertime = new ListEmployeeOvertime();
                 FragmentManager FM = getSupportFragmentManager();
                 FragmentTransaction FT = FM.beginTransaction();
-                FT.replace(R.id.main_menu, listEmployeeOvertime);
+                FT.replace(R.id.employee_overtime_item, listEmployeeOvertime);
                 FT.commit();
                 break;
             case R.id.add_employee_over:
@@ -52,7 +52,7 @@ public class EmployeeOvertimeActivity extends AppCompatActivity implements View.
                 AddEmployeeOvertime addEmployeeOvertime = new AddEmployeeOvertime();
                 FragmentManager FM2 = getSupportFragmentManager();
                 FragmentTransaction FT2 = FM2.beginTransaction();
-                FT2.replace(R.id.main_menu, addEmployeeOvertime);
+                FT2.replace(R.id.employee_overtime_item, addEmployeeOvertime);
                 FT2.commit();
                 break;
         }
@@ -63,10 +63,10 @@ public class EmployeeOvertimeActivity extends AppCompatActivity implements View.
     {
         list_employee_over.setColorFilter(getBaseContext().getResources().getColor(R.color.blue));
         add_employee_over.setColorFilter(getBaseContext().getResources().getColor(R.color.black_de));
-        MyOvertimeFragment myOvertimeFragment = new MyOvertimeFragment();
+        ListEmployeeOvertime listEmployeeOvertime = new ListEmployeeOvertime();
         FragmentManager FM = getSupportFragmentManager();
         FragmentTransaction FT = FM.beginTransaction();
-        FT.replace(R.id.main_menu, myOvertimeFragment);
+        FT.replace(R.id.employee_overtime_item, listEmployeeOvertime);
         FT.commit();
     }
 }

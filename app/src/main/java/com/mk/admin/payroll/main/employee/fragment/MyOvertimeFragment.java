@@ -1,4 +1,4 @@
-package com.mk.admin.payroll.main.manage.fragment;
+package com.mk.admin.payroll.main.employee.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,18 +7,14 @@ import android.view.ViewGroup;
 
 import com.mk.admin.payroll.R;
 
-/**
- * Created by admin on 2/8/2018.
- */
-
-public class AddEmployeeOvertime extends android.support.v4.app.Fragment  {
+public class MyOvertimeFragment extends android.support.v4.app.Fragment {
     private View viewFrag1;
-    public AddEmployeeOvertime () {
+    public MyOvertimeFragment () {
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        viewFrag1 = inflater.inflate(R.layout.fragment_add_employee_overtime, container, false);
+        viewFrag1 = inflater.inflate(R.layout.activity_my_overtime_fragment, container, false);
 
         return viewFrag1;
     }

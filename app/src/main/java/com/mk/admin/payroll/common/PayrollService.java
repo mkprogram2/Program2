@@ -1,7 +1,5 @@
 package com.mk.admin.payroll.common;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,16 +8,12 @@ import android.content.IntentFilter;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.mk.admin.payroll.main.HomeActivity;
-import com.mk.admin.payroll.main.WorkhoursActivity;
 import com.mk.admin.payroll.model.Workhour;
 import com.mk.admin.payroll.service.CheckinService;
 import com.mk.admin.payroll.service.WorkhourService;
@@ -221,7 +215,7 @@ public class PayrollService extends Service {
             public void run() {
                 boolean condition = false;
                 if(condition != true) {
-                    handler.postDelayed(this, 10000);
+                    handler.postDelayed(this, 60000);
                     Log.d("YAAA", " YAAA");
                     Toast.makeText(PayrollService.this, "Service", Toast.LENGTH_SHORT).show();
 

@@ -33,6 +33,11 @@ import com.mk.admin.payroll.common.Session;
 import com.mk.admin.payroll.common.SharedPreferenceEditor;
 import com.mk.admin.payroll.main.admin.EmployeeActivity;
 import com.mk.admin.payroll.main.admin.RemunerationActivity;
+import com.mk.admin.payroll.main.employee.CalendarActivity;
+import com.mk.admin.payroll.main.employee.OvertimeActivity;
+import com.mk.admin.payroll.main.employee.ProfileActivity;
+import com.mk.admin.payroll.main.employee.SalaryActivity;
+import com.mk.admin.payroll.main.employee.WorkhoursActivity;
 import com.mk.admin.payroll.main.manage.EmployeeOvertimeActivity;
 import com.mk.admin.payroll.model.Person;
 import com.mk.admin.payroll.model.Workhour;
@@ -254,6 +259,10 @@ public class HomeActivity extends AppCompatActivity
         if ( id == R.id.workhours_menu)
         {
             workhour(mid);
+        }
+        else if ( id == R.id.profile_menu)
+        {
+            startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
         }
         else if ( id == R.id.calendar_menu)
         {

@@ -1,4 +1,4 @@
-package com.mk.admin.payroll.main;
+package com.mk.admin.payroll.main.employee;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -8,8 +8,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.mk.admin.payroll.R;
-import com.mk.admin.payroll.main.fragment.ListOvertimeFragment;
-import com.mk.admin.payroll.main.fragment.MyOvertimeFragment;
+import com.mk.admin.payroll.main.employee.fragment.ListOvertimeFragment;
+import com.mk.admin.payroll.main.employee.fragment.MyOvertimeFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

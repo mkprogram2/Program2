@@ -1,4 +1,4 @@
-package com.mk.admin.payroll.main;
+package com.mk.admin.payroll.main.employee;
 
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -19,8 +19,6 @@ import com.mk.admin.payroll.service.SalaryService;
 import com.rackspira.kristiawan.rackmonthpicker.RackMonthPicker;
 import com.rackspira.kristiawan.rackmonthpicker.listener.DateMonthDialogListener;
 import com.rackspira.kristiawan.rackmonthpicker.listener.OnCancelMonthDialogListener;
-
-import org.w3c.dom.Text;
 
 import java.util.Calendar;
 import java.util.List;

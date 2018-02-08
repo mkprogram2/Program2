@@ -23,17 +23,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".main.WorkhoursActivity" />
-        <activity android:name=".main.CalendarActivity" />
         <activity
-            android:name=".main.SalaryActivity"
+            android:name=".main.employee.WorkhoursActivity"
+            android:label="Workhours" />
+        <activity android:name=".main.employee.CalendarActivity" />
+        <activity
+            android:name=".main.employee.SalaryActivity"
             android:label="@string/salary" />
-        <activity android:name=".main.admin.RemunerationActivity" />
-        <activity android:name=".main.admin.EmployeeActivity" />
-        <activity android:name=".main.admin.AddEmployeeActivity" />
-        <activity android:name=".main.manage.OvertimeRequestActivity" />
-        <activity android:name=".main.admin.HolidayActivity" />
-        <activity android:name=".main.manage.AddOvertimeActivity" />
+        <activity
+            android:name=".main.admin.RemunerationActivity"
+            android:label="@string/remuneration" />
+        <activity
+            android:name=".main.admin.EmployeeActivity"
+            android:label="@string/employee" />
+        <activity
+            android:name=".main.admin.AddEmployeeActivity"
+            android:label="@string/new_employee" />
+        <activity
+            android:name=".main.admin.HolidayActivity"
+            android:label="@string/holiday" />
 
         <service
             android:name=".common.PayrollService"
@@ -45,8 +53,14 @@
             android:configChanges="orientation|screenSize"
             android:label="Payroll"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".main.OvertimeActivity"/>
-        <activity android:name=".main.manage.EmployeeOvertimeActivity"/>
+        <activity
+            android:name=".main.employee.OvertimeActivity"
+            android:label="@string/overtime" />
+        <activity
+            android:name=".main.manage.EmployeeOvertimeActivity"
+            android:label="@string/employees_overtime" />
+        <activity android:name=".main.employee.ProfileActivity"
+            android:label="@string/profile"/>
     </application>
 
 </manifest>

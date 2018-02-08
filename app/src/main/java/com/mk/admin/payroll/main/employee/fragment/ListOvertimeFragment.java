@@ -1,4 +1,4 @@
-package com.mk.admin.payroll.main.fragment;
+package com.mk.admin.payroll.main.employee.fragment;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,7 +12,7 @@ import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
 import com.mk.admin.payroll.common.Session;
 import com.mk.admin.payroll.common.SharedPreferenceEditor;
-import com.mk.admin.payroll.main.adapter.OvertimeAdapter;
+import com.mk.admin.payroll.main.employee.adapter.OvertimeAdapter;
 import com.mk.admin.payroll.main.admin.adapter.ItemClickSupport;
 import com.mk.admin.payroll.model.Overtime;
 import com.mk.admin.payroll.service.OvertimeService;
@@ -38,7 +38,6 @@ public class ListOvertimeFragment extends android.support.v4.app.Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewFrag2 = inflater.inflate(R.layout.activity_list_overtime_fragment, container, false);
-
 
         rvOvertime = (RecyclerView)viewFrag2.findViewById(R.id.rv_overtime);
         rvOvertime.setHasFixedSize(true);

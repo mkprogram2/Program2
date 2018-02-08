@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mk.admin.payroll.R;
-import com.mk.admin.payroll.main.adapter.OvertimeAdapter;
 import com.mk.admin.payroll.model.Overtime;
 
 import java.util.List;

@@ -12,8 +12,8 @@ import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
 import com.mk.admin.payroll.common.Session;
 import com.mk.admin.payroll.common.SharedPreferenceEditor;
-import com.mk.admin.payroll.main.adapter.OvertimeAdapter;
 import com.mk.admin.payroll.main.admin.adapter.ItemClickSupport;
+import com.mk.admin.payroll.main.manage.adapter.EmployeeOvertimeAdapter;
 import com.mk.admin.payroll.model.Overtime;
 import com.mk.admin.payroll.service.OvertimeService;
 
@@ -42,7 +42,6 @@ public class ListEmployeeOvertime extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewFrag1 = inflater.inflate(R.layout.activity_list_overtime_fragment, container, false);
 
-
         rvOvertime = (RecyclerView)viewFrag1.findViewById(R.id.rv_employee_overtime);
         rvOvertime.setHasFixedSize(true);
 
@@ -50,7 +49,7 @@ public class ListEmployeeOvertime extends android.support.v4.app.Fragment {
         persons = SharedPreferenceEditor.LoadPreferences(viewFrag1.getContext(),"Persons","");
         session = new Session(viewFrag1.getContext());
 
-        GetOvertime(persons);
+        GetOvertime(persons, session.getId());
 
         return viewFrag1;
     }
@@ -58,9 +57,9 @@ public class ListEmployeeOvertime extends android.support.v4.app.Fragment {
     private void showRecyclerList()
     {
         rvOvertime.setLayoutManager(new LinearLayoutManager(viewFrag1.getContext()));
-        OvertimeAdapter OvertimeAdapter = new OvertimeAdapter(viewFrag1.getContext());
-        OvertimeAdapter.setOvertimes(overtimes);
-        rvOvertime.setAdapter(OvertimeAdapter);
+        EmployeeOvertimeAdapter employeeOvertimeAdapter = new EmployeeOvertimeAdapter(viewFrag1.getContext());
+        employeeOvertimeAdapter.setOvertimes(overtimes);
+        rvOvertime.setAdapter(employeeOvertimeAdapter);
 
         ItemClickSupport.addTo(rvOvertime).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
@@ -75,9 +74,10 @@ public class ListEmployeeOvertime extends android.support.v4.app.Fragment {
         Toast.makeText(viewFrag1.getContext(), "You Choose "+overtime.date.toString(), Toast.LENGTH_SHORT).show();
     }
 
-    private void GetOvertime (String persons)
+
+    private void GetOvertime (String persons, String id)
     {
-        Call<List<Overtime>> call = overtimeService.GetAllOvertime(persons, session.getAccesstoken());
+        Call<List<Overtime>> call = overtimeService.GetOvertime(persons, id, session.getAccesstoken());
         call.enqueue(new Callback<List<Overtime>>()
         {
             @Override

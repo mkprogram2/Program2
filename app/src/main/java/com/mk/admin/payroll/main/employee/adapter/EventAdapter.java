@@ -1,13 +1,11 @@
-package com.mk.admin.payroll.main.adapter;
+package com.mk.admin.payroll.main.employee.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.model.Holiday;
