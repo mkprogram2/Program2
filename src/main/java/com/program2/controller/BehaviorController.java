@@ -53,7 +53,8 @@ public class BehaviorController
 			}
 			
 		}
-		return WorkhourService.Checkin(personid);
-		//WorkhourService.CheckoutUser(personid);(personid);
+		int status = WorkhourService.Checkin(personid);
+		WorkhourService.CheckoutUser(personid);
+		return status;
 	}
 }

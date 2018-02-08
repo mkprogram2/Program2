@@ -39,7 +39,16 @@ public class PersonController
 	public Person login(@RequestParam("email") String email, @RequestParam("serial_key") String serial_key)
 	{
 		System.out.println(serial_key);
-		Person Login = PersonRepository.findByEmailAndPersondetailSerialkey(email, serial_key);
+		Person Login = PersonRepository.findByEmail(email);
+		if(Login.persondetail.serialkey == null) 
+		{
+			Login.persondetail.serialkey = serial_key;
+			PersonRepository.save(Login);
+		}
+		else if(Login.persondetail.serialkey != serial_key)
+		{
+			return new Person();
+		}
 		return Login;
 	}
 	

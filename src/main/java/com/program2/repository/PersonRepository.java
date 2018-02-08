@@ -18,7 +18,7 @@ public interface PersonRepository extends JpaRepository<Person, String>
 	public Person findById(String id);
 	
 	public List<Person> findAllByOrderByIdAsc();
-	public Person findByEmailAndPersondetailSerialkey(String email, String serial_key);
+	public Person findByEmail(String email);
 	
 	
 }
