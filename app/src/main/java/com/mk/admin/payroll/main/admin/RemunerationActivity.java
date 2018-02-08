@@ -1,6 +1,7 @@
 package com.mk.admin.payroll.main.admin;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,7 +21,9 @@ import android.widget.Toast;
 
 import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
+import com.mk.admin.payroll.common.Session;
 import com.mk.admin.payroll.common.SharedPreferenceEditor;
+import com.mk.admin.payroll.main.HomeActivity;
 import com.mk.admin.payroll.main.admin.adapter.EmployeeAdapter;
 import com.mk.admin.payroll.main.admin.adapter.ItemClickSupport;
 import com.mk.admin.payroll.model.Person;
@@ -99,20 +102,20 @@ public class RemunerationActivity extends AppCompatActivity {
     private String[] monthinyear = new String[]{"January" , "February", "Maret", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
     private RecyclerView rvCategory;
     private List<Person> list;
+    private Session session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remuneration);
-
+        session = new Session(this);
         ButterKnife.bind(this);
 
         employeeService = ClientService.createService().create(EmployeeService.class);
         salaryService = ClientService.createService().create(SalaryService.class);
         persons = SharedPreferenceEditor.LoadPreferences(this,"Persons","");
 
-        //mid = getIntent().getExtras().getString("id").toString();
         employee_id.setEnabled(false);
         employee_name.setEnabled(false);
         employee_role.setEnabled(false);
@@ -120,8 +123,6 @@ public class RemunerationActivity extends AppCompatActivity {
         cancel_remuneration.setVisibility(View.GONE);
 
         EmptyUI();
-        /*EdittextChange();
-        GetEmployee(persons, mid);*/
         CheckRadio();
 
         save_remuneration.setOnClickListener(new View.OnClickListener() {
@@ -165,7 +166,7 @@ public class RemunerationActivity extends AppCompatActivity {
 
     private void GetEmployee (String persons, String id)
     {
-        Call<Person> call = employeeService.GetEmployee(persons, id);
+        Call<Person> call = employeeService.GetEmployee(persons, id, session.getAccesstoken());
         call.enqueue(new Callback<Person>()
         {
             @Override
@@ -228,7 +229,7 @@ public class RemunerationActivity extends AppCompatActivity {
 
     private void GetRemuneration (String person, String id, Integer month, Integer year)
     {
-        Call<Remuneration> call = salaryService.GetRemuneration(person, id, month, year);
+        Call<Remuneration> call = salaryService.GetRemuneration(person, id, month, year, session.getAccesstoken());
         call.enqueue(new Callback<Remuneration>()
         {
             @Override
@@ -301,7 +302,7 @@ public class RemunerationActivity extends AppCompatActivity {
 
     private void PostRemuneration (String persons, Remuneration remunerations)
     {
-        Call<Remuneration> call = salaryService.PostRemuneration(persons, remunerations);
+        Call<Remuneration> call = salaryService.PostRemuneration(persons, remunerations, session.getAccesstoken());
         call.enqueue(new Callback<Remuneration>()
         {
             @Override
@@ -309,6 +310,7 @@ public class RemunerationActivity extends AppCompatActivity {
             {
                 remuneration = response.body();
                 Toast.makeText(RemunerationActivity.this,"Saving Remuneration Was Successfully", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(RemunerationActivity.this, HomeActivity.class));
             }
 
             @Override
@@ -547,7 +549,7 @@ public class RemunerationActivity extends AppCompatActivity {
 
     private void GetPerson (String persons)
     {
-        Call<List<Person>> call = employeeService.GetPerson(persons);
+        Call<List<Person>> call = employeeService.GetPerson(persons, session.getAccesstoken());
         call.enqueue(new Callback<List<Person>>()
         {
             @Override

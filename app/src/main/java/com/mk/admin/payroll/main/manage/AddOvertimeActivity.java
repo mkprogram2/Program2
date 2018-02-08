@@ -13,15 +13,13 @@ import android.widget.Toast;
 
 import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
+import com.mk.admin.payroll.common.Session;
 import com.mk.admin.payroll.common.SharedPreferenceEditor;
-import com.mk.admin.payroll.main.admin.EmployeeRecyclerActivity;
 import com.mk.admin.payroll.model.Overtime;
 import com.mk.admin.payroll.service.OvertimeService;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,13 +49,14 @@ public class AddOvertimeActivity extends AppCompatActivity {
     private String mid, mname, persons;
     private OvertimeService overtimeService;
     private Overtime overtime = new Overtime();
+    private Session session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_overtime);
-
+        session = new Session(this);
         ButterKnife.bind (this);
 
         overtimeService = ClientService.createService().create(OvertimeService.class);
@@ -112,16 +111,16 @@ public class AddOvertimeActivity extends AppCompatActivity {
 
     private void PostOvertime (String persons, Overtime overtimes)
     {
-        Call<Overtime> call = overtimeService.PostOvertime(persons, overtimes);
+        Call<Overtime> call = overtimeService.PostOvertime(persons, overtimes, session.getAccesstoken());
         call.enqueue(new Callback<Overtime>()
         {
             @Override
             public void onResponse(retrofit2.Call<Overtime> call, Response<Overtime> response)
             {
                 overtime = response.body();
-                Intent intent = new Intent(AddOvertimeActivity.this, EmployeeRecyclerActivity.class);
+                /*Intent intent = new Intent(AddOvertimeActivity.this, EmployeeRecyclerActivity.class);
                 intent.putExtra("activity", "reqovertime");
-                startActivity(intent);
+                startActivity(intent);*/
                 Toast.makeText(AddOvertimeActivity.this,"Saving Success!", Toast.LENGTH_LONG).show();
             }
             @Override

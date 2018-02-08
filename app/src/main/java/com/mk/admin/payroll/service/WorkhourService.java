@@ -4,10 +4,14 @@ import com.mk.admin.payroll.model.Workhour;
 
 import java.util.HashMap;
 
+import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by admin on 1/11/2018.
@@ -16,6 +20,10 @@ import retrofit2.http.Path;
 public interface WorkhourService
 {
     @GET("workhours/check/{id}")
-    Call<Workhour> getCheckworkhour(@Header("Person") String person,
-                                    @Path("id") String id);
+    Call<Workhour> getCheckworkhour(@Path("id") String id,
+                                    @Query("access_token") String access_token);
+
+    @POST("behaviors")
+    Call<Integer> postBehavior(@Body RequestBody id,
+                               @Query("access_token") String access_token);
 }

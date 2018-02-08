@@ -11,6 +11,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Query;
 
 /**
  * Created by admin on 1/5/2018.
@@ -18,11 +19,11 @@ import retrofit2.http.PUT;
 
 public interface CheckinService
 {
-    @POST("workhours/checkin/")
-    Call<Integer> postCheckin(@Header("persons") String persons,
-                                            @Body RequestBody id);
+    @POST("workhours/checkin")
+    Call<Integer> postCheckin(@Body RequestBody id,
+                              @Query("access_token") String access_token);
 
     @PUT("workhours/checkout/")
-    Call<Integer> checkout(@Header("Person") String person,
-                            @Body RequestBody id);
+    Call<Integer> checkout(@Body RequestBody id,
+                           @Query("access_token") String access_token);
 }

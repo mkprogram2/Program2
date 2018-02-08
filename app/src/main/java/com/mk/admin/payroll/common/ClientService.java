@@ -30,4 +30,23 @@ public class ClientService
                 .client(okHttpClient)
                 .build();
     }
+
+    public static Retrofit createServiceLogin()
+    {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        // set your desired log level
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .readTimeout(10, TimeUnit.SECONDS)
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .addInterceptor(logging)
+                .build();
+
+        return new Retrofit.Builder()
+                .baseUrl(RestVariable.SERVER_LOGIN)
+                .addConverterFactory(JacksonConverterFactory.create())
+                .client(okHttpClient)
+                .build();
+    }
 }

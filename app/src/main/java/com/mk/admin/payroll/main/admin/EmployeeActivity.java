@@ -19,11 +19,10 @@ import android.widget.Toast;
 
 import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
+import com.mk.admin.payroll.common.Session;
 import com.mk.admin.payroll.common.SharedPreferenceEditor;
-import com.mk.admin.payroll.main.HomeActivity;
 import com.mk.admin.payroll.main.admin.adapter.EmployeeAdapter;
 import com.mk.admin.payroll.main.admin.adapter.ItemClickSupport;
-import com.mk.admin.payroll.main.manage.OvertimeRequestActivity;
 import com.mk.admin.payroll.model.Person;
 import com.mk.admin.payroll.model.Role;
 import com.mk.admin.payroll.model.Shift;
@@ -72,13 +71,14 @@ public class EmployeeActivity extends AppCompatActivity {
     private Person dataperson;
     private RecyclerView rvCategory;
     private List<Person> list;
+    private Session session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employee);
-
+        session = new Session(this);
         ButterKnife.bind(this);
 
         DisableUI();
@@ -155,7 +155,7 @@ public class EmployeeActivity extends AppCompatActivity {
 
     private void GetEmployee (String persons, String id)
     {
-        Call<Person> call = employeeService.GetEmployee(persons, id);
+        Call<Person> call = employeeService.GetEmployee(persons, id, session.getAccesstoken());
         call.enqueue(new Callback<Person>()
         {
             @Override
@@ -163,7 +163,7 @@ public class EmployeeActivity extends AppCompatActivity {
             {
                 dataperson = response.body();
                 Log.d("Data", dataperson.name);
-                shiftid = dataperson.PersonDetail.Shift.id;
+                shiftid = dataperson.persondetail.Shift.id;
                 role = dataperson.Role.name;
                 GetShift();
                 GetRole();
@@ -180,7 +180,7 @@ public class EmployeeActivity extends AppCompatActivity {
 
     private void GetShift()
     {
-        Call<List<Shift>> call = employeeService.GetShifts();
+        Call<List<Shift>> call = employeeService.GetShifts(session.getAccesstoken());
         call.enqueue(new Callback<List<Shift>>()
         {
             @Override
@@ -207,7 +207,7 @@ public class EmployeeActivity extends AppCompatActivity {
 
     private void GetRole()
     {
-        Call<List<Role>> call = employeeService.GetRoles();
+        Call<List<Role>> call = employeeService.GetRoles(session.getAccesstoken());
         call.enqueue(new Callback<List<Role>>()
         {
             @Override
@@ -263,7 +263,7 @@ public class EmployeeActivity extends AppCompatActivity {
 
     private void PutEmployee(String person, Person persons)
     {
-        Call<Person> call = employeeService.PutEmployee(person, persons);
+        Call<Person> call = employeeService.PutEmployee(person, persons, session.getAccesstoken());
         call.enqueue(new Callback<Person>()
         {
             @Override
@@ -304,16 +304,16 @@ public class EmployeeActivity extends AppCompatActivity {
         {
             if (shifts.get(i).id.equals(shift_spin.getSelectedItem()))
             {
-                dataperson.PersonDetail.Shift.id = shifts.get(i).id;
-                dataperson.PersonDetail.Shift.workstart = shifts.get(i).workstart;
-                dataperson.PersonDetail.Shift.workend = shifts.get(i).workend;
+                dataperson.persondetail.Shift.id = shifts.get(i).id;
+                dataperson.persondetail.Shift.workstart = shifts.get(i).workstart;
+                dataperson.persondetail.Shift.workend = shifts.get(i).workend;
             }
         }
     }
 
     private void GetPerson (String persons)
     {
-        Call<List<Person>> call = employeeService.GetPerson(persons);
+        Call<List<Person>> call = employeeService.GetPerson(persons, session.getAccesstoken());
         call.enqueue(new Callback<List<Person>>()
         {
             @Override

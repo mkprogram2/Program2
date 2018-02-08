@@ -1,6 +1,5 @@
 package com.mk.admin.payroll.main;
 
-import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,16 +10,14 @@ import android.widget.Toast;
 
 import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
+import com.mk.admin.payroll.common.Session;
 import com.mk.admin.payroll.common.SharedPreferenceEditor;
-import com.mk.admin.payroll.main.admin.EmployeeActivity;
 import com.mk.admin.payroll.model.Person;
 import com.mk.admin.payroll.service.EmployeeService;
-import com.mk.admin.payroll.service.WorkhourService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,6 +37,7 @@ public class WorkhoursActivity extends AppCompatActivity
     private Handler handler = new Handler();
     private Runnable runnable;
     private String EVENT_DATE_TIME;
+    private Session session;
 
     @BindView(R.id.masuk)
     Button masuk;
@@ -65,7 +63,7 @@ public class WorkhoursActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workhours);
-
+        session = new Session(this);
         ButterKnife.bind(this);
 
         employeeService = ClientService.createService().create(EmployeeService.class);
@@ -150,7 +148,7 @@ public class WorkhoursActivity extends AppCompatActivity
 
     private void GetPerson (String persons, String id)
     {
-        Call<Person> call = employeeService.GetEmployee(persons, id);
+        Call<Person> call = employeeService.GetEmployee(persons, id, session.getAccesstoken());
         call.enqueue(new Callback<Person>()
         {
             @Override
@@ -158,9 +156,9 @@ public class WorkhoursActivity extends AppCompatActivity
             {
                 dataperson = response.body();
                 Log.d("Data", dataperson.name);
-                shift_in.setText(SetShiftTime(dataperson.PersonDetail.Shift.workstart));
-                shift_out.setText(SetShiftTime(dataperson.PersonDetail.Shift.workend));
-                break_time.setText(SetShiftTime(dataperson.PersonDetail.Shift.breakstart) + " - " + SetShiftTime(dataperson.PersonDetail.Shift.breakend));
+                shift_in.setText(SetShiftTime(dataperson.persondetail.Shift.workstart));
+                shift_out.setText(SetShiftTime(dataperson.persondetail.Shift.workend));
+                break_time.setText(SetShiftTime(dataperson.persondetail.Shift.breakstart) + " - " + SetShiftTime(dataperson.persondetail.Shift.breakend));
             }
 
             @Override

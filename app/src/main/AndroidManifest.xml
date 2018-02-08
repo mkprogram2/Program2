@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -14,16 +16,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <!--
-        <activity android:name=".main.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        -->
         <activity android:name=".main.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,7 +29,6 @@
             android:name=".main.SalaryActivity"
             android:label="@string/salary" />
         <activity android:name=".main.admin.RemunerationActivity" />
-        <activity android:name=".main.admin.EmployeeRecyclerActivity" />
         <activity android:name=".main.admin.EmployeeActivity" />
         <activity android:name=".main.admin.AddEmployeeActivity" />
         <activity android:name=".main.manage.OvertimeRequestActivity" />
@@ -53,7 +44,9 @@
             android:name=".main.HomeActivity"
             android:configChanges="orientation|screenSize"
             android:label="Payroll"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".main.OvertimeActivity"/>
+        <activity android:name=".main.manage.EmployeeOvertimeActivity"/>
     </application>
 
 </manifest>

@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
+import com.mk.admin.payroll.common.Session;
 import com.mk.admin.payroll.common.SharedPreferenceEditor;
 import com.mk.admin.payroll.model.Remuneration;
 import com.mk.admin.payroll.model.Workhour;
@@ -38,6 +39,7 @@ public class SalaryActivity extends AppCompatActivity
     private Integer present_days, work_days, months, years, month_now;
     private Remuneration remuneration = new Remuneration();
     private RackMonthPicker rackMonthPicker;
+    private Session session;
     private String[] monthinyear = new String[]{"January" , "February", "Maret", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 
     @BindView(R.id.gross_salary)
@@ -93,7 +95,7 @@ public class SalaryActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_salary);
-
+        session = new Session(this);
         ButterKnife.bind(this);
 
         service4 = ClientService.createService().create(SalaryService.class);
@@ -116,7 +118,7 @@ public class SalaryActivity extends AppCompatActivity
 
     private void getSalary (final String persons, String id, Integer month, Integer year)
     {
-        Call<Remuneration> call = service4.GetRemuneration(persons, id, month, year);
+        Call<Remuneration> call = service4.GetRemuneration(persons, id, month, year, session.getAccesstoken());
         call.enqueue(new Callback<Remuneration>()
         {
             @Override
@@ -137,7 +139,7 @@ public class SalaryActivity extends AppCompatActivity
 
     private void getPresent (final String persons, Integer month, Integer year, String id)
     {
-        Call<List<Workhour>> call = service4.getDay(persons, month, year, id);
+        Call<List<Workhour>> call = service4.getDay(persons, month, year, id, session.getAccesstoken());
         call.enqueue(new Callback<List<Workhour>>()
         {
             @Override
@@ -177,7 +179,7 @@ public class SalaryActivity extends AppCompatActivity
 
     private void GetWorkdays (final String persons, Integer month, Integer year)
     {
-        Call<Integer> call = service4.GetWorkdays(persons, month, year);
+        Call<Integer> call = service4.GetWorkdays(persons, month, year, session.getAccesstoken());
         call.enqueue(new Callback<Integer>()
         {
             @Override
@@ -204,7 +206,7 @@ public class SalaryActivity extends AppCompatActivity
 
     private void GetWorkdaysToday (final String persons, Integer month, Integer year)
     {
-        Call<Integer> call = service4.GetWorkdaysToday(persons, month, year);
+        Call<Integer> call = service4.GetWorkdaysToday(persons, month, year, session.getAccesstoken());
         call.enqueue(new Callback<Integer>()
         {
             @Override

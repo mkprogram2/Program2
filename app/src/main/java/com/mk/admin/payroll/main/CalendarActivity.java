@@ -19,19 +19,13 @@ import android.widget.Toast;
 
 import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
+import com.mk.admin.payroll.common.Session;
 import com.mk.admin.payroll.common.SharedPreferenceEditor;
 import com.mk.admin.payroll.main.adapter.CalendarAdapter;
-//import com.mk.admin.payroll.main.adapter.EventAdapter;
 import com.mk.admin.payroll.main.adapter.EventAdapter;
-import com.mk.admin.payroll.main.admin.EmployeeActivity;
-import com.mk.admin.payroll.main.admin.EmployeeRecyclerActivity;
-import com.mk.admin.payroll.main.admin.RemunerationActivity;
-//import com.mk.admin.payroll.main.admin.adapter.EmployeeAdapter;
 import com.mk.admin.payroll.main.admin.adapter.ItemClickSupport;
 import com.mk.admin.payroll.model.Holiday;
-import com.mk.admin.payroll.model.Person;
 import com.mk.admin.payroll.service.CalendarService;
-import com.mk.admin.payroll.service.EmployeeService;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -59,6 +53,7 @@ public class CalendarActivity extends AppCompatActivity {
     private String persons;
     private Integer currentDay, currentMonth, currentYear;
     private RecyclerView rvEvent;
+    private Session session;
 
     @BindView(R.id.no_event)
     TextView no_event;
@@ -86,6 +81,7 @@ public class CalendarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_calendar);
         Locale.setDefault(Locale.US);
 
+        session = new Session(this);
         ButterKnife.bind(this);
 
         calendarService = ClientService.createService().create(CalendarService.class);
@@ -207,7 +203,7 @@ public class CalendarActivity extends AppCompatActivity {
 
     private void GetHolidays (String persons, Integer month, Integer year)
     {
-        Call<List<Holiday>> call = calendarService.getHoliday(persons, month, year);
+        Call<List<Holiday>> call = calendarService.getHoliday(persons, month, year, session.getAccesstoken());
         call.enqueue(new Callback<List<Holiday>>()
         {
             @Override

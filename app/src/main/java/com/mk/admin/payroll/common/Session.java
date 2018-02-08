@@ -24,4 +24,15 @@ public class Session
         String id = prefs.getString("id","");
         return id;
     }
+
+    public void setAccesstoken (String access_token)
+    {
+        prefs.edit().putString("access_token", access_token).commit();
+    }
+
+    public String getAccesstoken ()
+    {
+        String access_token = prefs.getString("access_token", "");
+        return access_token;
+    }
 }

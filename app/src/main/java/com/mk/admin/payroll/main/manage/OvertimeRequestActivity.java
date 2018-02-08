@@ -11,11 +11,12 @@ import android.widget.Toast;
 
 import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
+import com.mk.admin.payroll.common.Session;
 import com.mk.admin.payroll.common.SharedPreferenceEditor;
 //import com.mk.admin.payroll.main.admin.adapter.EmployeeAdapter;
 import com.mk.admin.payroll.main.admin.adapter.ItemClickSupport;
-//import com.mk.admin.payroll.main.manage.adapter.OvertimeAdapter;
-import com.mk.admin.payroll.main.manage.adapter.OvertimeAdapter;
+//import com.mk.admin.payroll.main.adapter.OvertimeAdapter;
+import com.mk.admin.payroll.main.adapter.OvertimeAdapter;
 import com.mk.admin.payroll.model.Overtime;
 import com.mk.admin.payroll.service.OvertimeService;
 
@@ -37,6 +38,7 @@ public class OvertimeRequestActivity extends AppCompatActivity {
     private String persons;
     private Overtime overtime = new Overtime();
     private String mid, mname;
+    private Session session;
 
     @BindView(R.id.add_overtime)
     TextView add_overtime;
@@ -46,7 +48,7 @@ public class OvertimeRequestActivity extends AppCompatActivity {
     {
         super.onCreate (savedInstanceState);
         setContentView (R.layout.activity_overtime_request);
-
+        session = new Session(this);
         ButterKnife.bind (this);
 
         overtimeService = ClientService.createService().create(OvertimeService.class);
@@ -76,7 +78,7 @@ public class OvertimeRequestActivity extends AppCompatActivity {
 
     private void GetOvertime (String persons, String id)
     {
-        Call<List<Overtime>> call = overtimeService.GetOvertime(persons, id);
+        Call<List<Overtime>> call = overtimeService.GetOvertime(persons, id, session.getAccesstoken());
         call.enqueue(new Callback<List<Overtime>>()
         {
             @Override

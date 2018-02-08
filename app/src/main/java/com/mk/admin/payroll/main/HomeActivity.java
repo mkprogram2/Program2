@@ -1,14 +1,10 @@
 package com.mk.admin.payroll.main;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -20,9 +16,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,21 +29,15 @@ import retrofit2.Response;
 
 import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
-import com.mk.admin.payroll.common.IDs;
-import com.mk.admin.payroll.common.PayrollService;
 import com.mk.admin.payroll.common.Session;
 import com.mk.admin.payroll.common.SharedPreferenceEditor;
-import com.mk.admin.payroll.main.admin.AddEmployeeActivity;
 import com.mk.admin.payroll.main.admin.EmployeeActivity;
-import com.mk.admin.payroll.main.admin.EmployeeRecyclerActivity;
 import com.mk.admin.payroll.main.admin.RemunerationActivity;
-import com.mk.admin.payroll.main.admin.adapter.EmployeeAdapter;
-import com.mk.admin.payroll.main.admin.adapter.ItemClickSupport;
+import com.mk.admin.payroll.main.manage.EmployeeOvertimeActivity;
 import com.mk.admin.payroll.model.Person;
 import com.mk.admin.payroll.model.Workhour;
 import com.mk.admin.payroll.service.CheckinService;
 import com.mk.admin.payroll.service.EmployeeService;
-import com.mk.admin.payroll.service.LoginService;
 import com.mk.admin.payroll.service.WorkhourService;
 
 import java.text.SimpleDateFormat;
@@ -78,13 +65,13 @@ public class HomeActivity extends AppCompatActivity
     TextView employee_name;
     @BindView(R.id.employee_role)
     TextView employee_role;
-    @BindView(R.id.checkin)
+    /*@BindView(R.id.checkin)
     Button checkin;
     @BindView(R.id.workhours)
     Button workhours;
     @BindView(R.id.checkout)
     Button checkout;
-    /*@BindView(R.id.calendar)
+    @BindView(R.id.calendar)
     Button calendar;
     @BindView(R.id.salary)
     Button salary;
@@ -111,6 +98,7 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
 
         ButterKnife.bind(this);
+        //startService(new Intent(HomeActivity.this, PayrollService.class));
 
         employeeService = ClientService.createService().create(EmployeeService.class);
         service2 = ClientService.createService().create(CheckinService.class);
@@ -119,9 +107,7 @@ public class HomeActivity extends AppCompatActivity
         session = new Session(this);
 
         GetEmployee(persons, session.getId());
-        Log.d("tes","1");
-        startService(new Intent(HomeActivity.this, PayrollService.class));
-        Log.d("tes","1");
+
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -134,7 +120,7 @@ public class HomeActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        checkin.setOnClickListener (new View.OnClickListener()
+        /*checkin.setOnClickListener (new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -143,12 +129,12 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
-        /*calendar.setOnClickListener(new View.OnClickListener() {
+        calendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(HomeActivity.this,CalendarActivity.class));
             }
-        });*/
+        });
 
         workhours.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,7 +150,7 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
-        /*salary.setOnClickListener(new View.OnClickListener()
+        salary.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -218,46 +204,6 @@ public class HomeActivity extends AppCompatActivity
         });*/
     }
 
-    private void GetPerson (String persons)
-    {
-        Call<List<Person>> call = employeeService.GetPerson(persons);
-        call.enqueue(new Callback<List<Person>>()
-        {
-            @Override
-            public void onResponse(retrofit2.Call<List<Person>> call, Response<List<Person>> response)
-            {
-                list = response.body();
-                Log.d("Data",list.get(0).name);
-                Log.d("Size", String.valueOf(list.size()));
-                showRecyclerList();
-            }
-
-            @Override
-            public void onFailure(retrofit2.Call<List<Person>> call, Throwable t)
-            {
-                Toast.makeText(HomeActivity.this,"Error", Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-
-    private void showRecyclerList()
-    {
-        // custom dialog
-        final Dialog dialog = new Dialog(HomeActivity.this);
-        dialog.setContentView(R.layout.employee_list_dialog);
-        dialog.setTitle("Title...");
-
-        dialog.show();
-
-        rvCategory = (RecyclerView)dialog.findViewById(R.id.rv_employees);
-        rvCategory.setHasFixedSize(true);
-        rvCategory.setLayoutManager(new LinearLayoutManager(HomeActivity.this));
-        EmployeeAdapter EmployeeAdapter = new EmployeeAdapter(HomeActivity.this);
-        EmployeeAdapter.setListPerson(list);
-        rvCategory.setAdapter(EmployeeAdapter);
-    }
-
     @Override
     public void onBackPressed()
     {
@@ -301,13 +247,13 @@ public class HomeActivity extends AppCompatActivity
 
         int id = item.getItemId();
 
-        if (id == R.id.menu_logout)
+        /*if (id == R.id.menu_logout)
         {
             Logout();
-        }
-        else if ( id == R.id.workhours_menu)
+        }*/
+        if ( id == R.id.workhours_menu)
         {
-            workhour(persons, mid);
+            workhour(mid);
         }
         else if ( id == R.id.calendar_menu)
         {
@@ -321,21 +267,23 @@ public class HomeActivity extends AppCompatActivity
             intent.putExtra("role_name", role_name);
             startActivity(intent);
         }
+        else if (id == R.id.overtime)
+        {
+            startActivity(new Intent(HomeActivity.this, OvertimeActivity.class));
+        }
         else if ( id == R.id.employee_menu)
         {
             startActivity(new Intent(HomeActivity.this, EmployeeActivity.class));
         }
         else if ( id == R.id.req_overtime_menu)
         {
-            Intent intent = new Intent(HomeActivity.this, EmployeeRecyclerActivity.class);
-            intent.putExtra("activity", "reqovertime");
-            startActivity(intent);
+            startActivity(new Intent(HomeActivity.this, EmployeeOvertimeActivity.class));
+            /*Intent intent = new Intent(HomeActivity.this, EmployeeRecyclerActivity.class);
+            intent.putExtra("activity", "reqovertime");*/
+            //startActivity(new Intent(HomeActivity.this, Over));
         }
         else if (id == R.id.remuneration_menu)
         {
-            /*Intent intent = new Intent(HomeActivity.this, EmployeeRecyclerActivity.class);
-            intent.putExtra("activity", "remuneration");
-            startActivity(intent);*/
             startActivity(new Intent(HomeActivity.this, RemunerationActivity.class));
         }
 
@@ -357,7 +305,6 @@ public class HomeActivity extends AppCompatActivity
                 if(menuItem.getItemId() == R.id.item_manage)
                 {
                     menuItem.setVisible(false);
-                    break;
                 }
             }
         }
@@ -370,7 +317,6 @@ public class HomeActivity extends AppCompatActivity
                 if(menuItem.getItemId() == R.id.item_human_resource)
                 {
                     menuItem.setVisible(false);
-                    break;
                 }
             }
         }
@@ -378,15 +324,23 @@ public class HomeActivity extends AppCompatActivity
         {
             for (int menuItemIndex = 0; menuItemIndex < menu.size(); menuItemIndex++)
             {
-                MenuItem menuItem= menu.getItem(menuItemIndex);
+                MenuItem menuItem = menu.getItem(menuItemIndex);
 
-                if(menuItem.getItemId() == R.id.item_human_resource)
+                if(menuItem.getItemId() == R.id.item_manage)
                 {
                     menuItem.setVisible(false);
+                    Log.d("human resource", "human");
+
                 }
-                if (menuItem.getItemId() == R.id.item_manage);
+                if (menuItem.getItemId() == R.id.item_human_resource);
                 {
                     menuItem.setVisible(false);
+                    Log.d("manage", "manage");
+                    //break;
+                }
+                if (menuItem.getItemId() == R.id.item_working)
+                {
+                    menuItem.setVisible(true);
                 }
             }
         }
@@ -436,9 +390,9 @@ public class HomeActivity extends AppCompatActivity
         {}
     }
 
-    private void checkIn(final String persons, RequestBody id)
+    /*private void checkIn(RequestBody id, String access_token)
     {
-        Call<Integer> call = service2.postCheckin(persons, id);
+        Call<Integer> call = service2.postCheckin(id, access_token);
         call.enqueue(new Callback<Integer>()
         {
             @Override
@@ -448,7 +402,7 @@ public class HomeActivity extends AppCompatActivity
 
                 if (data == 1)
                 {
-                    workhour(persons, mid);
+                    workhour(mid);
                 }
                 else if(data == 2)
                 {
@@ -465,11 +419,11 @@ public class HomeActivity extends AppCompatActivity
                 Toast.makeText(HomeActivity.this,"Error", Toast.LENGTH_LONG).show();
             }
         });
-    }
+    }*/
 
-    private void checkOut(final String persons, RequestBody id)
+    /*private void checkOut(RequestBody id)
     {
-        Call<Integer> call = service2.checkout(persons, id);
+        Call<Integer> call = service2.checkout(id);
         call.enqueue(new Callback<Integer>()
         {
             @Override
@@ -479,7 +433,7 @@ public class HomeActivity extends AppCompatActivity
 
                 if (data == 1)
                 {
-                    workhour(persons, mid);
+                    workhour(mid);
                 }
                 else if (data == 2)
                 {
@@ -501,11 +455,11 @@ public class HomeActivity extends AppCompatActivity
                 Toast.makeText(HomeActivity.this,"Error", Toast.LENGTH_LONG).show();
             }
         });
-    }
+    }*/
 
-    private void workhour (final String persons, String id)
+    private void workhour (String id)
     {
-        Call<Workhour> call = service3.getCheckworkhour(persons, id);
+        Call<Workhour> call = service3.getCheckworkhour(id, session.getAccesstoken());
         call.enqueue(new Callback<Workhour>()
         {
             private String responseCode, responseMessage;
@@ -543,7 +497,7 @@ public class HomeActivity extends AppCompatActivity
 
     private void GetEmployee (String persons, String id)
     {
-        Call<Person> call = employeeService.GetEmployee(persons, id);
+        Call<Person> call = employeeService.GetEmployee(persons, id, session.getAccesstoken());
         call.enqueue(new Callback<Person>()
         {
             @Override
@@ -557,9 +511,9 @@ public class HomeActivity extends AppCompatActivity
                     mname = dataperson.name;
                     role_name = dataperson.Role.name;
                     role_id = dataperson.Role.id;
-                    mshiftid = dataperson.PersonDetail.Shift.id ;
-                    shift_workstart = dataperson.PersonDetail.Shift.workstart;
-                    shift_workend = dataperson.PersonDetail.Shift.workend;
+                    mshiftid = dataperson.persondetail.Shift.id ;
+                    shift_workstart = dataperson.persondetail.Shift.workstart;
+                    shift_workend = dataperson.persondetail.Shift.workend;
 
                     employee_name.setText(mname);
                     employee_role.setText(role_name);

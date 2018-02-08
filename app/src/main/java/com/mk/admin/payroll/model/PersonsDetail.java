@@ -8,5 +8,6 @@ public class PersonsDetail
 {
     public String personid;
     public String assignwork;
+    public String serialkey;
     public Shift Shift = new Shift();
 }

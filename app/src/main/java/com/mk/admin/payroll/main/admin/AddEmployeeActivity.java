@@ -1,6 +1,7 @@
 package com.mk.admin.payroll.main.admin;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
+import com.mk.admin.payroll.common.Session;
 import com.mk.admin.payroll.common.SharedPreferenceEditor;
 import com.mk.admin.payroll.model.Person;
 import com.mk.admin.payroll.model.Role;
@@ -66,12 +68,13 @@ public class AddEmployeeActivity extends AppCompatActivity {
     private List<Role> roles; private DatePickerDialog datePickerDialog;
     private SimpleDateFormat dateFormatter;
     public Date dates;
+    private Session session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_employee);
-
+        session = new Session(this);
         ButterKnife.bind(this);
         dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
@@ -124,7 +127,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
 
     private void GetShift()
     {
-        Call<List<Shift>> call = employeeService.GetShifts();
+        Call<List<Shift>> call = employeeService.GetShifts(session.getAccesstoken());
         call.enqueue(new Callback<List<Shift>>()
         {
             @Override
@@ -149,7 +152,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
 
     private void GetRole()
     {
-        Call<List<Role>> call = employeeService.GetRoles();
+        Call<List<Role>> call = employeeService.GetRoles(session.getAccesstoken());
         call.enqueue(new Callback<List<Role>>()
         {
             @Override
@@ -188,7 +191,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
 
     private void PostEmployee(String person, Person persons)
     {
-        Call<Person> call = employeeService.PostEmployee(person, persons);
+        Call<Person> call = employeeService.PostEmployee(person, persons, session.getAccesstoken());
         call.enqueue(new Callback<Person>()
         {
             @Override
@@ -197,6 +200,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
                 final Person dataperson = response.body();
                 Log.d("Data", dataperson.name);
                 Toast.makeText(AddEmployeeActivity.this,"Saving Success", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(AddEmployeeActivity.this, EmployeeActivity.class));
             }
 
             @Override
@@ -213,7 +217,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
         Person person = new Person();
         person.name = add_employee_name.getText().toString();
         person.apppassword = add_password.getText().toString();
-        person.PersonDetail.Shift.id = add_shift_spin.getSelectedItem().toString();
+        person.persondetail.Shift.id = add_shift_spin.getSelectedItem().toString();
         for (int i = 0; i < roles.size(); i++)
         {
             if (roles.get(i).name.equals(add_role_spin.getSelectedItem()))
@@ -226,7 +230,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
             uniqueId = UUID.randomUUID().toString();
         }
         person.id = uniqueId;
-        person.PersonDetail.assignwork = dateFormatter.format(dates);
+        person.persondetail.assignwork = dateFormatter.format(dates);
         //Person.assignwork = dates;
         PostEmployee(persons, person);
     }

@@ -21,7 +21,7 @@ public class Person
     public String phone;
     public Role Role = new Role();
     public Place Place = new Place();
-    public PersonsDetail PersonDetail = new PersonsDetail();
+    public PersonsDetail persondetail = new PersonsDetail();
 
     /*public String password;
     public double salary;

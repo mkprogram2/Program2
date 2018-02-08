@@ -5,7 +5,9 @@
 
     <group android:checkableBehavior="single">
 
-        <item android:title="@string/working">
+        <item
+            android:id="@+id/item_working"
+            android:title="@string/working">
             <menu>
                 <item
                     android:id="@+id/workhours_menu"
@@ -19,6 +21,10 @@
                     android:id="@+id/salary_menu"
                     android:icon="@drawable/ic_payments"
                     android:title="Salary" />
+                <item
+                    android:id="@+id/overtime"
+                    android:icon="@drawable/ic_overtime"
+                    android:title="@string/overtime"/>
             </menu>
         </item>
     </group>
@@ -52,18 +58,18 @@
                 <item
                     android:id="@+id/req_overtime_menu"
                     android:icon="@drawable/ic_overtime"
-                    android:title="Overtime" />
+                    android:title="Employees Overtime" />
             </menu>
         </item>
     </group>
 
-    <item android:title="Logout">
+    <!--<item android:title="Logout">
         <menu>
             <item
                 android:id="@+id/menu_logout"
                 android:icon="@drawable/ic_overtime"
                 android:title="Logout" />
         </menu>
-    </item>
+    </item>-->
 
 </menu>
