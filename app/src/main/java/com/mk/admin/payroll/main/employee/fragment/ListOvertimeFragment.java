@@ -79,9 +79,15 @@ public class ListOvertimeFragment extends android.support.v4.app.Fragment {
             @Override
             public void onResponse(retrofit2.Call<List<Overtime>> call, Response<List<Overtime>> response)
             {
-                overtimes = response.body();
+                if (response.isSuccessful())
+                {
+                    overtimes = response.body();
+                    showRecyclerList();
+                }
+                else
+                {
 
-                showRecyclerList();
+                }
             }
             @Override
             public void onFailure(retrofit2.Call<List<Overtime>> call, Throwable t)

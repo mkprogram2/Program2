@@ -51,7 +51,6 @@ public class PayrollService extends Service {
         service3 = ClientService.createService().create(WorkhourService.class);
         persons = SharedPreferenceEditor.LoadPreferences(this,"Persons","");
 
-        status = true;
         session = new Session(PayrollService.this);
         mid = session.getId();
         String strRequestBody = mid;
@@ -69,8 +68,8 @@ public class PayrollService extends Service {
     @Override
     public void onDestroy() {
         Toast.makeText(this, "Payroll Stopped Working !", Toast.LENGTH_SHORT).show();
-        super.onDestroy();
-        startService(new Intent(this, PayrollService.class)); // add this line
+        /*super.onDestroy();
+        startService(new Intent(this, PayrollService.class));*/ // add this line
     }
 
     /*@Override
@@ -114,6 +113,7 @@ public class PayrollService extends Service {
                         Log.d("MAC ADDRESS", macaddress);
                         if (ssid.equals("\"B1Z_2017\""))
                         {
+                            status = true;
                             EveryTime();
                         /*session = new Session(PayrollService.this);
                         mid = session.getId();
@@ -123,7 +123,10 @@ public class PayrollService extends Service {
                         }
                         else
                         {
-                            Toast.makeText(PayrollService.this, "Out Of Range Within Workplace !", Toast.LENGTH_SHORT).show();
+                            if (status == true)
+                                Toast.makeText(PayrollService.this, "Out Of Range Within Workplace !", Toast.LENGTH_SHORT).show();
+                            else
+                                status = false;
                         }
                     }
                 }
@@ -193,11 +196,18 @@ public class PayrollService extends Service {
             @Override
             public void onResponse(retrofit2.Call<Integer> call, Response<Integer> response)
             {
-                final Integer data = response.body();
-                if (data == 1)
+                if (response.isSuccessful())
+                {
+                    final Integer data = response.body();
+                }
+                else
+                {
+                    onDestroy();
+                }
+                /*if (data == 1)
                 {
                     workhour(mid);
-                }
+                }*/
             }
             @Override
             public void onFailure(retrofit2.Call<Integer> call, Throwable t)

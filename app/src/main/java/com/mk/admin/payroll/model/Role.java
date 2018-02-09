@@ -11,23 +11,4 @@ public class Role
     public String permissions;
     public Integer rightslevel;
     public RoleDetail RoleDetail = new RoleDetail();
-
-    /*public Double maxsalary;
-    public Double minsalary;
-
-    public Integer getId() { return id; }
-
-    public void setId(Integer id) { this.id = id; }
-
-    public String getName() { return name; }
-
-    public void setName(String name) { this.name = name; }
-
-    public Double getMaxsalary() { return maxsalary; }
-
-    public void setMaxsalary(Double maxsalary) { this.maxsalary = maxsalary; }
-
-    public Double getMinsalary() { return minsalary; }
-
-    public void setMinsalary(Double minsalary) { this.minsalary = minsalary; }*/
 }

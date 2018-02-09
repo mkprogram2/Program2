@@ -19,7 +19,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="horizontal">
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingTop="5dp">
 
         <ImageView
             android:id="@+id/list_employee_over"
@@ -27,6 +29,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             app:srcCompat="@drawable/ic_list" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:background="@color/blue"
+            android:layout_marginBottom="10dp"/>
 
         <ImageView
             android:id="@+id/add_employee_over"

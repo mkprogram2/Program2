@@ -7,6 +7,7 @@ import java.util.List;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -30,6 +31,10 @@ public interface OvertimeService
                                      @Query("access_token") String access_token);
 
     @GET("overtimes")
-    Call<List<Overtime>> GetAllOvertime (@Header("persons") String person,
+    Call<List<Overtime>> GetAllOvertime(@Header("persons") String person,
                                          @Query("access_token") String access_token);
+
+    @DELETE("overtimes/{id}")
+    Call<Integer> DeleteOvertime (@Path("id") Integer id,
+                                   @Query("access_token") String access_token);
 }

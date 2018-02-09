@@ -41,7 +41,7 @@ public class OvertimeAdapter extends RecyclerView.Adapter<OvertimeAdapter.Catego
 
     @Override
     public void onBindViewHolder(OvertimeAdapter.CategoryViewHolder holder, int position) {
-
+        holder.overtime_name.setText(getOvertimes().get(position).person.name);
         holder.overtime_date.setText(getOvertimes().get(position).date.toString());
         holder.overtime_duration.setText(getOvertimes().get(position).duration.toString());
         holder.overtime_status.setText(getOvertimes().get(position).status.toString());
@@ -58,9 +58,11 @@ public class OvertimeAdapter extends RecyclerView.Adapter<OvertimeAdapter.Catego
         TextView overtime_date;
         TextView overtime_duration;
         TextView overtime_status;
+        TextView overtime_name;
 
         public CategoryViewHolder(View itemView) {
             super(itemView);
+            overtime_name = (TextView)itemView.findViewById(R.id.overtime_name);
             overtime_date = (TextView)itemView.findViewById(R.id.overtime_date);
             overtime_duration = (TextView)itemView.findViewById(R.id.overtime_duration);
             overtime_status = (TextView)itemView.findViewById(R.id.overtime_status);

@@ -41,10 +41,16 @@ public class EmployeeOvertimeAdapter extends RecyclerView.Adapter<EmployeeOverti
 
     @Override
     public void onBindViewHolder(EmployeeOvertimeAdapter.CategoryViewHolder holder, int position) {
+        Integer time_duration = getOvertimes().get(position).duration / 3600;
 
+        holder.overtime_name.setText(getOvertimes().get(position).person.name);
         holder.overtime_date.setText(getOvertimes().get(position).date.toString());
-        holder.overtime_duration.setText(getOvertimes().get(position).duration.toString());
-        holder.overtime_status.setText(getOvertimes().get(position).status.toString());
+        holder.overtime_duration.setText(time_duration.toString() + " Hours");
+
+        if (getOvertimes().get(position).status == 0)
+            holder.overtime_status.setText("Not Approved");
+        else
+            holder.overtime_status.setText("Approved");
     }
 
     @Override
@@ -58,9 +64,11 @@ public class EmployeeOvertimeAdapter extends RecyclerView.Adapter<EmployeeOverti
         TextView overtime_date;
         TextView overtime_duration;
         TextView overtime_status;
+        TextView overtime_name;
 
         public CategoryViewHolder(View itemView) {
             super(itemView);
+            overtime_name = (TextView)itemView.findViewById(R.id.overtime_name);
             overtime_date = (TextView)itemView.findViewById(R.id.overtime_date);
             overtime_duration = (TextView)itemView.findViewById(R.id.overtime_duration);
             overtime_status = (TextView)itemView.findViewById(R.id.overtime_status);

@@ -24,6 +24,27 @@
             android:layout_marginBottom="5dp">
 
             <TextView
+                android:id="@+id/textView66"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/overtime_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp">
+
+            <TextView
                 android:id="@+id/textView54"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
@@ -68,7 +89,7 @@
                 android:id="@+id/textView63"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:text="Status"
+                android:text="Approved"
                 android:textStyle="bold" />
 
             <TextView

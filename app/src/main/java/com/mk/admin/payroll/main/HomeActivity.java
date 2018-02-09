@@ -70,32 +70,6 @@ public class HomeActivity extends AppCompatActivity
     TextView employee_name;
     @BindView(R.id.employee_role)
     TextView employee_role;
-    /*@BindView(R.id.checkin)
-    Button checkin;
-    @BindView(R.id.workhours)
-    Button workhours;
-    @BindView(R.id.checkout)
-    Button checkout;
-    @BindView(R.id.calendar)
-    Button calendar;
-    @BindView(R.id.salary)
-    Button salary;
-    @BindView(R.id.remuneration)
-    Button remuneration;
-    @BindView(R.id.employee)
-    Button employee;
-    @BindView(R.id.add_employee)
-    Button add_employee;
-    @BindView(R.id.overtime)
-    Button overtime;
-    @BindView(R.id.req_overtime)
-    Button reqovertime;
-    @BindView(R.id.user)
-    Button user;
-    @BindView(R.id.human_resource)
-    LinearLayout human_resource;
-    @BindView(R.id.manage)
-    LinearLayout manage;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,89 +98,6 @@ public class HomeActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
-        /*checkin.setOnClickListener (new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                checkIn(persons, requestBody);
-            }
-        });
-
-        calendar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(HomeActivity.this,CalendarActivity.class));
-            }
-        });
-
-        workhours.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                workhour(persons, mid);
-            }
-        });
-
-        checkout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkOut(persons, requestBody);
-            }
-        });
-
-        salary.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                Intent intent = new Intent(HomeActivity.this, SalaryActivity.class);
-                intent.putExtra("id", mid);
-                intent.putExtra("name", mname);
-                intent.putExtra("role_name", role_name);
-                startActivity(intent);
-            }
-        });
-
-        remuneration.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, EmployeeRecyclerActivity.class);
-                intent.putExtra("activity", "remuneration");
-                startActivity(intent);
-            }
-        });
-
-        employee.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(HomeActivity.this, EmployeeActivity.class));
-            }
-        });
-
-        add_employee.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(HomeActivity.this, AddEmployeeActivity.class));
-            }
-        });
-
-        reqovertime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, EmployeeRecyclerActivity.class);
-                intent.putExtra("activity", "reqovertime");
-                startActivity(intent);
-            }
-        });
-
-        user.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                GetPerson(persons);
-            }
-        });*/
     }
 
     @Override
@@ -252,10 +143,6 @@ public class HomeActivity extends AppCompatActivity
 
         int id = item.getItemId();
 
-        /*if (id == R.id.menu_logout)
-        {
-            Logout();
-        }*/
         if ( id == R.id.workhours_menu)
         {
             workhour(mid);
@@ -287,9 +174,6 @@ public class HomeActivity extends AppCompatActivity
         else if ( id == R.id.req_overtime_menu)
         {
             startActivity(new Intent(HomeActivity.this, EmployeeOvertimeActivity.class));
-            /*Intent intent = new Intent(HomeActivity.this, EmployeeRecyclerActivity.class);
-            intent.putExtra("activity", "reqovertime");*/
-            //startActivity(new Intent(HomeActivity.this, Over));
         }
         else if (id == R.id.remuneration_menu)
         {
@@ -483,7 +367,6 @@ public class HomeActivity extends AppCompatActivity
                 intent.putExtra("workstartinterval", data.workstartinterval.toString());
                 intent.putExtra("interval_work", interval_work);
                 intent.putExtra("personid", data.personid);
-                intent.putExtra("checkout_status", data.status.toString());
                 if (data.workend == null)
                 {
                     intent.putExtra("workend", "null_workend");

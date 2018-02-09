@@ -28,7 +28,7 @@ import retrofit2.Response;
 public class WorkhoursActivity extends AppCompatActivity
 {
 
-    private String workstart, workstartinterval, interval_work, workend, result, result2, persons, personid, shifttime, checkout_status;
+    private String workstart, workstartinterval, interval_work, workend, result, result2, persons, personid, shifttime;
     private Long workstartinterval_time;
     private String[] waktu_shift, waktu_kerja, telat_s;
     private Integer jam_pulang_shift, menit_pulang_shift, jam_pulang, menit_pulang, telat_jam, telat_menit, check;
@@ -74,7 +74,6 @@ public class WorkhoursActivity extends AppCompatActivity
         interval_work = getIntent().getExtras().getString("interval_work");
         workend = getIntent().getExtras().getString("workend");
         personid = getIntent().getExtras().getString("personid");
-        checkout_status = getIntent().getExtras().getString("checkout_status");
 
         GetPerson(persons, personid);
 
@@ -137,10 +136,6 @@ public class WorkhoursActivity extends AppCompatActivity
         {
             GetWorkend(workend);
             keluar.setText(result);
-            if (checkout_status.equals("1"))
-                checkout.setText("You Have Been Checked Out");
-            else if (checkout_status.equals("2"))
-                checkout.setText("You Have Been Checked Out By System");
         }
 
         countDownStart();

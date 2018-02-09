@@ -13,5 +13,5 @@ public class Overtime
     public String information;
     public Integer duration;
     public Integer status;
-    public String personid;
+    public Person person = new Person();
 }

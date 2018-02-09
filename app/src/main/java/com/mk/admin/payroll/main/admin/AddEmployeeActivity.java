@@ -65,9 +65,10 @@ public class AddEmployeeActivity extends AppCompatActivity {
     final List<String> list_shift = new ArrayList<String>();
     final List<String> list_role = new ArrayList<String>();
     private List<Shift> shifts;
-    private List<Role> roles; private DatePickerDialog datePickerDialog;
+    private List<Role> roles;
+    private DatePickerDialog datePickerDialog;
     private SimpleDateFormat dateFormatter;
-    public Date dates;
+    private Date dates;
     private Session session;
 
     @Override

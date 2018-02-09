@@ -90,10 +90,12 @@ public class LoginActivity extends AppCompatActivity
                     session.setId(data.id);
                     if (data.id != null)
                     {
-                        if (PayrollService.status == false)
+                        /*if (PayrollService.status == false)
                         {
                             startService(new Intent(LoginActivity.this, PayrollService.class));
-                        }
+                        }*/
+                        stopService(new Intent(LoginActivity.this, PayrollService.class));
+                        startService(new Intent(LoginActivity.this, PayrollService.class));
                         startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                     }
                     else

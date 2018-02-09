@@ -22,25 +22,4 @@ public class Person
     public Role Role = new Role();
     public Place Place = new Place();
     public PersonsDetail persondetail = new PersonsDetail();
-
-    /*public String password;
-    public double salary;
-    public String assignwork;
-    public Shift Shift = new Shift();
-
-    public String getId() { return id; }
-
-    public void setId(String id) { this.id = id; }
-
-    public String getName() { return name; }
-
-    public void setName(String name) { this.name = name; }
-
-    public String getPassword() { return password; }
-
-    public void setPassword(String password) { this.password = password; }
-
-    public double getSalary () { return salary; }
-
-    public void setSalary (double salary) { this.salary = salary;}*/
 }
