@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,8 +46,18 @@ public class AddEmployeeActivity extends AppCompatActivity {
     EditText add_employee_name;
     @BindView(R.id.add_password)
     EditText add_password;
+    @BindView(R.id.add_email)
+    EditText add_email;
     @BindView(R.id.date_in)
     EditText date_in;
+    @BindView(R.id.add_npwp)
+    EditText add_npwp;
+    @BindView(R.id.add_phone)
+    EditText add_phone;
+    @BindView(R.id.add_birth)
+    EditText add_birth;
+    @BindView(R.id.add_gender)
+    Spinner add_gender;
     @BindView(R.id.add_role_spin)
     Spinner add_role_spin;
     @BindView(R.id.add_shift_spin)
@@ -55,10 +66,14 @@ public class AddEmployeeActivity extends AppCompatActivity {
     TextView add_shift_in;
     @BindView(R.id.add_shift_out)
     TextView add_shift_out;
-    @BindView(R.id.add_employee)
-    Button add_employee;
     @BindView(R.id.calendar_in)
     Button calendar_in;
+    @BindView(R.id.calendar_birth)
+    Button calendar_birth;
+    @BindView(R.id.save_employee)
+    ImageView save_employee;
+    @BindView(R.id.cancel_save)
+    ImageView cancel_save;
 
     private EmployeeService employeeService;
     private String persons;
@@ -68,8 +83,9 @@ public class AddEmployeeActivity extends AppCompatActivity {
     private List<Role> roles;
     private DatePickerDialog datePickerDialog;
     private SimpleDateFormat dateFormatter;
-    private Date dates;
+    private Date dates, birthdate;
     private Session session;
+    private String[] genderSpinner = new String[] {"Male", "Female"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +100,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
 
         GetShift();
         GetRole();
+        SetGenderSpinner();
 
         add_shift_spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -111,9 +128,10 @@ public class AddEmployeeActivity extends AppCompatActivity {
             }
         });
 
-        add_employee.setOnClickListener(new View.OnClickListener() {
+        save_employee.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 if (add_employee_name.equals("") || add_password.equals("") || date_in.equals(""))
                 {
                     Toast.makeText(AddEmployeeActivity.this,"Wrong Entries", Toast.LENGTH_LONG).show();
@@ -122,6 +140,20 @@ public class AddEmployeeActivity extends AppCompatActivity {
                 {
                     SetPerson();
                 }
+            }
+        });
+
+        cancel_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClearUI();
+            }
+        });
+
+        calendar_birth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDateDialogBirth();
             }
         });
     }
@@ -190,6 +222,14 @@ public class AddEmployeeActivity extends AppCompatActivity {
         add_role_spin.setAdapter(adp1);
     }
 
+    private void SetGenderSpinner ()
+    {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, genderSpinner);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        add_gender.setAdapter(adapter);
+    }
+
     private void PostEmployee(String person, Person persons)
     {
         Call<Person> call = employeeService.PostEmployee(person, persons, session.getAccesstoken());
@@ -217,8 +257,10 @@ public class AddEmployeeActivity extends AppCompatActivity {
     {
         Person person = new Person();
         person.name = add_employee_name.getText().toString();
+        person.email = add_email.getText().toString();
         person.apppassword = add_password.getText().toString();
         person.persondetail.Shift.id = add_shift_spin.getSelectedItem().toString();
+
         for (int i = 0; i < roles.size(); i++)
         {
             if (roles.get(i).name.equals(add_role_spin.getSelectedItem()))
@@ -226,13 +268,22 @@ public class AddEmployeeActivity extends AppCompatActivity {
                 person.Role.id = roles.get(i).id;
             }
         }
+
         String uniqueId = null;
         if(uniqueId == null) {
             uniqueId = UUID.randomUUID().toString();
         }
         person.id = uniqueId;
         person.persondetail.assignwork = dateFormatter.format(dates);
-        //Person.assignwork = dates;
+        person.gender = add_gender.getSelectedItem().toString();
+
+        if (!add_npwp.equals(""))
+            person.npwp = add_npwp.getText().toString();
+        if (!add_phone.equals(""))
+            person.phone = add_phone.getText().toString();
+        if (!add_birth.equals(""))
+            person.birthdate = birthdate;
+
         PostEmployee(persons, person);
     }
 
@@ -257,5 +308,39 @@ public class AddEmployeeActivity extends AppCompatActivity {
             }
         },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();
+    }
+
+    private void showDateDialogBirth()
+    {
+        Calendar newCalendar = Calendar.getInstance();
+        datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener()
+        {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
+            {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+                add_birth.setText(dateFormatter.format(newDate.getTime()).toString());
+
+                try {
+                    birthdate = dateFormatter.parse(add_birth.getText().toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Log.d("date", dateFormatter.format(birthdate).toString());
+            }
+        },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.show();
+    }
+
+    private void ClearUI ()
+    {
+        add_employee_name.setText("");
+        add_email.setText("");
+        add_password.setText("");
+        date_in.setText("");
+        add_npwp.setText("");
+        add_phone.setText("");
+        add_birth.setText("");
     }
 }

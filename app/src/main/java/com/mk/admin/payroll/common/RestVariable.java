@@ -13,13 +13,14 @@ public class RestVariable
 
     //public static final String SERVER_LOGIN = "http://192.168.71.120:8087/api/auth/";
     //public static final String SERVER_URL = "http://192.168.71.120:8087/api/hr/";
-    public static final String SERVER_LOGIN = "http://192.168.71.60:8087/api/auth/";
-    public static final String SERVER_URL = "http://192.168.71.60:8087/api/hr/";
 
-    //public static final String SERVER_LOGIN = "http://192.168.71.120:8084/";
+    //public static final String SERVER_LOGIN = "http://192.168.71.60:8087/api/auth/";
+    //public static final String SERVER_URL = "http://192.168.71.60:8087/api/hr/";
+
+    public static final String SERVER_LOGIN = "http://192.168.71.89:8087/api/auth/";
+    public static final String SERVER_URL = "http://192.168.71.89:8087/api/hr/";
 
     public static final String APP_ID = "app-payroll";
-    //public static final String SECRET = "6e086c8a-15d3-424b-9e57-d5321d980c76";
     public static final String SECRET = "f647a550-0a41-11e8-ae94-d73daeaee534";
     public static final String Authorization = "Basic " + Base64.encodeToString((APP_ID + ":" + SECRET).getBytes(), Base64.NO_WRAP);
     public static final String PASSWORD = "password";

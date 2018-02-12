@@ -67,9 +67,9 @@ public class PayrollService extends Service {
 
     @Override
     public void onDestroy() {
-        Toast.makeText(this, "Payroll Stopped Working !", Toast.LENGTH_SHORT).show();
-        /*super.onDestroy();
-        startService(new Intent(this, PayrollService.class));*/ // add this line
+        //Toast.makeText(this, "Payroll Stopped Working !", Toast.LENGTH_SHORT).show();
+        super.onDestroy();
+        //startService(new Intent(this, PayrollService.class)); // add this line
     }
 
     /*@Override

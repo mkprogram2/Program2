@@ -44,7 +44,11 @@ public class OvertimeAdapter extends RecyclerView.Adapter<OvertimeAdapter.Catego
         holder.overtime_name.setText(getOvertimes().get(position).person.name);
         holder.overtime_date.setText(getOvertimes().get(position).date.toString());
         holder.overtime_duration.setText(getOvertimes().get(position).duration.toString());
-        holder.overtime_status.setText(getOvertimes().get(position).status.toString());
+
+        if (getOvertimes().get(position).status == 0)
+            holder.overtime_status.setText("Not Approved");
+        else
+            holder.overtime_status.setText("Approved");
     }
 
     @Override

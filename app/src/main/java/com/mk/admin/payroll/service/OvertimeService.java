@@ -11,6 +11,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -25,7 +26,7 @@ public interface OvertimeService
                                 @Body Overtime overtime,
                                 @Query("access_token") String access_token);
 
-    @GET("overtimes/{id}")
+    @GET("overtimes/persons/{id}")
     Call<List<Overtime>> GetOvertime(@Header("persons") String persons,
                                      @Path("id") String id,
                                      @Query("access_token") String access_token);
@@ -37,4 +38,12 @@ public interface OvertimeService
     @DELETE("overtimes/{id}")
     Call<Integer> DeleteOvertime (@Path("id") Integer id,
                                    @Query("access_token") String access_token);
+
+    @PUT("overtimes")
+    Call<Overtime> ApprovedOvertime (@Body Overtime overtime,
+                                     @Query("access_token") String access_token);
+
+    @GET("overtimes/{id}")
+    Call<Overtime> GetOvertimeId(@Path("id") Integer id,
+                                 @Query("access_token") String access_token);
 }

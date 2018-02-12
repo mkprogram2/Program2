@@ -1,5 +1,6 @@
 package com.mk.admin.payroll.main.admin;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -28,8 +30,13 @@ import com.mk.admin.payroll.model.Role;
 import com.mk.admin.payroll.model.Shift;
 import com.mk.admin.payroll.service.EmployeeService;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,6 +50,18 @@ public class EmployeeActivity extends AppCompatActivity {
     EditText employee_id;
     @BindView(R.id.employee_name)
     EditText employee_name;
+    @BindView(R.id.employee_email)
+    EditText employee_email;
+    @BindView(R.id.employee_datein)
+    EditText employee_datein;
+    @BindView(R.id.employee_npwp)
+    EditText employee_npwp;
+    @BindView(R.id.employee_phone)
+    EditText employee_phone;
+    @BindView(R.id.employee_birth)
+    EditText employee_birth;
+    @BindView(R.id.employee_gender)
+    Spinner employee_gender;
     @BindView(R.id.role_spin)
     Spinner role_spin;
     @BindView(R.id.shift_spin)
@@ -61,6 +80,8 @@ public class EmployeeActivity extends AppCompatActivity {
     Button select_employee;
     @BindView(R.id.add_employee)
     Button add_employee;
+    @BindView(R.id.calendar_birth)
+    Button calendar_birth;
 
     private EmployeeService employeeService;
     private String persons, shiftid, role, mid, mname;
@@ -72,6 +93,10 @@ public class EmployeeActivity extends AppCompatActivity {
     private RecyclerView rvCategory;
     private List<Person> list;
     private Session session;
+    private String[] genderSpinner = new String[] {"Male", "Female"};
+    private SimpleDateFormat dateFormatter;
+    private DatePickerDialog datePickerDialog;
+    private Date dates;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -80,6 +105,7 @@ public class EmployeeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_employee);
         session = new Session(this);
         ButterKnife.bind(this);
+        dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
         DisableUI();
 
@@ -107,6 +133,8 @@ public class EmployeeActivity extends AppCompatActivity {
             }
         });
 
+        SetGenderSpinner();
+
         save_employee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,7 +144,7 @@ public class EmployeeActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    dataperson.name = employee_name.getText().toString();
+                    SetPerson();
                     SetRole();
                     SetShift();
                     PutEmployee(persons, dataperson);
@@ -151,6 +179,13 @@ public class EmployeeActivity extends AppCompatActivity {
                 startActivity(new Intent(EmployeeActivity.this, AddEmployeeActivity.class));
             }
         });
+
+        calendar_birth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDateDialog();
+            }
+        });
     }
 
     private void GetEmployee (String persons, String id)
@@ -176,6 +211,21 @@ public class EmployeeActivity extends AppCompatActivity {
                 Toast.makeText(EmployeeActivity.this,"Error", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void SetPerson ()
+    {
+        dataperson.name = employee_name.getText().toString();
+        dataperson.email = employee_email.getText().toString();
+        dataperson.persondetail.assignwork = employee_datein.toString();
+        dataperson.npwp = employee_npwp.toString();
+        dataperson.phone = employee_phone.toString();
+        dataperson.gender = employee_gender.getSelectedItem().toString();
+        try {
+            dataperson.birthdate = dateFormatter.parse(employee_birth.toString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     private void GetShift()
@@ -365,6 +415,18 @@ public class EmployeeActivity extends AppCompatActivity {
 
         employee_id.setText(mid);
         employee_name.setText(mname);
+        employee_email.setText(person.email);
+        employee_npwp.setText(person.npwp);
+        employee_phone.setText(person.phone);
+        employee_birth.setText(person.birthdate.toString());
+
+        for (int i =0; i < genderSpinner.length; i++)
+        {
+            if (genderSpinner[i].equals(person.gender))
+            {
+                employee_gender.setSelection(i);
+            }
+        }
 
         GetEmployee(persons, mid);
     }
@@ -375,6 +437,13 @@ public class EmployeeActivity extends AppCompatActivity {
         employee_name.setEnabled(false);
         role_spin.setEnabled(false);
         shift_spin.setEnabled(false);
+        employee_email.setEnabled(false);
+        employee_datein.setEnabled(false);
+        employee_npwp.setEnabled(false);
+        employee_phone.setEnabled(false);
+        employee_birth.setEnabled(false);
+        employee_gender.setEnabled(false);
+        calendar_birth.setEnabled(false);
         save_employee.setVisibility(View.GONE);
         cancel_edit.setVisibility(View.GONE);
         edit_employee.setVisibility(View.VISIBLE);
@@ -385,7 +454,43 @@ public class EmployeeActivity extends AppCompatActivity {
         edit_employee.setVisibility(View.GONE);
         save_employee.setVisibility(View.VISIBLE);
         cancel_edit.setVisibility(View.VISIBLE);
-        role_spin.setEnabled(true);
-        shift_spin.setEnabled(true);
+        employee_name.setEnabled(true);
+        employee_email.setEnabled(true);
+        employee_npwp.setEnabled(true);
+        employee_phone.setEnabled(true);
+        employee_birth.setEnabled(true);
+        employee_gender.setEnabled(true);
+        calendar_birth.setEnabled(true);
+    }
+
+    private void SetGenderSpinner ()
+    {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, genderSpinner);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        employee_gender.setAdapter(adapter);
+    }
+
+    private void showDateDialog()
+    {
+        Calendar newCalendar = Calendar.getInstance();
+        datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener()
+        {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
+            {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+                employee_birth.setText(dateFormatter.format(newDate.getTime()).toString());
+
+                try {
+                    dates = dateFormatter.parse(employee_birth.getText().toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Log.d("date", dateFormatter.format(dates).toString());
+            }
+        },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.show();
     }
 }
