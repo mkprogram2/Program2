@@ -94,7 +94,7 @@ public class RemunerationActivity extends AppCompatActivity {
 
     private EmployeeService employeeService;
     private SalaryService salaryService;
-    private String persons, mid, mname;
+    private String mid, mname;
     private Integer months, yearss;
     private Person dataperson = new Person();
     private Remuneration remuneration = new Remuneration();
@@ -114,7 +114,6 @@ public class RemunerationActivity extends AppCompatActivity {
 
         employeeService = ClientService.createService().create(EmployeeService.class);
         salaryService = ClientService.createService().create(SalaryService.class);
-        persons = SharedPreferenceEditor.LoadPreferences(this,"Persons","");
 
         employee_id.setEnabled(false);
         employee_name.setEnabled(false);
@@ -151,7 +150,7 @@ public class RemunerationActivity extends AppCompatActivity {
         select_employee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GetPerson(persons);
+                GetPerson();
             }
         });
 
@@ -164,9 +163,9 @@ public class RemunerationActivity extends AppCompatActivity {
         });
     }
 
-    private void GetEmployee (String persons, String id)
+    private void GetEmployee (String id)
     {
-        Call<Person> call = employeeService.GetEmployee(persons, id, session.getAccesstoken());
+        Call<Person> call = employeeService.GetEmployee(id, session.getAccesstoken());
         call.enqueue(new Callback<Person>()
         {
             @Override
@@ -208,7 +207,7 @@ public class RemunerationActivity extends AppCompatActivity {
                         months = month;
                         yearss = year;
 
-                        GetRemuneration(persons, mid, month, year);
+                        GetRemuneration(mid, month, year);
 
                         for (int i = 0; i < monthinyear.length; i++)
                         {
@@ -227,9 +226,9 @@ public class RemunerationActivity extends AppCompatActivity {
                 });
     }
 
-    private void GetRemuneration (String person, String id, Integer month, Integer year)
+    private void GetRemuneration (String id, Integer month, Integer year)
     {
-        Call<Remuneration> call = salaryService.GetRemuneration(person, id, month, year, session.getAccesstoken());
+        Call<Remuneration> call = salaryService.GetRemuneration(id, month, year, session.getAccesstoken());
         call.enqueue(new Callback<Remuneration>()
         {
             @Override
@@ -297,12 +296,12 @@ public class RemunerationActivity extends AppCompatActivity {
         remuneration.income = Double.parseDouble(gross_salary.getText().toString());
         remuneration.month = months;
         remuneration.year = yearss;
-        PostRemuneration(persons, remuneration);
+        PostRemuneration(remuneration);
     }
 
-    private void PostRemuneration (String persons, Remuneration remunerations)
+    private void PostRemuneration (Remuneration remunerations)
     {
-        Call<Remuneration> call = salaryService.PostRemuneration(persons, remunerations, session.getAccesstoken());
+        Call<Remuneration> call = salaryService.PostRemuneration(remunerations, session.getAccesstoken());
         call.enqueue(new Callback<Remuneration>()
         {
             @Override
@@ -547,9 +546,9 @@ public class RemunerationActivity extends AppCompatActivity {
         });
     }
 
-    private void GetPerson (String persons)
+    private void GetPerson ()
     {
-        Call<List<Person>> call = employeeService.GetPerson(persons, session.getAccesstoken());
+        Call<List<Person>> call = employeeService.GetPerson(session.getAccesstoken());
         call.enqueue(new Callback<List<Person>>()
         {
             @Override
@@ -604,6 +603,6 @@ public class RemunerationActivity extends AppCompatActivity {
         save_remuneration.setVisibility(View.VISIBLE);
         cancel_remuneration.setVisibility(View.VISIBLE);
 
-        GetEmployee(persons, mid);
+        GetEmployee(mid);
     }
 }

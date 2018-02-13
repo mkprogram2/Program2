@@ -15,7 +15,8 @@ import com.mk.admin.payroll.main.manage.fragment.ListEmployeeOvertime;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class EmployeeOvertimeActivity extends AppCompatActivity implements View.OnClickListener {
+public class EmployeeOvertimeActivity extends AppCompatActivity implements View.OnClickListener
+{
 
     @BindView(R.id.list_employee_over)
     ImageView list_employee_over;
@@ -23,7 +24,8 @@ public class EmployeeOvertimeActivity extends AppCompatActivity implements View.
     ImageView add_employee_over;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employee_overtime);
 

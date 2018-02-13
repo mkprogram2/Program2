@@ -64,11 +64,10 @@ public class AddEmployeeOvertime extends android.support.v4.app.Fragment
     private View viewFrag1;
     private EmployeeService employeeService;
     private OvertimeService overtimeService;
-    private String persons, mid, mname;
+    private String mid;
     private Session session;
     private List<Person> list;
     private RecyclerView rvCategory;
-    private Person dataperson = new Person();
     private Overtime overtime = new Overtime();
     private DatePickerDialog datePickerDialog;
     private SimpleDateFormat dateFormatter;
@@ -99,12 +98,11 @@ public class AddEmployeeOvertime extends android.support.v4.app.Fragment
 
         employeeService = ClientService.createService().create(EmployeeService.class);
         overtimeService = ClientService.createService().create(OvertimeService.class);
-        persons = SharedPreferenceEditor.LoadPreferences(viewFrag1.getContext(),"Persons","");
 
         select_employee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GetPerson(persons);
+                GetPerson();
             }
         });
 
@@ -155,24 +153,37 @@ public class AddEmployeeOvertime extends android.support.v4.app.Fragment
         overtime_calendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDateDialog();
+                if (employee_name.length() == 0)
+                {
+                    select_employee.setError("");
+                    Toast.makeText(viewFrag1.getContext(), "Please Select Employee", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    showDateDialog();
+                }
             }
         });
         return viewFrag1;
     }
 
-    private void GetPerson (String persons)
+    private void GetPerson ()
     {
-        Call<List<Person>> call = employeeService.GetPerson(persons, session.getAccesstoken());
+        Call<List<Person>> call = employeeService.GetPerson(session.getAccesstoken());
         call.enqueue(new Callback<List<Person>>()
         {
             @Override
             public void onResponse(retrofit2.Call<List<Person>> call, Response<List<Person>> response)
             {
-                list = response.body();
-                Log.d("Data",list.get(0).name);
-                Log.d("Size", String.valueOf(list.size()));
-                showRecyclerList();
+                if (response.isSuccessful())
+                {
+                    list = response.body();
+                    Log.d("Data",list.get(0).name);
+                    Log.d("Size", String.valueOf(list.size()));
+                    showRecyclerList();
+                }
+                else
+                    Toast.makeText(viewFrag1.getContext(),"Server Failed", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -211,12 +222,24 @@ public class AddEmployeeOvertime extends android.support.v4.app.Fragment
     private void showSelectedPerson(Person person)
     {
         mid = person.id;
-        mname = person.name;
 
-        GetEmployee(persons, mid);
+        //GetEmployee(persons, mid);
+
+        for (int i =0; i < list.size(); i++)
+        {
+            if (list.get(i).id == mid)
+            {
+                employee_name.setText(list.get(i).name);
+                employee_role.setText(list.get(i).Role.name);
+
+                save_overtime.setVisibility(View.VISIBLE);
+                cancel_overtime.setVisibility(View.VISIBLE);
+                break;
+            }
+        }
     }
 
-    private void GetEmployee (String persons, String id)
+    /*private void GetEmployee (String persons, String id)
     {
         Call<Person> call = employeeService.GetEmployee(persons, id, session.getAccesstoken());
         call.enqueue(new Callback<Person>()
@@ -240,6 +263,35 @@ public class AddEmployeeOvertime extends android.support.v4.app.Fragment
                 Toast.makeText(viewFrag1.getContext(),"Server Failed", Toast.LENGTH_LONG).show();
             }
         });
+    }*/
+
+    private void GetOvertimeByDate (String id, final String date)
+    {
+        Call<Overtime> call = overtimeService.GetOvertimeByDate(id, date, session.getAccesstoken());
+        call.enqueue(new Callback<Overtime>()
+        {
+            @Override
+            public void onResponse(retrofit2.Call<Overtime> call, Response<Overtime> response)
+            {
+                if (response.isSuccessful())
+                {
+                    overtime = response.body();
+                    date_overtime.setText(date);
+                    Integer duration_over = overtime.duration / 3600;
+                    duration.setText(duration_over.toString());
+                    information.setText(overtime.information.toString());
+                }
+                else
+                {
+                    Toast.makeText(viewFrag1.getContext(), "New Overtime", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(retrofit2.Call<Overtime> call, Throwable t)
+            {
+                Toast.makeText(viewFrag1.getContext(),"Server Failed", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void clearUI ()
@@ -260,12 +312,12 @@ public class AddEmployeeOvertime extends android.support.v4.app.Fragment
         overtime.duration = Integer.parseInt(duration.getText().toString()) * 3600;
         overtime.information = information.getText().toString();
         overtime.status = 0;
-        PostOvertime(persons, overtime);
+        PostOvertime(overtime);
     }
 
-    private void PostOvertime (String persons, Overtime overtimes)
+    private void PostOvertime (Overtime overtimes)
     {
-        Call<Overtime> call = overtimeService.PostOvertime(persons, overtimes, session.getAccesstoken());
+        Call<Overtime> call = overtimeService.PostOvertime(overtimes, session.getAccesstoken());
         call.enqueue(new Callback<Overtime>()
         {
             @Override
@@ -274,7 +326,7 @@ public class AddEmployeeOvertime extends android.support.v4.app.Fragment
                 if (response.isSuccessful())
                 {
                     overtime = response.body();
-                    Toast.makeText(viewFrag1.getContext(), "Save Successfull", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(viewFrag1.getContext(), "Overtime Saved", Toast.LENGTH_SHORT).show();
                     clearUI();
                 }
             }
@@ -282,31 +334,6 @@ public class AddEmployeeOvertime extends android.support.v4.app.Fragment
             public void onFailure(retrofit2.Call<Overtime> call, Throwable t)
             {
                 Toast.makeText(viewFrag1.getContext(),"Server Failed", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void EdittextChange ()
-    {
-        duration.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) { }
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-
-            public void onTextChanged(CharSequence s, int start, int before, int count)
-            {
-                if (!duration.getText().equals(""))
-                {
-                    Integer time_duration = Integer.parseInt(duration.getText().toString());
-                    if (time_duration > 3)
-                    {
-                        Toast.makeText(viewFrag1.getContext(), "Duration Has 1 - 3 Hours Only!", Toast.LENGTH_SHORT).show();
-                        duration.setText("");
-                    }
-                }
-                else
-                {
-                    duration.setText("1");
-                }
             }
         });
     }
@@ -332,6 +359,7 @@ public class AddEmployeeOvertime extends android.support.v4.app.Fragment
                     e.printStackTrace();
                 }
                 Log.d("date", dateFormatter.format(dates).toString());
+                GetOvertimeByDate(mid, dateFormatter.format(newDate.getTime()).toString());
             }
         },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();

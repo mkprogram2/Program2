@@ -48,8 +48,7 @@ public class LoginActivity extends AppCompatActivity
     Button login;
 
     private LoginService service, serviceVerified;
-    private String persons, mUsername, mPassword;
-    private ProgressDialog progressDialog;
+    private String mUsername, mPassword;
     private Session session;
 
     @Override
@@ -62,7 +61,6 @@ public class LoginActivity extends AppCompatActivity
 
         service = ClientService.createServiceLogin().create(LoginService.class);
         serviceVerified = ClientService.createService().create(LoginService.class);
-        persons = SharedPreferenceEditor.LoadPreferences(this, "Persons", "");
         session = new Session(this);
 
         login.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +100,6 @@ public class LoginActivity extends AppCompatActivity
                     {
                         Toast.makeText(LoginActivity.this, "E-mail Or Password Are Wrong2!", Toast.LENGTH_LONG).show();
                     }
-                    //setFocus();
                 }
                 else
                 {
@@ -113,8 +110,6 @@ public class LoginActivity extends AppCompatActivity
             @Override
             public void onFailure(retrofit2.Call<Person> call, Throwable t)
             {
-                //setFocus();
-                Log.d("ERROR", t.getMessage());
                 Toast.makeText(LoginActivity.this, "Server Failed", Toast.LENGTH_LONG).show();
             }
 
@@ -148,26 +143,10 @@ public class LoginActivity extends AppCompatActivity
             @Override
             public void onFailure(retrofit2.Call<AuthUtil> call, Throwable t)
             {
-                //setFocus();
-                Log.d("ERROR", t.getMessage());
                 Toast.makeText(LoginActivity.this, "Server Failed", Toast.LENGTH_LONG).show();
             }
 
         });
-    }
-
-    private Person setlogin()
-    {
-        Person person = new Person();
-        person.email = username.getText().toString();
-        person.apppassword = password.getText().toString();
-        return person;
-    }
-
-    private void setFocus()
-    {
-        username.setText("");
-        password.setText("");
     }
 
     private void attempLogin ()

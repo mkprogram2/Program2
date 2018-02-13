@@ -14,7 +14,8 @@ import com.mk.admin.payroll.main.employee.fragment.MyOvertimeFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class OvertimeActivity extends AppCompatActivity implements View.OnClickListener {
+public class OvertimeActivity extends AppCompatActivity implements View.OnClickListener
+{
 
     @BindView(R.id.myover)
     ImageView myover;
@@ -22,7 +23,8 @@ public class OvertimeActivity extends AppCompatActivity implements View.OnClickL
     ImageView listover;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overtime);
 
@@ -34,7 +36,8 @@ public class OvertimeActivity extends AppCompatActivity implements View.OnClickL
     }
 
     @Override
-    public void onClick(View view) {
+    public void onClick(View view)
+    {
         switch (view.getId()){
             case R.id.listover:
                 myover.setColorFilter(getBaseContext().getResources().getColor(R.color.black_de));

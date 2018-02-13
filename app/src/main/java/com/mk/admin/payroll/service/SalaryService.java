@@ -22,33 +22,28 @@ import retrofit2.http.Query;
 public interface SalaryService
 {
     @GET("workhours/{month}/{year}/{id}")
-    Call<List<Workhour>> getDay (@Header("Person") String person,
-                                 @Path("month") Integer month,
+    Call<List<Workhour>> getDay (@Path("month") Integer month,
                                  @Path("year") Integer year,
                                  @Path("id") String id,
                                  @Query("access_token") String access_token);
 
     @GET("remunerations/totalwim/{month}/{year}")
-    Call<Integer> GetWorkdays (@Header("Person") String person,
-                               @Path("month") Integer month,
+    Call<Integer> GetWorkdays (@Path("month") Integer month,
                                @Path("year") Integer year,
                                @Query("access_token") String access_token);
 
     @GET("remunerations/totalwfy/{month}/{year}")
-    Call<Integer> GetWorkdaysToday (@Header("Person") String person,
-                                    @Path("month") Integer month,
+    Call<Integer> GetWorkdaysToday (@Path("month") Integer month,
                                     @Path("year") Integer year,
                                     @Query("access_token") String access_token);
 
     @GET("remunerations/{id}/{month}/{year}")
-    Call<Remuneration> GetRemuneration (@Header("person") String person,
-                                        @Path("id") String id,
+    Call<Remuneration> GetRemuneration (@Path("id") String id,
                                         @Path("month") Integer month,
                                         @Path("year") Integer year,
                                         @Query("access_token") String access_token);
 
     @POST("remunerations/")
-    Call<Remuneration> PostRemuneration (@Header("person") String person,
-                                         @Body Remuneration remuneration,
+    Call<Remuneration> PostRemuneration (@Body Remuneration remuneration,
                                          @Query("access_token") String access_token);
 }

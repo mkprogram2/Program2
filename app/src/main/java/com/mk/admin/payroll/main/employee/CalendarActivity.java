@@ -47,7 +47,6 @@ public class CalendarActivity extends AppCompatActivity {
     public ArrayList<String> items;
     private List<Holiday> holidays = new ArrayList();
     private CalendarService calendarService;
-    private String persons;
     private Integer currentDay, currentMonth, currentYear;
     private RecyclerView rvEvent;
     private Session session;
@@ -65,7 +64,7 @@ public class CalendarActivity extends AppCompatActivity {
                 df.format(itemmonth.getTime());
                 itemmonth.add(5, 1);
             }
-            GetHolidays(persons, currentMonth, currentYear);
+            GetHolidays(currentMonth, currentYear);
         }
     };
 
@@ -82,7 +81,6 @@ public class CalendarActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         calendarService = ClientService.createService().create(CalendarService.class);
-        persons = SharedPreferenceEditor.LoadPreferences(this,"Persons","");
 
         month = (GregorianCalendar)GregorianCalendar.getInstance();
         itemmonth = (GregorianCalendar)month.clone();
@@ -170,7 +168,8 @@ public class CalendarActivity extends AppCompatActivity {
     }
 
     @SuppressLint("WrongConstant")
-    protected void setNextMonth() {
+    protected void setNextMonth()
+    {
         if(month.get(2) == month.getActualMaximum(2)) {
             month.set(month.get(1) + 1, month.getActualMinimum(2), 1);
         } else {
@@ -179,7 +178,8 @@ public class CalendarActivity extends AppCompatActivity {
     }
 
     @SuppressLint("WrongConstant")
-    protected void setPreviousMonth() {
+    protected void setPreviousMonth()
+    {
         if(month.get(2) == month.getActualMinimum(2)) {
             month.set(month.get(1) - 1, month.getActualMaximum(2), 1);
         } else {
@@ -187,7 +187,8 @@ public class CalendarActivity extends AppCompatActivity {
         }
     }
 
-    public void refreshCalendar() {
+    public void refreshCalendar()
+    {
         TextView title = (TextView)this.findViewById(R.id.title_calendar);
         adapter.refreshDays();
         currentMonth = Integer.parseInt(android.text.format.DateFormat.format("M", month).toString());
@@ -198,9 +199,9 @@ public class CalendarActivity extends AppCompatActivity {
         Log.d("TEST MONTH", android.text.format.DateFormat.format("M yyyy", month).toString());
     }
 
-    private void GetHolidays (String persons, Integer month, Integer year)
+    private void GetHolidays (Integer month, Integer year)
     {
-        Call<List<Holiday>> call = calendarService.getHoliday(persons, month, year, session.getAccesstoken());
+        Call<List<Holiday>> call = calendarService.getHoliday(month, year, session.getAccesstoken());
         call.enqueue(new Callback<List<Holiday>>()
         {
             @Override
@@ -223,7 +224,8 @@ public class CalendarActivity extends AppCompatActivity {
         });
     }
 
-    private void showRecyclerList(){
+    private void showRecyclerList()
+    {
         rvEvent.setLayoutManager(new LinearLayoutManager(this));
         EventAdapter EventAdapter = new EventAdapter(this);
         EventAdapter.setHolidays(holidays);
@@ -237,7 +239,8 @@ public class CalendarActivity extends AppCompatActivity {
         });
     }
 
-    private void showSelectedPerson(Holiday holiday){
+    private void showSelectedPerson(Holiday holiday)
+    {
         Toast.makeText(this, "Event :  "+ holiday.name, Toast.LENGTH_SHORT).show();
     }
 }

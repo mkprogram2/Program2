@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -21,8 +20,6 @@ import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,7 +27,6 @@ import retrofit2.Response;
 import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
 import com.mk.admin.payroll.common.Session;
-import com.mk.admin.payroll.common.SharedPreferenceEditor;
 import com.mk.admin.payroll.main.admin.EmployeeActivity;
 import com.mk.admin.payroll.main.admin.RemunerationActivity;
 import com.mk.admin.payroll.main.employee.CalendarActivity;
@@ -41,7 +37,6 @@ import com.mk.admin.payroll.main.employee.WorkhoursActivity;
 import com.mk.admin.payroll.main.manage.EmployeeOvertimeActivity;
 import com.mk.admin.payroll.model.Person;
 import com.mk.admin.payroll.model.Workhour;
-import com.mk.admin.payroll.service.CheckinService;
 import com.mk.admin.payroll.service.EmployeeService;
 import com.mk.admin.payroll.service.WorkhourService;
 
@@ -54,17 +49,11 @@ public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private EmployeeService employeeService;
-    private CheckinService service2;
     private WorkhourService service3;
-    private String mid, mname, shift_workstart, shift_workend, interval_work, mshiftid,  role_name;
-    public double gross_salary;
+    private String mid, mname, shift_workstart, shift_workend, interval_work, role_name;
     public Integer role_id;
-    private String persons;
     private NavigationView navigationView;
     private Session session;
-    private RequestBody requestBody;
-    private RecyclerView rvCategory;
-    private List<Person> list;
 
     @BindView(R.id.employee_name)
     TextView employee_name;
@@ -72,7 +61,8 @@ public class HomeActivity extends AppCompatActivity
     TextView employee_role;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
@@ -80,12 +70,10 @@ public class HomeActivity extends AppCompatActivity
         //startService(new Intent(HomeActivity.this, PayrollService.class));
 
         employeeService = ClientService.createService().create(EmployeeService.class);
-        service2 = ClientService.createService().create(CheckinService.class);
         service3 = ClientService.createService().create(WorkhourService.class);
-        persons = SharedPreferenceEditor.LoadPreferences(this,"Persons","");
         session = new Session(this);
 
-        GetEmployee(persons, session.getId());
+        GetEmployee(session.getId());
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -283,73 +271,6 @@ public class HomeActivity extends AppCompatActivity
         {}
     }
 
-    /*private void checkIn(RequestBody id, String access_token)
-    {
-        Call<Integer> call = service2.postCheckin(id, access_token);
-        call.enqueue(new Callback<Integer>()
-        {
-            @Override
-            public void onResponse(retrofit2.Call<Integer> call, Response<Integer> response)
-            {
-                final Integer data = response.body();
-
-                if (data == 1)
-                {
-                    workhour(mid);
-                }
-                else if(data == 2)
-                {
-                    Toast.makeText(HomeActivity.this,"Anda Telah CheckIn Hari Ini", Toast.LENGTH_LONG).show();
-                }
-                else
-                {
-                    Toast.makeText(HomeActivity.this,"Holiday!!", Toast.LENGTH_LONG).show();
-                }
-            }
-            @Override
-            public void onFailure(retrofit2.Call<Integer> call, Throwable t)
-            {
-                Toast.makeText(HomeActivity.this,"Error", Toast.LENGTH_LONG).show();
-            }
-        });
-    }*/
-
-    /*private void checkOut(RequestBody id)
-    {
-        Call<Integer> call = service2.checkout(id);
-        call.enqueue(new Callback<Integer>()
-        {
-            @Override
-            public void onResponse(retrofit2.Call<Integer> call, Response<Integer> response)
-            {
-                final Integer data = response.body();
-
-                if (data == 1)
-                {
-                    workhour(mid);
-                }
-                else if (data == 2)
-                {
-                    Toast.makeText(HomeActivity.this,"Please Check In", Toast.LENGTH_LONG).show();
-                }
-                else if (data == 3)
-                {
-                    Toast.makeText(HomeActivity.this,"You Have Been Checked Out", Toast.LENGTH_LONG).show();
-                }
-                else if (data == 4)
-                {
-                    Toast.makeText(HomeActivity.this,"Cannot Check Out in 30 Minutes After Checked In", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(retrofit2.Call<Integer> call, Throwable t)
-            {
-                Toast.makeText(HomeActivity.this,"Error", Toast.LENGTH_LONG).show();
-            }
-        });
-    }*/
-
     private void workhour (String id)
     {
         Call<Workhour> call = service3.getCheckworkhour(id, session.getAccesstoken());
@@ -387,9 +308,9 @@ public class HomeActivity extends AppCompatActivity
         });
     }
 
-    private void GetEmployee (String persons, String id)
+    private void GetEmployee (String id)
     {
-        Call<Person> call = employeeService.GetEmployee(persons, id, session.getAccesstoken());
+        Call<Person> call = employeeService.GetEmployee(id, session.getAccesstoken());
         call.enqueue(new Callback<Person>()
         {
             @Override
@@ -403,7 +324,6 @@ public class HomeActivity extends AppCompatActivity
                     mname = dataperson.name;
                     role_name = dataperson.Role.name;
                     role_id = dataperson.Role.id;
-                    mshiftid = dataperson.persondetail.Shift.id ;
                     shift_workstart = dataperson.persondetail.Shift.workstart;
                     shift_workend = dataperson.persondetail.Shift.workend;
 
@@ -419,9 +339,6 @@ public class HomeActivity extends AppCompatActivity
                     CheckRole();
 
                     GetIntervalWork();
-
-                    String strRequestBody = mid;
-                    requestBody = RequestBody.create(MediaType.parse("text/plain"),strRequestBody);
                 }
             }
 

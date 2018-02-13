@@ -28,7 +28,7 @@ import retrofit2.Response;
 public class WorkhoursActivity extends AppCompatActivity
 {
 
-    private String workstart, workstartinterval, interval_work, workend, result, result2, persons, personid, shifttime;
+    private String workstart, workstartinterval, interval_work, workend, result, result2, personid, shifttime;
     private Long workstartinterval_time;
     private String[] waktu_shift, waktu_kerja, telat_s;
     private Integer jam_pulang_shift, menit_pulang_shift, jam_pulang, menit_pulang, telat_jam, telat_menit, check;
@@ -67,7 +67,6 @@ public class WorkhoursActivity extends AppCompatActivity
         ButterKnife.bind(this);
 
         employeeService = ClientService.createService().create(EmployeeService.class);
-        persons = SharedPreferenceEditor.LoadPreferences(this,"Persons","");
 
         workstartinterval = getIntent().getExtras().getString("workstartinterval");
         workstart = getIntent().getExtras().getString("workstart");
@@ -75,7 +74,7 @@ public class WorkhoursActivity extends AppCompatActivity
         workend = getIntent().getExtras().getString("workend");
         personid = getIntent().getExtras().getString("personid");
 
-        GetPerson(persons, personid);
+        GetPerson(personid);
 
         if (workstart == null || workstartinterval == null)
         {
@@ -141,9 +140,9 @@ public class WorkhoursActivity extends AppCompatActivity
         countDownStart();
     }
 
-    private void GetPerson (String persons, String id)
+    private void GetPerson (String id)
     {
-        Call<Person> call = employeeService.GetEmployee(persons, id, session.getAccesstoken());
+        Call<Person> call = employeeService.GetEmployee(id, session.getAccesstoken());
         call.enqueue(new Callback<Person>()
         {
             @Override

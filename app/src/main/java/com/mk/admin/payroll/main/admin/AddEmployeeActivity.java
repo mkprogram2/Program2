@@ -76,7 +76,6 @@ public class AddEmployeeActivity extends AppCompatActivity {
     ImageView cancel_save;
 
     private EmployeeService employeeService;
-    private String persons;
     final List<String> list_shift = new ArrayList<String>();
     final List<String> list_role = new ArrayList<String>();
     private List<Shift> shifts;
@@ -96,7 +95,6 @@ public class AddEmployeeActivity extends AppCompatActivity {
         dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
         employeeService = ClientService.createService().create(EmployeeService.class);
-        persons = SharedPreferenceEditor.LoadPreferences(this,"Persons","");
 
         GetShift();
         GetRole();
@@ -230,9 +228,9 @@ public class AddEmployeeActivity extends AppCompatActivity {
         add_gender.setAdapter(adapter);
     }
 
-    private void PostEmployee(String person, Person persons)
+    private void PostEmployee(Person persons)
     {
-        Call<Person> call = employeeService.PostEmployee(person, persons, session.getAccesstoken());
+        Call<Person> call = employeeService.PostEmployee(persons, session.getAccesstoken());
         call.enqueue(new Callback<Person>()
         {
             @Override
@@ -284,7 +282,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
         if (!add_birth.equals(""))
             person.birthdate = birthdate;
 
-        PostEmployee(persons, person);
+        PostEmployee(person);
     }
 
     private void showDateDialog()

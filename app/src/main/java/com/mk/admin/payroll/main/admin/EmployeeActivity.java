@@ -84,7 +84,7 @@ public class EmployeeActivity extends AppCompatActivity {
     Button calendar_birth;
 
     private EmployeeService employeeService;
-    private String persons, shiftid, role, mid, mname;
+    private String shiftid, role, mid, mname;
     final List<String> list_shift = new ArrayList<String>();
     final List<String> list_role = new ArrayList<String>();
     private List<Shift> shifts = new ArrayList<>();
@@ -110,7 +110,6 @@ public class EmployeeActivity extends AppCompatActivity {
         DisableUI();
 
         employeeService = ClientService.createService().create(EmployeeService.class);
-        persons = SharedPreferenceEditor.LoadPreferences(this,"Persons","");
 
         shift_spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
@@ -147,7 +146,7 @@ public class EmployeeActivity extends AppCompatActivity {
                     SetPerson();
                     SetRole();
                     SetShift();
-                    PutEmployee(persons, dataperson);
+                    PutEmployee(dataperson);
                 }
             }
         });
@@ -169,7 +168,7 @@ public class EmployeeActivity extends AppCompatActivity {
         select_employee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GetPerson(persons);
+                GetPerson();
             }
         });
 
@@ -188,9 +187,9 @@ public class EmployeeActivity extends AppCompatActivity {
         });
     }
 
-    private void GetEmployee (String persons, String id)
+    private void GetEmployee (String id)
     {
-        Call<Person> call = employeeService.GetEmployee(persons, id, session.getAccesstoken());
+        Call<Person> call = employeeService.GetEmployee(id, session.getAccesstoken());
         call.enqueue(new Callback<Person>()
         {
             @Override
@@ -222,7 +221,7 @@ public class EmployeeActivity extends AppCompatActivity {
         dataperson.phone = employee_phone.toString();
         dataperson.gender = employee_gender.getSelectedItem().toString();
         try {
-            dataperson.birthdate = dateFormatter.parse(employee_birth.toString());
+            dataperson.birthdate = dateFormatter.parse(employee_birth.getText().toString());
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -311,9 +310,9 @@ public class EmployeeActivity extends AppCompatActivity {
         }
     }
 
-    private void PutEmployee(String person, Person persons)
+    private void PutEmployee(Person persons)
     {
-        Call<Person> call = employeeService.PutEmployee(person, persons, session.getAccesstoken());
+        Call<Person> call = employeeService.PutEmployee(persons, session.getAccesstoken());
         call.enqueue(new Callback<Person>()
         {
             @Override
@@ -361,9 +360,9 @@ public class EmployeeActivity extends AppCompatActivity {
         }
     }
 
-    private void GetPerson (String persons)
+    private void GetPerson ()
     {
-        Call<List<Person>> call = employeeService.GetPerson(persons, session.getAccesstoken());
+        Call<List<Person>> call = employeeService.GetPerson(session.getAccesstoken());
         call.enqueue(new Callback<List<Person>>()
         {
             @Override
@@ -419,6 +418,7 @@ public class EmployeeActivity extends AppCompatActivity {
         employee_npwp.setText(person.npwp);
         employee_phone.setText(person.phone);
         employee_birth.setText(person.birthdate.toString());
+        employee_datein.setText(person.persondetail.assignwork);
 
         for (int i =0; i < genderSpinner.length; i++)
         {
@@ -428,7 +428,7 @@ public class EmployeeActivity extends AppCompatActivity {
             }
         }
 
-        GetEmployee(persons, mid);
+        GetEmployee(mid);
     }
 
     private void DisableUI ()

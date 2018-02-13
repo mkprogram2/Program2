@@ -32,7 +32,6 @@ public class ListOvertimeFragment extends android.support.v4.app.Fragment {
     private List<Overtime> overtimes;
     private View viewFrag2;
     private OvertimeService overtimeService;
-    private String persons;
     private Session session;
     private Overtime overtime;
 
@@ -43,17 +42,17 @@ public class ListOvertimeFragment extends android.support.v4.app.Fragment {
 
     }
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         viewFrag2 = inflater.inflate(R.layout.activity_list_overtime_fragment, container, false);
 
         rvOvertime = (RecyclerView)viewFrag2.findViewById(R.id.rv_overtime);
         rvOvertime.setHasFixedSize(true);
 
         overtimeService = ClientService.createService().create(OvertimeService.class);
-        persons = SharedPreferenceEditor.LoadPreferences(viewFrag2.getContext(),"Persons","");
         session = new Session(viewFrag2.getContext());
 
-        GetOvertime(persons, session.getId());
+        GetOvertime(session.getId());
 
         return viewFrag2;
     }
@@ -77,7 +76,7 @@ public class ListOvertimeFragment extends android.support.v4.app.Fragment {
     {
         final Dialog dialog = new Dialog(viewFrag2.getContext());
         dialog.setContentView(R.layout.approved_overtime_dialog);
-        dialog.setTitle("Delete Overtime");
+        dialog.setTitle("Approved Overtime");
         TextView aprroved_question = (TextView)dialog.findViewById(R.id.aprroved_question);
         cancel_approved = (ImageView)dialog.findViewById(R.id.cancel_approved);
         approved_overtime = (ImageView)dialog.findViewById(R.id.delete_approved);
@@ -102,9 +101,9 @@ public class ListOvertimeFragment extends android.support.v4.app.Fragment {
         });
     }
 
-    private void GetOvertime (String persons, String id)
+    private void GetOvertime (String id)
     {
-        Call<List<Overtime>> call = overtimeService.GetOvertime(persons, id, session.getAccesstoken());
+        Call<List<Overtime>> call = overtimeService.GetOvertime(id, session.getAccesstoken());
         call.enqueue(new Callback<List<Overtime>>()
         {
             @Override
@@ -160,7 +159,7 @@ public class ListOvertimeFragment extends android.support.v4.app.Fragment {
                 if (response.isSuccessful())
                 {
                     overtime = response.body();
-                    GetOvertime(persons, session.getId());
+                    GetOvertime(session.getId());
                     Toast.makeText(viewFrag2.getContext(),"Overtime Approved", Toast.LENGTH_SHORT).show();
                 }
             }

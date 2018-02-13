@@ -33,7 +33,7 @@ import retrofit2.Response;
 public class SalaryActivity extends AppCompatActivity
 {
     private SalaryService service4;
-    private String persons, mid;
+    private String mid;
     private Integer present_days, work_days, months, years, month_now;
     private Remuneration remuneration = new Remuneration();
     private RackMonthPicker rackMonthPicker;
@@ -90,14 +90,14 @@ public class SalaryActivity extends AppCompatActivity
     Button salary;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_salary);
         session = new Session(this);
         ButterKnife.bind(this);
 
         service4 = ClientService.createService().create(SalaryService.class);
-        persons = SharedPreferenceEditor.LoadPreferences(this,"Persons","");
 
         mid = getIntent().getExtras().getString("id");
         employee_name.setText(getIntent().getExtras().getString("name"));
@@ -114,9 +114,9 @@ public class SalaryActivity extends AppCompatActivity
         });
     }
 
-    private void getSalary (final String persons, String id, Integer month, Integer year)
+    private void getSalary (String id, Integer month, Integer year)
     {
-        Call<Remuneration> call = service4.GetRemuneration(persons, id, month, year, session.getAccesstoken());
+        Call<Remuneration> call = service4.GetRemuneration(id, month, year, session.getAccesstoken());
         call.enqueue(new Callback<Remuneration>()
         {
             @Override
@@ -135,9 +135,9 @@ public class SalaryActivity extends AppCompatActivity
         });
     }
 
-    private void getPresent (final String persons, Integer month, Integer year, String id)
+    private void getPresent (Integer month, Integer year, String id)
     {
-        Call<List<Workhour>> call = service4.getDay(persons, month, year, id, session.getAccesstoken());
+        Call<List<Workhour>> call = service4.getDay(month, year, id, session.getAccesstoken());
         call.enqueue(new Callback<List<Workhour>>()
         {
             @Override
@@ -158,11 +158,11 @@ public class SalaryActivity extends AppCompatActivity
                 present_day.setText(String.valueOf(present_days));
                 if (months == month_now)
                 {
-                    GetWorkdaysToday(persons, months, years);
+                    GetWorkdaysToday(months, years);
                 }
                 else
                 {
-                    GetWorkdays(persons, months, years);
+                    GetWorkdays(months, years);
                 }
             }
 
@@ -175,9 +175,9 @@ public class SalaryActivity extends AppCompatActivity
         });
     }
 
-    private void GetWorkdays (final String persons, Integer month, Integer year)
+    private void GetWorkdays (Integer month, Integer year)
     {
-        Call<Integer> call = service4.GetWorkdays(persons, month, year, session.getAccesstoken());
+        Call<Integer> call = service4.GetWorkdays(month, year, session.getAccesstoken());
         call.enqueue(new Callback<Integer>()
         {
             @Override
@@ -202,9 +202,9 @@ public class SalaryActivity extends AppCompatActivity
         });
     }
 
-    private void GetWorkdaysToday (final String persons, Integer month, Integer year)
+    private void GetWorkdaysToday (Integer month, Integer year)
     {
-        Call<Integer> call = service4.GetWorkdaysToday(persons, month, year, session.getAccesstoken());
+        Call<Integer> call = service4.GetWorkdaysToday(month, year, session.getAccesstoken());
         call.enqueue(new Callback<Integer>()
         {
             @Override
@@ -333,9 +333,9 @@ public class SalaryActivity extends AppCompatActivity
                         years = year;
                         month_now = currentMonth + 1;
 
-                        getPresent(persons, month, year, mid);
+                        getPresent(month, year, mid);
 
-                        getSalary(persons, mid, month, year);
+                        getSalary(mid, month, year);
                     }
                 })
                 .setNegativeButton(new OnCancelMonthDialogListener()

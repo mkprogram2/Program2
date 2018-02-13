@@ -22,13 +22,11 @@ import retrofit2.http.Query;
 
 public interface EmployeeService
 {
-    @GET("persons/")
-    Call<List<Person>> GetPerson(@Header("Person") String person,
-                                 @Query("access_token") String access_token);
+    @GET("persons/") //Get all person
+    Call<List<Person>> GetPerson(@Query("access_token") String access_token);
 
-    @GET("persons/{id}")
-    Call<Person> GetEmployee(@Header("Person")String person,
-                             @Path("id") String id,
+    @GET("persons/{id}") //Get one person based id
+    Call<Person> GetEmployee(@Path("id") String id,
                              @Query("access_token") String access_token);
 
     @GET("shifts")
@@ -38,12 +36,10 @@ public interface EmployeeService
     Call<List<Role>> GetRoles(@Query("access_token") String access_token);
 
     @PUT("persons/")
-    Call<Person> PutEmployee(@Header("Person") String person,
-                             @Body Person persons,
+    Call<Person> PutEmployee(@Body Person persons,
                              @Query("access_token") String access_token);
 
     @POST("persons/")
-    Call<Person> PostEmployee(@Header("Person") String person,
-                              @Body Person persons,
+    Call<Person> PostEmployee(@Body Person persons,
                               @Query("access_token") String access_token);
 }

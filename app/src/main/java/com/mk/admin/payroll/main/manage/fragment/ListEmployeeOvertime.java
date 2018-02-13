@@ -40,7 +40,6 @@ public class ListEmployeeOvertime extends android.support.v4.app.Fragment {
     private Overtime overtime;
     private View viewFrag1;
     private OvertimeService overtimeService;
-    private String persons;
     private Session session;
 
     private ImageView cancel_approved;
@@ -57,10 +56,9 @@ public class ListEmployeeOvertime extends android.support.v4.app.Fragment {
         rvOvertime.setHasFixedSize(true);
 
         overtimeService = ClientService.createService().create(OvertimeService.class);
-        persons = SharedPreferenceEditor.LoadPreferences(viewFrag1.getContext(),"Persons","");
         session = new Session(viewFrag1.getContext());
 
-        GetAllOvertime(persons);
+        GetAllOvertime();
 
         return viewFrag1;
     }
@@ -108,9 +106,9 @@ public class ListEmployeeOvertime extends android.support.v4.app.Fragment {
         });
     }
 
-    private void GetAllOvertime (String persons)
+    private void GetAllOvertime ()
     {
-        Call<List<Overtime>> call = overtimeService.GetAllOvertime(persons, session.getAccesstoken());
+        Call<List<Overtime>> call = overtimeService.GetAllOvertime(session.getAccesstoken());
         call.enqueue(new Callback<List<Overtime>>()
         {
             @Override
@@ -146,8 +144,7 @@ public class ListEmployeeOvertime extends android.support.v4.app.Fragment {
             @Override
             public void onFailure(retrofit2.Call<Integer> call, Throwable t)
             {
-                GetAllOvertime(persons);
-                //Toast.makeText(viewFrag1.getContext(),"Server Failed", Toast.LENGTH_LONG).show();
+                GetAllOvertime();
             }
         });
     }
