@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -122,7 +123,7 @@ public class ListOvertimeFragment extends android.support.v4.app.Fragment {
             @Override
             public void onFailure(retrofit2.Call<List<Overtime>> call, Throwable t)
             {
-                Toast.makeText(viewFrag2.getContext(),"Error", Toast.LENGTH_LONG).show();
+                Toast.makeText(viewFrag2.getContext(),"Server Failed", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -166,7 +167,7 @@ public class ListOvertimeFragment extends android.support.v4.app.Fragment {
             @Override
             public void onFailure(retrofit2.Call<Overtime> call, Throwable t)
             {
-                Toast.makeText(viewFrag2.getContext(),"Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(viewFrag2.getContext(),"Server Failed", Toast.LENGTH_SHORT).show();
             }
         });
     }

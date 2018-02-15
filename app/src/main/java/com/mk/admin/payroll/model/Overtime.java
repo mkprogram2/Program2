@@ -1,5 +1,7 @@
 package com.mk.admin.payroll.model;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -13,5 +15,8 @@ public class Overtime
     public String information;
     public Integer duration;
     public Integer status;
+    public Time start;
+    public Time stop;
+    public Integer dur;
     public Person person = new Person();
 }

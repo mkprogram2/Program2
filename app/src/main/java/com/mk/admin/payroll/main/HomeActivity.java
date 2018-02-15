@@ -145,11 +145,7 @@ public class HomeActivity extends AppCompatActivity
         }
         else if ( id == R.id.salary_menu)
         {
-            Intent intent = new Intent(HomeActivity.this, SalaryActivity.class);
-            intent.putExtra("id", mid);
-            intent.putExtra("name", mname);
-            intent.putExtra("role_name", role_name);
-            startActivity(intent);
+            startActivity(new Intent(HomeActivity.this, SalaryActivity.class));
         }
         else if (id == R.id.overtime)
         {
@@ -345,8 +341,7 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onFailure(retrofit2.Call<Person> call, Throwable t)
             {
-                Log.d("Error here", t.getMessage());
-                Toast.makeText(HomeActivity.this,"Error", Toast.LENGTH_LONG).show();
+                Toast.makeText(HomeActivity.this,"Server Failed", Toast.LENGTH_LONG).show();
             }
         });
     }

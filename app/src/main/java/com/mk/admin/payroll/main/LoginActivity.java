@@ -1,5 +1,6 @@
 package com.mk.admin.payroll.main;
 
+import android.app.ActivityManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -92,8 +93,12 @@ public class LoginActivity extends AppCompatActivity
                         {
                             startService(new Intent(LoginActivity.this, PayrollService.class));
                         }*/
-                        stopService(new Intent(LoginActivity.this, PayrollService.class));
-                        startService(new Intent(LoginActivity.this, PayrollService.class));
+                        if (!isMyServiceRunning(PayrollService.class))
+                        {
+                            startService(new Intent(LoginActivity.this, PayrollService.class));
+                        }
+                    /*stopService(new Intent(LoginActivity.this, PayrollService.class));
+                    startService(new Intent(LoginActivity.this, PayrollService.class));*/
                         startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                     }
                     else
@@ -207,5 +212,15 @@ public class LoginActivity extends AppCompatActivity
                     }
                 }
             }, 1000);
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

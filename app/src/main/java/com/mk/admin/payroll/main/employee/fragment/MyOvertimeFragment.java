@@ -1,9 +1,12 @@
 package com.mk.admin.payroll.main.employee.fragment;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,12 +27,16 @@ public class MyOvertimeFragment extends android.support.v4.app.Fragment {
     private TextView duration_overtime;
     private TextView date_overtime;
     private TextView information_overtime;
+    private Button cancel_overtime;
 
     private OvertimeService overtimeService;
     private Session session;
     private Overtime overtime;
+    private ImageView cancel_approved;
+    private ImageView approved_overtime;
 
-    public MyOvertimeFragment () {
+    public MyOvertimeFragment ()
+    {
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -44,8 +51,39 @@ public class MyOvertimeFragment extends android.support.v4.app.Fragment {
         duration_overtime = (TextView)viewFrag1.findViewById(R.id.duration_overtime);
         date_overtime = (TextView)viewFrag1.findViewById(R.id.date_overtime);
         information_overtime = (TextView)viewFrag1.findViewById(R.id.information_overtime);
+        cancel_overtime = (Button)viewFrag1.findViewById(R.id.cancel_overtime);
 
         GetMyOvertime(session.getId());
+        cancel_overtime.setEnabled(false);
+
+        cancel_overtime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog dialog = new Dialog(viewFrag1.getContext());
+                dialog.setContentView(R.layout.approved_overtime_dialog);
+                dialog.setTitle("Canceled Overtime");
+                TextView aprroved_question = (TextView)dialog.findViewById(R.id.aprroved_question);
+                cancel_approved = (ImageView)dialog.findViewById(R.id.cancel_approved);
+                approved_overtime = (ImageView)dialog.findViewById(R.id.delete_approved);
+                aprroved_question.setText("Canceled Overtime On " + overtime.date + " ?");
+                dialog.show();
+
+                cancel_approved.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                approved_overtime.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        SetOvertime();
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
 
         return viewFrag1;
     }
@@ -65,13 +103,44 @@ public class MyOvertimeFragment extends android.support.v4.app.Fragment {
                     duration_overtime.setText(duration_over.toString() + " Hours");
                     date_overtime.setText(overtime.date.toString());
                     information_overtime.setText(overtime.information.toString());
+                    cancel_overtime.setEnabled(true);
                 }
             }
             @Override
             public void onFailure(retrofit2.Call<Overtime> call, Throwable t)
             {
                 Toast.makeText(viewFrag1.getContext(),"You Have Not Overtime For Today", Toast.LENGTH_LONG).show();
+                cancel_overtime.setEnabled(false);
             }
         });
+    }
+
+    private void CancelOvertime (Overtime overtimes)
+    {
+        Call<Overtime> call = overtimeService.ApprovedOvertime(overtimes, session.getAccesstoken());
+        call.enqueue(new Callback<Overtime>()
+        {
+            @Override
+            public void onResponse(retrofit2.Call<Overtime> call, Response<Overtime> response)
+            {
+                if (response.isSuccessful())
+                {
+                    overtime = response.body();
+                    Toast.makeText(viewFrag1.getContext(),"Overtime Canceled", Toast.LENGTH_SHORT).show();
+                    GetMyOvertime(session.getId());
+                }
+            }
+            @Override
+            public void onFailure(retrofit2.Call<Overtime> call, Throwable t)
+            {
+                Toast.makeText(viewFrag1.getContext(),"Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void SetOvertime ()
+    {
+        overtime.status = 3;
+        CancelOvertime(overtime);
     }
 }

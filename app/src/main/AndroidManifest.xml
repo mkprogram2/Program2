@@ -59,8 +59,20 @@
         <activity
             android:name=".main.manage.EmployeeOvertimeActivity"
             android:label="@string/employees_overtime" />
-        <activity android:name=".main.employee.ProfileActivity"
-            android:label="@string/profile"/>
+        <activity
+            android:name=".main.employee.ProfileActivity"
+            android:label="@string/profile" />
+
+        <receiver
+            android:name=".common.PayrollReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.net.wifi.STATE_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

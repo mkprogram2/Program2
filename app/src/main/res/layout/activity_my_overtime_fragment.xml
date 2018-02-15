@@ -137,10 +137,10 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/cancel_overtime"
         android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:text="Cancel Overtime"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:text="Cancel Overtime" />
 
 </LinearLayout>
