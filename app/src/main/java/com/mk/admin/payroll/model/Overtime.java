@@ -17,6 +17,6 @@ public class Overtime
     public Integer status;
     public Time start;
     public Time stop;
-    public Integer dur;
+    public Integer interval;
     public Person person = new Person();
 }

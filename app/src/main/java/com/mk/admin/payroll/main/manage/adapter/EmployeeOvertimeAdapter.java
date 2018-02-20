@@ -49,8 +49,12 @@ public class EmployeeOvertimeAdapter extends RecyclerView.Adapter<EmployeeOverti
 
         if (getOvertimes().get(position).status == 0)
             holder.overtime_status.setText("Not Approved");
-        else
+        else if (getOvertimes().get(position).status == 1)
             holder.overtime_status.setText("Approved");
+        else if (getOvertimes().get(position).status == 3)
+            holder.overtime_status.setText("Canceled");
+        else
+            holder.overtime_status.setText("Completed");
     }
 
     @Override

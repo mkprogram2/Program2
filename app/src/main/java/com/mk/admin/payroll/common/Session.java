@@ -38,4 +38,37 @@ public class Session
         String access_token = prefs.getString("access_token", "");
         return access_token;
     }
+
+    public void SetUsername (String username)
+    {
+        prefs.edit().putString("username", username).commit();
+    }
+
+    public String GetUsername ()
+    {
+        String username = prefs.getString("username", "");
+        return username;
+    }
+
+    public void SetPassword (String password)
+    {
+        prefs.edit().putString("password", password).commit();
+    }
+
+    public String GetPassword ()
+    {
+        String password = prefs.getString("password", "");
+        return password;
+    }
+
+    public void SetMerchantCode (String merchantcode)
+    {
+        prefs.edit().putString("merchantcode", merchantcode).commit();
+    }
+
+    public String GetMerchantCode ()
+    {
+        String merchantcode = prefs.getString("merchantcode", "");
+        return merchantcode;
+    }
 }

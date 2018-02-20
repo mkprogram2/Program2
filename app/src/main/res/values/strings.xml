@@ -34,4 +34,5 @@
     <string name="new_overtime">New Overtime</string>
     <string name="employees_overtime">Employee\'s Overtime</string>
     <string name="profile">Profile</string>
+    <string name="permission">Permission</string>
 </resources>

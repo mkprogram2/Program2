@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ServiceInfo;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -60,11 +61,11 @@ public class PayrollService extends Service {
         IntentFilter filters = new IntentFilter();
         filters.addAction("android.net.wifi.WIFI_STATE_CHANGED");
         filters.addAction("android.net.wifi.STATE_CHANGE");
-        filters.addAction("android.intent.action.BOOT_COMPLETED");
         super.registerReceiver(receiver, filters);
         //return super.onStartCommand(intent, flags, startId);
         //EveryTime();
-        return START_STICKY;
+        return START_REDELIVER_INTENT;
+        //return START_STICKY;
     }
 
     @Override
@@ -74,7 +75,28 @@ public class PayrollService extends Service {
         //startService(new Intent(this, PayrollService.class)); // add this line
     }
 
-    private final BroadcastReceiver receiver = new BroadcastReceiver() {
+    @Override
+    public void onTaskRemoved(Intent rootIntent){
+        Toast.makeText(this, "Test !", Toast.LENGTH_SHORT).show();
+        Log.e("FLAGX : ", ServiceInfo.FLAG_STOP_WITH_TASK + "");
+        Intent restartServiceIntent = new Intent(getApplicationContext(),
+                this.getClass());
+        restartServiceIntent.setPackage(getPackageName());
+
+        PendingIntent restartServicePendingIntent = PendingIntent.getService(
+                getApplicationContext(), 1, restartServiceIntent,
+                PendingIntent.FLAG_ONE_SHOT);
+        AlarmManager alarmService = (AlarmManager) getApplicationContext()
+                .getSystemService(Context.ALARM_SERVICE);
+        alarmService.set(AlarmManager.ELAPSED_REALTIME,
+                SystemClock.elapsedRealtime() + 1000,
+                restartServicePendingIntent);
+
+        super.onTaskRemoved(rootIntent);
+    }
+
+    private final BroadcastReceiver receiver = new BroadcastReceiver()
+    {
         @Override
         public void onReceive(final Context context, final Intent intent)
         {
@@ -151,7 +173,7 @@ public class PayrollService extends Service {
                 if(condition != true) {
                     handler.postDelayed(this, 60000);
                     Log.d("YAAA", " YAAA");
-                    Toast.makeText(PayrollService.this, "Service", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(PayrollService.this, "Service", Toast.LENGTH_SHORT).show();
 
                     temp = false;
                     Behavior(requestBody);

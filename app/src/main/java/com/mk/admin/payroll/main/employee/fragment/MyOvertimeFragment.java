@@ -14,6 +14,7 @@ import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
 import com.mk.admin.payroll.common.Session;
 import com.mk.admin.payroll.model.Overtime;
+import com.mk.admin.payroll.service.EmployeeService;
 import com.mk.admin.payroll.service.OvertimeService;
 
 import retrofit2.Call;
@@ -103,6 +104,10 @@ public class MyOvertimeFragment extends android.support.v4.app.Fragment {
                     duration_overtime.setText(duration_over.toString() + " Hours");
                     date_overtime.setText(overtime.date.toString());
                     information_overtime.setText(overtime.information.toString());
+                    if (overtime.start != null)
+                        start_overtime.setText(overtime.start.toString());
+                    if (overtime.stop != null)
+                        end_overtime.setText(overtime.stop.toString());
                     cancel_overtime.setEnabled(true);
                 }
             }
@@ -111,6 +116,7 @@ public class MyOvertimeFragment extends android.support.v4.app.Fragment {
             {
                 Toast.makeText(viewFrag1.getContext(),"You Have Not Overtime For Today", Toast.LENGTH_LONG).show();
                 cancel_overtime.setEnabled(false);
+                EmptyUI();
             }
         });
     }
@@ -142,5 +148,14 @@ public class MyOvertimeFragment extends android.support.v4.app.Fragment {
     {
         overtime.status = 3;
         CancelOvertime(overtime);
+    }
+
+    private void EmptyUI ()
+    {
+        start_overtime.setText("");
+        end_overtime.setText("");
+        duration_overtime.setText("");
+        date_overtime.setText("");
+        information_overtime.setText("");
     }
 }

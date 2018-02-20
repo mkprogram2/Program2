@@ -38,7 +38,8 @@ public class OvertimeActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View view)
     {
-        switch (view.getId()){
+        switch (view.getId())
+        {
             case R.id.listover:
                 myover.setColorFilter(getBaseContext().getResources().getColor(R.color.black_de));
                 listover.setColorFilter(getBaseContext().getResources().getColor(R.color.blue));

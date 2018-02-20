@@ -48,6 +48,10 @@
                     android:id="@+id/remuneration_menu"
                     android:icon="@drawable/ic_payments"
                     android:title="Remuneration" />
+                <item
+                    android:id="@+id/permission_menu"
+                    android:icon="@drawable/ic_permission_list"
+                    android:title="@string/permission"/>
             </menu>
         </item>
     </group>

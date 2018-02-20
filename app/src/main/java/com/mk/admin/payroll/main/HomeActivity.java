@@ -28,6 +28,7 @@ import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
 import com.mk.admin.payroll.common.Session;
 import com.mk.admin.payroll.main.admin.EmployeeActivity;
+import com.mk.admin.payroll.main.admin.PermissionActivity;
 import com.mk.admin.payroll.main.admin.RemunerationActivity;
 import com.mk.admin.payroll.main.employee.CalendarActivity;
 import com.mk.admin.payroll.main.employee.OvertimeActivity;
@@ -162,6 +163,10 @@ public class HomeActivity extends AppCompatActivity
         else if (id == R.id.remuneration_menu)
         {
             startActivity(new Intent(HomeActivity.this, RemunerationActivity.class));
+        }
+        else if (id == R.id.permission_menu)
+        {
+            startActivity(new Intent(HomeActivity.this, PermissionActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

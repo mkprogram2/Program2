@@ -2,8 +2,10 @@ package com.mk.admin.payroll.main;
 
 import android.app.ActivityManager;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 
 import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
+import com.mk.admin.payroll.common.PayrollReceiver;
 import com.mk.admin.payroll.common.PayrollService;
 import com.mk.admin.payroll.common.RestVariable;
 import com.mk.admin.payroll.common.Session;
@@ -51,6 +54,7 @@ public class LoginActivity extends AppCompatActivity
     private LoginService service, serviceVerified;
     private String mUsername, mPassword;
     private Session session;
+    private PayrollReceiver payrollReceiver = new PayrollReceiver();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -71,6 +75,11 @@ public class LoginActivity extends AppCompatActivity
                 attempLogin();
             }
         });
+
+        /*IntentFilter filters = new IntentFilter();
+        filters.addAction("android.net.wifi.STATE_CHANGE");
+        filters.addAction("android.net.wifi.WIFI_STATE_CHANGED");
+        registerReceiver(payrollReceiver, filters);*/
         //startService(new Intent(LoginActivity.this, PayrollService.class));
         //EveryTime();
     }
@@ -87,6 +96,9 @@ public class LoginActivity extends AppCompatActivity
                 {
                     final Person data = response.body();
                     session.setId(data.id);
+                    session.SetUsername(mUsername);
+                    session.SetPassword(mPassword);
+                    session.SetMerchantCode(loginmerchantcode.getText().toString());
                     if (data.id != null)
                     {
                         /*if (PayrollService.status == false)
@@ -117,7 +129,6 @@ public class LoginActivity extends AppCompatActivity
             {
                 Toast.makeText(LoginActivity.this, "Server Failed", Toast.LENGTH_LONG).show();
             }
-
         });
     }
 
@@ -185,12 +196,6 @@ public class LoginActivity extends AppCompatActivity
         }
         else
         {
-            /*progressDialog.setMessage(this.getString(R.string.progress_message));
-            progressDialog.setCancelable(false);
-            progressDialog.show();*/
-
-            //Person personlogin = setlogin();
-            //postlogin(persons, personlogin);
             postlogin(loginmerchantcode.getText().toString(), RestVariable.PASSWORD, mUsername, mPassword);
 
         }

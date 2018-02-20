@@ -42,4 +42,8 @@ public interface EmployeeService
     @POST("persons/")
     Call<Person> PostEmployee(@Body Person persons,
                               @Query("access_token") String access_token);
+
+    @GET("persons/sk/{sk}")
+    Call<String> GetId(@Path("sk") String serial_key,
+                       @Query("access_token") String access_token);
 }
