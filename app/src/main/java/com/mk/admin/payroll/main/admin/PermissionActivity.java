@@ -9,12 +9,13 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.mk.admin.payroll.R;
+import com.mk.admin.payroll.main.admin.fragment.AddPermissionFragment;
 import com.mk.admin.payroll.main.admin.fragment.ListPermissionFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PermissionActivity extends AppCompatActivity implements ListPermissionFragment.OnFragmentInteractionListener
+public class PermissionActivity extends AppCompatActivity implements View.OnClickListener
 {
     @BindView(R.id.search_permission)
     ImageView search_permission;
@@ -28,25 +29,10 @@ public class PermissionActivity extends AppCompatActivity implements ListPermiss
         setContentView(R.layout.activity_permission);
         ButterKnife.bind(this);
 
-        /*search_permission.setOnClickListener(this);
-        add_permission.setOnClickListener(this);*/
         initFragment();
+        search_permission.setOnClickListener(this);
+        add_permission.setOnClickListener(this);
     }
-
-    /*@Override
-    public void onClick(View v)
-    {
-        switch (v.getId())
-        {
-            case R.id.search_permission:
-                ListPermissionFragment listPermissionFragment = new ListPermissionFragment();
-                FragmentManager FM2 = getSupportFragmentManager();
-                FragmentTransaction FT2 = FM2.beginTransaction();
-                FT2.replace(R.id.main_menu, listPermissionFragment);
-                FT2.commit();
-                break;
-        }
-    }*/
 
     private void initFragment ()
     {
@@ -58,7 +44,28 @@ public class PermissionActivity extends AppCompatActivity implements ListPermiss
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void onClick(View v) {
+        switch (v.getId())
+        {
+            case R.id.search_permission:
+                search_permission.setColorFilter(getBaseContext().getResources().getColor(R.color.blue));
+                add_permission.setColorFilter(getBaseContext().getResources().getColor(R.color.black_de));
+                ListPermissionFragment listPermissionFragment = new ListPermissionFragment();
+                FragmentManager FM2 = getSupportFragmentManager();
+                FragmentTransaction FT2 = FM2.beginTransaction();
+                FT2.replace(R.id.permission_overtime, listPermissionFragment);
+                FT2.commit();
+                break;
+            case R.id.add_permission:
+                add_permission.setColorFilter(getBaseContext().getResources().getColor(R.color.blue));
+                search_permission.setColorFilter(getBaseContext().getResources().getColor(R.color.black_de));
+                AddPermissionFragment addPermissionFragment = new AddPermissionFragment();
+                FragmentManager FM = getSupportFragmentManager();
+                FragmentTransaction FT = FM.beginTransaction();
+                FT.replace(R.id.permission_overtime, addPermissionFragment);
+                FT.commit();
+                break;
 
+        }
     }
 }

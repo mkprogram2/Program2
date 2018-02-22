@@ -3,6 +3,8 @@ package com.mk.admin.payroll.main;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -15,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -336,6 +339,14 @@ public class HomeActivity extends AppCompatActivity
                     textViewUser.setText(mname);
                     TextView textViewCompany = (TextView) headerLayout.findViewById(R.id.employee_role);
                     textViewCompany.setText(role_name);
+                    ImageView employee_photo = (ImageView) headerLayout.findViewById(R.id.employee_photo);
+                    if (dataperson.image != null)
+                    {
+                        byte[] data = dataperson.image;
+                        Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
+                        employee_photo.setImageBitmap(bmp);
+                    }
+
 
                     CheckRole();
 

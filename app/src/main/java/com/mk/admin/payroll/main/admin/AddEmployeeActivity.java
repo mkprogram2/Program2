@@ -55,7 +55,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
     @BindView(R.id.add_phone)
     EditText add_phone;
     @BindView(R.id.add_birth)
-    EditText add_birth;
+    TextView add_birth;
     @BindView(R.id.add_gender)
     Spinner add_gender;
     @BindView(R.id.add_role_spin)
@@ -68,8 +68,8 @@ public class AddEmployeeActivity extends AppCompatActivity {
     TextView add_shift_out;
     @BindView(R.id.calendar_in)
     Button calendar_in;
-    @BindView(R.id.calendar_birth)
-    Button calendar_birth;
+    /*@BindView(R.id.calendar_birth)
+    Button calendar_birth;*/
     @BindView(R.id.save_employee)
     ImageView save_employee;
     @BindView(R.id.cancel_save)
@@ -82,7 +82,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
     private List<Role> roles;
     private DatePickerDialog datePickerDialog;
     private SimpleDateFormat dateFormatter;
-    private Date dates, birthdate;
+    private java.sql.Date dates, birthdate;
     private Session session;
     private String[] genderSpinner = new String[] {"Male", "Female"};
 
@@ -148,12 +148,19 @@ public class AddEmployeeActivity extends AppCompatActivity {
             }
         });
 
-        calendar_birth.setOnClickListener(new View.OnClickListener() {
+        add_birth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDateDialogBirth();
             }
         });
+
+        /*calendar_birth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDateDialogBirth();
+            }
+        });*/
     }
 
     private void GetShift()
@@ -273,7 +280,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
         }
         person.id = uniqueId;
         person.persondetail.assignwork = dateFormatter.format(dates);
-        person.gender = add_gender.getSelectedItem().toString();
+        person.gender = add_gender.getSelectedItem().toString().charAt(0);
 
         if (!add_npwp.equals(""))
             person.npwp = add_npwp.getText().toString();
@@ -287,7 +294,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
 
     private void showDateDialog()
     {
-        Calendar newCalendar = Calendar.getInstance();
+        final Calendar newCalendar = Calendar.getInstance();
         datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener()
         {
             @Override
@@ -298,7 +305,8 @@ public class AddEmployeeActivity extends AppCompatActivity {
                 date_in.setText(dateFormatter.format(newDate.getTime()).toString());
 
                 try {
-                    dates = dateFormatter.parse(date_in.getText().toString());
+                    Date parse = dateFormatter.parse(date_in.getText().toString());
+                    dates = new java.sql.Date(parse.getTime());
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -321,7 +329,8 @@ public class AddEmployeeActivity extends AppCompatActivity {
                 add_birth.setText(dateFormatter.format(newDate.getTime()).toString());
 
                 try {
-                    birthdate = dateFormatter.parse(add_birth.getText().toString());
+                    Date parse = dateFormatter.parse(add_birth.getText().toString());
+                    birthdate = new java.sql.Date(parse.getTime());
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

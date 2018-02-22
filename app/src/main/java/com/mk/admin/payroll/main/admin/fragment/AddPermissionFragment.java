@@ -9,11 +9,12 @@ import android.widget.TextView;
 
 import com.mk.admin.payroll.R;
 
-public class ListPermissionFragment extends Fragment
+public class AddPermissionFragment extends Fragment
 {
-    private TextView employee_name;
 
-    public ListPermissionFragment()
+    TextView employee_name;
+
+    public AddPermissionFragment()
     {
     }
 
@@ -21,9 +22,9 @@ public class ListPermissionFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View viewfrag;
-        viewfrag = inflater.inflate(R.layout.fragment_list_permission, container, false);
+        View viewfrag = inflater.inflate(R.layout.fragment_add_permission, container, false);
         employee_name = (TextView)viewfrag.findViewById(R.id.employee_name);
-        return inflater.inflate(R.layout.fragment_list_permission, container, false);
+
+        return viewfrag;
     }
 }
