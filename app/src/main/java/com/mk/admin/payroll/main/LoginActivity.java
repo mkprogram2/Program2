@@ -115,12 +115,12 @@ public class LoginActivity extends AppCompatActivity
                     }
                     else
                     {
-                        Toast.makeText(LoginActivity.this, "E-mail Or Password Are Wrong2!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this, "E-mail Or Password Are Wrong!", Toast.LENGTH_LONG).show();
                     }
                 }
                 else
                 {
-                    Toast.makeText(LoginActivity.this, "E-mail Or Password Are Wrong2!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "E-mail Or Password Are Wrong!", Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -152,7 +152,7 @@ public class LoginActivity extends AppCompatActivity
                 }
                 else
                 {
-                    Toast.makeText(LoginActivity.this, "E-mail Or Password Are Wrong1!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "Server Failed", Toast.LENGTH_LONG).show();
                 }
             }
 
