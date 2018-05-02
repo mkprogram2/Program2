@@ -35,4 +35,7 @@
     <string name="employees_overtime">Employee\'s Overtime</string>
     <string name="profile">Profile</string>
     <string name="permission">Permission</string>
+    <string name="working_hour">Working Hour</string>
+    <string name="shift_in">Shift In</string>
+    <string name="shift_out">Shift Out</string>
 </resources>

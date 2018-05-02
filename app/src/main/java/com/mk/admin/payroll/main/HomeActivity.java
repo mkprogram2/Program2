@@ -5,7 +5,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +19,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AnalogClock;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,25 +48,51 @@ import com.mk.admin.payroll.model.Workhour;
 import com.mk.admin.payroll.service.EmployeeService;
 import com.mk.admin.payroll.service.WorkhourService;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    @BindView(R.id.today)
+    TextView today;
+    @BindView(R.id.datenow)
+    TextView datenow;
+    @BindView(R.id.masuk)
+    TextView masuk;
+    @BindView(R.id.keluar)
+    TextView keluar;
+    @BindView(R.id.shift_in)
+    TextView shift_in;
+    @BindView(R.id.shift_out)
+    TextView shift_out;
+    @BindView(R.id.break_time)
+    TextView break_time;
+    @BindView(R.id.kehadiran)
+    Button kehadiran;
+    @BindView(R.id.checkout)
+    TextView checkout;
+    @BindView(R.id.timeout)
+    TextView timeout;
+    /*@BindView(R.id.tv_hour)
+    TextView tv_hour;*/
+
     private EmployeeService employeeService;
     private WorkhourService service3;
-    private String mid, mname, shift_workstart, shift_workend, interval_work, role_name;
-    public Integer role_id;
+    private String mid, mname, shift_workstart, shift_workend, interval_work, role_name, workstart, workstartinterval, workend, result, result2, personid, shifttime, EVENT_DATE_TIME;
+    public Integer role_id, jam_pulang_shift, menit_pulang_shift, jam_pulang, menit_pulang, telat_jam, telat_menit, check;
+    private Long workstartinterval_time;
+    private String[] waktu_shift, waktu_kerja, telat_s;
     private NavigationView navigationView;
     private Session session;
-
-    @BindView(R.id.employee_name)
-    TextView employee_name;
-    @BindView(R.id.employee_role)
-    TextView employee_role;
+    private Person dataperson = new Person();
+    private Handler handler = new Handler();
+    private Runnable runnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -71,6 +101,14 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
 
         ButterKnife.bind(this);
+        Calendar calendar = Calendar.getInstance();
+        Date date = calendar.getTime();
+        today.setText(new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date.getTime()));
+
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        datenow.setText(df.format(c));
+
         //startService(new Intent(HomeActivity.this, PayrollService.class));
 
         employeeService = ClientService.createService().create(EmployeeService.class);
@@ -280,14 +318,12 @@ public class HomeActivity extends AppCompatActivity
         Call<Workhour> call = service3.getCheckworkhour(id, session.getAccesstoken());
         call.enqueue(new Callback<Workhour>()
         {
-            private String responseCode, responseMessage;
-
             @Override
             public void onResponse(retrofit2.Call<Workhour> call, Response<Workhour> response)
             {
                 final Workhour data = response.body();
 
-                Intent intent = new Intent(HomeActivity.this, WorkhoursActivity.class);
+                /*Intent intent = new Intent(HomeActivity.this, WorkhoursActivity.class);
                 intent.putExtra("workstart", data.workstart.toString());
                 intent.putExtra("workstartinterval", data.workstartinterval.toString());
                 intent.putExtra("interval_work", interval_work);
@@ -300,7 +336,19 @@ public class HomeActivity extends AppCompatActivity
                 {
                     intent.putExtra("workend", data.workend.toString());
                 }
-                startActivity(intent);
+                startActivity(intent);*/
+
+                workstart = data.workstart.toString();
+                workstartinterval = data.workstartinterval.toString();
+                if (data.workend == null)
+                {
+                    workend = "null_workend";
+                }
+                else
+                {
+                    workend = data.workend.toString();
+                }
+                setTime();
             }
 
             @Override
@@ -308,7 +356,6 @@ public class HomeActivity extends AppCompatActivity
             {
                 Toast.makeText(HomeActivity.this,"Please Check In", Toast.LENGTH_LONG).show();
             }
-
         });
     }
 
@@ -330,9 +377,9 @@ public class HomeActivity extends AppCompatActivity
                     role_id = dataperson.Role.id;
                     shift_workstart = dataperson.persondetail.Shift.workstart;
                     shift_workend = dataperson.persondetail.Shift.workend;
-
-                    employee_name.setText(mname);
-                    employee_role.setText(role_name);
+                    shift_in.setText(SetShiftTime(dataperson.persondetail.Shift.workstart));
+                    shift_out.setText(SetShiftTime(dataperson.persondetail.Shift.workend));
+                    break_time.setText(SetShiftTime(dataperson.persondetail.Shift.breakstart) + " - " + SetShiftTime(dataperson.persondetail.Shift.breakend));
 
                     View headerLayout = navigationView.getHeaderView(0);
                     TextView textViewUser = (TextView) headerLayout.findViewById(R.id.employee_name);
@@ -346,11 +393,9 @@ public class HomeActivity extends AppCompatActivity
                         Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
                         employee_photo.setImageBitmap(bmp);
                     }
-
-
                     CheckRole();
-
                     GetIntervalWork();
+                    workhour(session.getId());
                 }
             }
 
@@ -360,5 +405,154 @@ public class HomeActivity extends AppCompatActivity
                 Toast.makeText(HomeActivity.this,"Server Failed", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void setTime ()
+    {
+        if (workstart == null || workstartinterval == null)
+        {
+            kehadiran.setText("Please Check In");
+        }
+        else
+        {
+            workstartinterval_time = Long.parseLong(workstartinterval);
+            Log.d("workinterval", workstartinterval_time.toString());
+
+            GetWorkstart(workstart);
+
+            masuk.setText(result2.toString());
+
+            waktu_shift = interval_work.split(":");
+            jam_pulang_shift = Integer.parseInt(waktu_shift[0]);
+            menit_pulang_shift = Integer.parseInt((waktu_shift[1]));
+
+            waktu_kerja = result2.split(":");
+            jam_pulang = Integer.parseInt(waktu_kerja[0]) + jam_pulang_shift;
+            menit_pulang = Integer.parseInt(waktu_kerja[1]) + menit_pulang_shift;
+
+            telat_s = workstartinterval.split("-");
+            telat_jam = Integer.parseInt(workstartinterval) / 3600;
+            telat_menit = (Integer.parseInt(workstartinterval) % 3600) / 60;
+            check = Integer.parseInt(workstartinterval);
+
+            if (workstartinterval_time < 0)
+            {
+                kehadiran.setText("Late " + telat_jam + " Hours : " + telat_menit + " Minutes");
+            }
+            else
+            {
+                kehadiran.setText("On Time");
+            }
+
+            if (jam_pulang > 23)
+            {
+                timeout.setText("23:59");
+                EVENT_DATE_TIME = "0" + jam_pulang + ":" + menit_pulang + ":00";
+            }
+            else
+            {
+                if (jam_pulang <10)
+                {
+                    timeout.setText("0" +jam_pulang + ":" + menit_pulang);
+                    EVENT_DATE_TIME = "0" + jam_pulang + ":" + menit_pulang + ":00";
+                }
+                else if(menit_pulang < 10)
+                {
+                    timeout.setText(jam_pulang + ":0" + menit_pulang);
+                    EVENT_DATE_TIME =jam_pulang + ":0" + menit_pulang + ":00";
+                }
+                else
+                {
+                    timeout.setText(jam_pulang + ":" + menit_pulang);
+                    EVENT_DATE_TIME = jam_pulang + ":" + menit_pulang + ":00";
+                }
+            }
+        }
+
+        if (workend.equals("null_workend"))
+        {
+            keluar.setText("");
+            checkout.setText("Checked Out");
+        }
+        else
+        {
+            GetWorkend(workend);
+            keluar.setText(result);
+            checkout.setText("Checked In");
+        }
+
+        countDownStart();
+    }
+
+    private void GetWorkstart (String worktime)
+    {
+        SimpleDateFormat formatterr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+
+        try {
+            Date dates = formatterr.parse(worktime);
+            formatterr.applyPattern("HH:mm");
+            Log.d("Date", dates.toString());
+            result2 = formatterr.format(dates);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void GetWorkend (String worktime)
+    {
+        SimpleDateFormat formatterr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+
+        try {
+            Date dates = formatterr.parse(worktime);
+            formatterr.applyPattern("HH:mm");
+            result = formatterr.format(dates);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void countDownStart()
+    {
+        runnable = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                try {
+                    handler.postDelayed(this, 1000);
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+                    Date event_date = dateFormat.parse(EVENT_DATE_TIME);
+                    Date current_date = dateFormat.parse(dateFormat.format(new Date()));
+                    long diff = event_date.getTime() - current_date.getTime();
+                    long Days = diff / (24 * 60 * 60 * 1000);
+                    long Hours = diff / (60 * 60 * 1000) % 24;
+                    long Minutes = diff / (60 * 1000) % 60;
+                    long Seconds = diff / 1000 % 60;
+
+                    //tv_hour.setText(String.format("%02d", Hours) + " : " + String.format("%02d", Minutes) + " : " + String.format("%02d", Seconds));
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        handler.postDelayed(runnable, 0);
+    }
+
+    private String SetShiftTime (String time)
+    {
+        SimpleDateFormat formatterr = new SimpleDateFormat("HH:mm:ss");
+
+        try {
+            Date dates = formatterr.parse(time);
+            formatterr.applyPattern("HH:mm");
+            shifttime = formatterr.format(dates);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return shifttime;
     }
 }

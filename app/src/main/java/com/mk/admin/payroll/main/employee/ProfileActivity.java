@@ -13,26 +13,20 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
 import com.mk.admin.payroll.common.Session;
 import com.mk.admin.payroll.main.HomeActivity;
-import com.mk.admin.payroll.main.admin.EmployeeActivity;
 import com.mk.admin.payroll.model.Person;
 import com.mk.admin.payroll.service.EmployeeService;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -65,10 +59,6 @@ public class ProfileActivity extends AppCompatActivity {
     EditText employee_role;
     @BindView(R.id.employee_gender)
     Spinner employee_gender;
-    @BindView(R.id.shift_in)
-    TextView shift_in;
-    @BindView(R.id.shift_out)
-    TextView shift_out;
     @BindView(R.id.save_employee)
     ImageView save_employee;
     @BindView(R.id.edit_employee)
@@ -85,10 +75,8 @@ public class ProfileActivity extends AppCompatActivity {
     private Person person = new Person();
     private String[] genderSpinner = new String[] {"Male", "Female"};
     private SimpleDateFormat dateFormatter;
-    private DatePickerDialog datePickerDialog;
     private Date dates;
     private static int RESULT_LOAD_IMAGE = 1;
-    private String birthdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -194,7 +182,6 @@ public class ProfileActivity extends AppCompatActivity {
                 {
                     person = response.body();
                     Log.d("AAAAAAAAAAAAA", person.birthdate.toString());
-                    //GetBirth(person.birthdate.toString());
                     SetUI();
                 }
             }
@@ -217,8 +204,6 @@ public class ProfileActivity extends AppCompatActivity {
         employee_role.setText(person.Role.name);
         employee_npwp.setText(person.npwp);
         employee_phone.setText(person.phone);
-        shift_in.setText(person.persondetail.Shift.workstart);
-        shift_out.setText(person.persondetail.Shift.workend);
 
         if (person.image != null)
         {
@@ -243,7 +228,7 @@ public class ProfileActivity extends AppCompatActivity {
         try {
             Date dates = formatterr.parse(birth);
             formatterr.applyPattern("yyyy-MMM-dd");
-            birthdate = formatterr.format(dates);
+            String birthdate = formatterr.format(dates);
             employee_birth.setText(birthdate);
 
         } catch (ParseException e) {
@@ -333,11 +318,9 @@ public class ProfileActivity extends AppCompatActivity {
     private void showDateDialog()
     {
         Calendar newCalendar = Calendar.getInstance();
-        datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener()
-        {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
-            {
+            public void onDateSet (DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, monthOfYear, dayOfMonth);
                 employee_birth.setText(dateFormatter.format(newDate.getTime()).toString());
@@ -349,7 +332,7 @@ public class ProfileActivity extends AppCompatActivity {
                 }
                 Log.d("date", dateFormatter.format(dates).toString());
             }
-        },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();
     }
 }

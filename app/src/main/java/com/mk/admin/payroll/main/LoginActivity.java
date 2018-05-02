@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity
     Button login;
 
     private LoginService service, serviceVerified;
-    private String mUsername, mPassword;
+    private String mUsername, mPassword, mloginmerchantcode;
     private Session session;
     private PayrollReceiver payrollReceiver = new PayrollReceiver();
 
@@ -169,9 +169,11 @@ public class LoginActivity extends AppCompatActivity
     {
         username.setError(null);
         password.setError(null);
+        loginmerchantcode.setError(null);
 
         mUsername = username.getText().toString();
         mPassword = password.getText().toString();
+        mloginmerchantcode = loginmerchantcode.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -187,6 +189,13 @@ public class LoginActivity extends AppCompatActivity
         {
             password.setError("This field is required");
             focusView = password;
+            cancel = true;
+        }
+
+        if (TextUtils.isEmpty(mloginmerchantcode))
+        {
+            loginmerchantcode.setError("This field is required");
+            focusView = loginmerchantcode;
             cancel = true;
         }
 

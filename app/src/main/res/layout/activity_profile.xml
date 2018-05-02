@@ -1,149 +1,229 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.mk.admin.payroll.main.employee.ProfileActivity">
+    tools:context="com.mk.admin.payroll.main.employee.ProfileActivity"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue"
+        app:title="Profile"
+        app:titleTextColor="@color/white"
+        app:navigationIcon="@drawable/ic_arrow_left"
+        app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/gray100"
+        android:background="@color/white"
         android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingBottom="16dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingTop="16dp">
-
-            <ImageView
-                android:id="@+id/save_employee"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:srcCompat="@android:drawable/ic_menu_save" />
-
-            <ImageView
-                android:id="@+id/cancel_edit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
-
-            <ImageView
-                android:id="@+id/edit_employee"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:srcCompat="@android:drawable/ic_menu_edit" />
-
-        </LinearLayout>
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingBottom="16dp"
             android:paddingRight="16dp"
-            android:paddingLeft="16dp">
+            android:paddingLeft="16dp"
+            android:paddingTop="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" >
 
+                <de.hdodenhof.circleimageview.CircleImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/employee_photo"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_launcher_background"
+                    app:civ_border_color="@color/blue"
+                    app:civ_border_width="5dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="10dp"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="wrap_content"
                     android:background="@color/white"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:paddingBottom="10dp"
                     android:paddingTop="10dp">
 
-                    <!--<ImageView
-                        android:id="@+id/employee_photo"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:scaleType="fitXY"
-                        app:srcCompat="@drawable/ic_person" />-->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:layout_gravity="end">
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/employee_photo"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_launcher_background"
-                        app:civ_border_color="@color/white"
-                        app:civ_border_width="3dp"
-                        android:layout_gravity="center"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginLeft="10dp"/>
+                        <ImageView
+                            android:id="@+id/save_employee"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            app:srcCompat="@android:drawable/ic_menu_save"
+                            android:layout_marginRight="10dp"/>
+
+                        <ImageView
+                            android:id="@+id/cancel_edit"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+                        <ImageView
+                            android:id="@+id/edit_employee"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            app:srcCompat="@android:drawable/ic_menu_edit"
+                            android:layout_gravity="end"/>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="General Information"
+                        android:textSize="15sp"
+                        android:textStyle="bold"/>
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@color/blue" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/rounded_edittext"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:layout_marginBottom="5dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.5"
+                            android:text="ID"
+                            android:textSize="15sp"/>
 
                         <EditText
                             android:id="@+id/employee_id"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="30dp"
                             android:ems="10"
                             android:layout_weight="1"
+                            android:textSize="15sp"
                             android:hint="ID"
-                            android:inputType="textPersonName" />
+                            android:inputType="textPersonName"
+                            android:textDirection="rtl"
+                            android:paddingLeft="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:background="@null"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/rounded_edittext"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:layout_marginBottom="5dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.5"
+                            android:text="Name"
+                            android:textSize="15sp"/>
 
                         <EditText
                             android:id="@+id/employee_name"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="30dp"
                             android:ems="10"
                             android:layout_weight="1"
+                            android:textSize="15sp"
                             android:hint="Name"
-                            android:inputType="textPersonName" />
-
-                        <EditText
-                            android:id="@+id/employee_email"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ems="10"
-                            android:layout_weight="1"
-                            android:hint="E - mail"
-                            android:inputType="textPersonName" />
-
+                            android:inputType="textPersonName"
+                            android:background="@null"
+                            android:paddingLeft="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:textDirection="rtl"/>
                     </LinearLayout>
 
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@color/gray200"
-                    android:backgroundTint="@color/white"
-                    android:orientation="vertical"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingTop="10dp">
-
-                    <TextView
-                        android:id="@+id/textView77"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Working"
+                        android:orientation="horizontal"
+                        android:background="@drawable/rounded_edittext"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:layout_marginBottom="5dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.5"
+                            android:text="Birthdate"
+                            android:textSize="15sp"/>
+
+                        <EditText
+                            android:id="@+id/employee_birth"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:ems="10"
+                            android:layout_weight="1"
+                            android:textSize="15sp"
+                            android:hint="Birthdate"
+                            android:inputType="textPersonName"
+                            android:background="@null"
+                            android:paddingLeft="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:textDirection="rtl"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/rounded_edittext"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:layout_marginBottom="10dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.5"
+                            android:text="Gender"
+                            android:textSize="15sp"
+                            android:layout_gravity="center"/>
+
+                        <Spinner
+                            android:id="@+id/employee_gender"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_weight="1"
+                            android:textSize="15sp"
+                            android:textAlignment="textEnd"
+                            android:textDirection="ltr"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/textView78"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Account Information"
                         android:textStyle="bold"
                         android:textSize="15dp"/>
 
@@ -151,207 +231,200 @@
                         android:layout_width="wrap_content"
                         android:layout_height="1dp"
                         android:layout_marginBottom="10dp"
-                        android:background="@android:color/holo_blue_bright" />
-
-                    <TextView
-                        android:id="@+id/textView79"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Date In" />
-
-                    <EditText
-                        android:id="@+id/employee_datein"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="textPersonName" />
-
-                    <TextView
-                        android:id="@+id/textView35"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="Role" />
-
-                    <EditText
-                        android:id="@+id/employee_role"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="textPersonName" />
-
-                    <TextView
-                        android:id="@+id/textView36"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="Shift" />
+                        android:background="@color/blue" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.5"
-                        android:orientation="vertical">
-
-                        <LinearLayout
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/rounded_edittext"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:layout_marginBottom="5dp">
+                        <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="horizontal">
+                            android:layout_weight="1.5"
+                            android:text="Date In"
+                            android:textSize="15sp"/>
 
-                            <TextView
-                                android:id="@+id/textView31"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="In"
-                                android:textAlignment="center" />
-
-                            <TextView
-                                android:id="@+id/textView37"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Out"
-                                android:textAlignment="center" />
-                        </LinearLayout>
-
-                        <LinearLayout
+                        <EditText
+                            android:id="@+id/employee_datein"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="30dp"
+                            android:ems="10"
                             android:layout_weight="1"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/shift_in"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text=""
-                                android:textSize="20dp" />
-
-                            <TextView
-                                android:id="@+id/shift_out"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text=""
-                                android:textSize="20dp" />
-
-                        </LinearLayout>
-
+                            android:textSize="15sp"
+                            android:hint="Date In"
+                            android:inputType="textPersonName"
+                            android:background="@null"
+                            android:paddingLeft="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:textDirection="rtl"/>
                     </LinearLayout>
 
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/white"
-                    android:orientation="vertical"
-                    android:paddingBottom="30dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingTop="10dp">
-
-                    <TextView
-                        android:id="@+id/textView74"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Person"
-                        android:textSize="15dp"
-                        android:textStyle="bold" />
+                        android:orientation="horizontal"
+                        android:background="@drawable/rounded_edittext"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:layout_marginBottom="5dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.5"
+                            android:text="Coorporation"
+                            android:textSize="15sp"/>
+
+                        <EditText
+                            android:id="@+id/coorporation_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:ems="10"
+                            android:layout_weight="1"
+                            android:textSize="15sp"
+                            android:hint="Coorporation Name"
+                            android:inputType="textPersonName"
+                            android:background="@null"
+                            android:paddingLeft="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:textDirection="rtl"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/rounded_edittext"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:layout_marginBottom="5dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.5"
+                            android:text="Role"
+                            android:textSize="15sp"/>
+
+                        <EditText
+                            android:id="@+id/employee_role"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:ems="10"
+                            android:layout_weight="1"
+                            android:textSize="15sp"
+                            android:hint="Role"
+                            android:inputType="textPersonName"
+                            android:background="@null"
+                            android:paddingLeft="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:textDirection="rtl"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/rounded_edittext"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:layout_marginBottom="10dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.5"
+                            android:text="E-mail"
+                            android:textSize="15sp"/>
+
+                        <EditText
+                            android:id="@+id/employee_email"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:ems="10"
+                            android:layout_weight="1"
+                            android:textSize="15sp"
+                            android:hint="E-mail"
+                            android:inputType="textPersonName"
+                            android:background="@null"
+                            android:paddingLeft="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:textDirection="rtl"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/textView80"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Other Information"
+                        android:textStyle="bold"
+                        android:textSize="15dp"/>
 
                     <View
                         android:layout_width="wrap_content"
                         android:layout_height="1dp"
                         android:layout_marginBottom="10dp"
-                        android:background="@android:color/holo_blue_bright" />
+                        android:background="@color/blue" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/rounded_edittext"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:layout_marginBottom="5dp">
                         <TextView
-                            android:id="@+id/textView17"
-                            android:layout_width="100dp"
-                            android:layout_height="wrap_content"
-                            android:text="NPWP" />
-
-                        <EditText
-                            android:id="@+id/employee_npwp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:ems="10"
-                            android:hint="NPWP"
-                            android:inputType="textPersonName|number" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/textView32"
-                            android:layout_width="100dp"
-                            android:layout_height="wrap_content"
-                            android:text="Phone" />
+                            android:layout_weight="1.5"
+                            android:text="Phone"
+                            android:textSize="15sp"/>
 
                         <EditText
                             android:id="@+id/employee_phone"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="30dp"
                             android:ems="10"
-                            android:hint="Phone Number"
-                            android:inputType="number" />
+                            android:layout_weight="1"
+                            android:textSize="15sp"
+                            android:hint="Phone"
+                            android:inputType="textPersonName"
+                            android:background="@null"
+                            android:paddingLeft="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:textDirection="rtl"/>
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/rounded_edittext"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:layout_marginBottom="5dp">
                         <TextView
-                            android:id="@+id/textView34"
-                            android:layout_width="100dp"
-                            android:layout_height="wrap_content"
-                            android:text="Gender"
-                            android:layout_gravity="center"/>
-
-                        <Spinner
-                            android:id="@+id/employee_gender"
                             android:layout_width="match_parent"
-                            android:layout_height="50dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/textView68"
-                            android:layout_width="100dp"
                             android:layout_height="wrap_content"
-                            android:text="TextView"
-                            android:layout_gravity="center"/>
+                            android:layout_weight="1.5"
+                            android:text="NPWP"
+                            android:textSize="15sp"/>
 
                         <EditText
-                            android:id="@+id/employee_birth"
+                            android:id="@+id/employee_npwp"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
+                            android:layout_height="30dp"
                             android:ems="10"
-                            android:hint="Birth Date"
-                            android:inputType="textPersonName" />
-
-                        <!--<Button
-                            android:id="@+id/calendar_birth"
-                            android:layout_width="wrap_content"
-                            android:layout_height="50dp"
-                            android:drawableTop="@drawable/ic_calendar" />-->
+                            android:layout_weight="1"
+                            android:textSize="15sp"
+                            android:hint="NPWP"
+                            android:inputType="textPersonName"
+                            android:background="@null"
+                            android:paddingLeft="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:textDirection="rtl"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -361,4 +434,4 @@
 
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

@@ -7,13 +7,23 @@
     tools:context="com.mk.admin.payroll.main.employee.SalaryActivity"
     android:orientation="vertical">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue"
+        android:elevation="4dp"
+        app:title="Salary"
+        app:titleTextColor="@color/white"
+        app:navigationIcon="@drawable/back_button"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
     <FrameLayout
         android:id="@+id/fragment_salary"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.1">
-
-    </FrameLayout>
+        android:layout_weight="0.2"/>
 
     <LinearLayout
         android:layout_width="match_parent"

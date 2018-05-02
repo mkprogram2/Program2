@@ -20,7 +20,6 @@
         <activity android:name=".main.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -79,7 +78,7 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".main.admin.PermissionActivity"></activity>
+        <activity android:name=".main.admin.PermissionActivity"/>
     </application>
 
 </manifest>
