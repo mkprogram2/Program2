@@ -67,6 +67,8 @@ public class ProfileActivity extends AppCompatActivity {
     ImageView cancel_edit;
     @BindView(R.id.employee_photo)
     ImageView employee_photo;
+    @BindView(R.id.back_icon)
+    ImageView back_icon;
     /*@BindView(R.id.calendar_birth)
     Button calendar_birth;*/
 
@@ -134,6 +136,13 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivityForResult(i, RESULT_LOAD_IMAGE);
             }
         });
+
+        back_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View v) {
+                onBackPressed();
+            }
+        });
     }
 
     @Override
@@ -166,7 +175,6 @@ public class ProfileActivity extends AppCompatActivity {
     public void onBackPressed()
     {
         super.onBackPressed();
-        startActivity(new Intent(ProfileActivity.this, HomeActivity.class));
         finish();
     }
 

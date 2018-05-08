@@ -71,4 +71,15 @@ public class Session
         String merchantcode = prefs.getString("merchantcode", "");
         return merchantcode;
     }
+
+    public  void SetRememberMe (Integer rememberme)
+    {
+        prefs.edit().putInt("rememberme", rememberme).commit();
+    }
+
+    public Integer GetRememberMe ()
+    {
+        Integer rememberme = prefs.getInt("rememberme", 0);
+        return rememberme;
+    }
 }

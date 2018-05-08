@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
@@ -19,7 +18,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AnalogClock;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,12 +25,15 @@ import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import com.mk.admin.payroll.R;
 import com.mk.admin.payroll.common.ClientService;
+import com.mk.admin.payroll.common.PayrollService;
 import com.mk.admin.payroll.common.Session;
 import com.mk.admin.payroll.main.admin.EmployeeActivity;
 import com.mk.admin.payroll.main.admin.PermissionActivity;
@@ -74,13 +75,11 @@ public class HomeActivity extends AppCompatActivity
     @BindView(R.id.break_time)
     TextView break_time;
     @BindView(R.id.kehadiran)
-    Button kehadiran;
+    TextView kehadiran;
     @BindView(R.id.checkout)
     TextView checkout;
     @BindView(R.id.timeout)
     TextView timeout;
-    /*@BindView(R.id.tv_hour)
-    TextView tv_hour;*/
 
     private EmployeeService employeeService;
     private WorkhourService service3;
@@ -93,6 +92,7 @@ public class HomeActivity extends AppCompatActivity
     private Person dataperson = new Person();
     private Handler handler = new Handler();
     private Runnable runnable;
+    private RequestBody requestBody;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -144,7 +144,6 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
         return true;
     }
@@ -152,16 +151,11 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.logout) {
+        if (id == R.id.logout)
+        {
             Logout();
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -173,11 +167,7 @@ public class HomeActivity extends AppCompatActivity
 
         int id = item.getItemId();
 
-        if ( id == R.id.workhours_menu)
-        {
-            workhour(mid);
-        }
-        else if ( id == R.id.profile_menu)
+        if ( id == R.id.profile_menu)
         {
             startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
         }
@@ -323,21 +313,6 @@ public class HomeActivity extends AppCompatActivity
             {
                 final Workhour data = response.body();
 
-                /*Intent intent = new Intent(HomeActivity.this, WorkhoursActivity.class);
-                intent.putExtra("workstart", data.workstart.toString());
-                intent.putExtra("workstartinterval", data.workstartinterval.toString());
-                intent.putExtra("interval_work", interval_work);
-                intent.putExtra("personid", data.personid);
-                if (data.workend == null)
-                {
-                    intent.putExtra("workend", "null_workend");
-                }
-                else
-                {
-                    intent.putExtra("workend", data.workend.toString());
-                }
-                startActivity(intent);*/
-
                 workstart = data.workstart.toString();
                 workstartinterval = data.workstartinterval.toString();
                 if (data.workend == null)
@@ -395,7 +370,9 @@ public class HomeActivity extends AppCompatActivity
                     }
                     CheckRole();
                     GetIntervalWork();
-                    workhour(session.getId());
+
+                    requestBody = RequestBody.create(MediaType.parse("text/plain"),session.getId());
+                    Behavior(requestBody);
                 }
             }
 
@@ -437,7 +414,36 @@ public class HomeActivity extends AppCompatActivity
 
             if (workstartinterval_time < 0)
             {
-                kehadiran.setText("Late " + telat_jam + " Hours : " + telat_menit + " Minutes");
+                if (telat_jam < 0)
+                {
+                    String[] hour_late = telat_jam.toString().split("-");
+                    if (telat_menit < 0)
+                    {
+                        String[] minute_late = telat_menit.toString().split("-");
+                        kehadiran.setText("Late " + hour_late[1] + " Hours : " + minute_late[1] + " Minutes");
+                    }
+                    else
+                    {
+                        kehadiran.setText("Late " + hour_late[1] + " Hours : " + telat_menit + " Minutes");
+                    }
+                }
+                else if (telat_menit < 0)
+                {
+                    String[] minute_late = telat_menit.toString().split("-");
+                    if (telat_jam < 0)
+                    {
+                        String[] hour_late = telat_jam.toString().split("-");
+                        kehadiran.setText("Late " + hour_late[1] + " Hours : " + minute_late[1] + " Minutes");
+                    }
+                    else
+                    {
+                        kehadiran.setText("Late " + telat_jam + " Hours : " + minute_late[1] + " Minutes");
+                    }
+                }
+                else
+                {
+                    kehadiran.setText("Late " + telat_jam + " Hours : " + telat_menit + " Minutes");
+                }
             }
             else
             {
@@ -554,5 +560,27 @@ public class HomeActivity extends AppCompatActivity
             e.printStackTrace();
         }
         return shifttime;
+    }
+
+
+    private void Behavior (RequestBody id)
+    {
+        Call<Integer> call = service3.postBehavior(id, session.getAccesstoken());
+        call.enqueue(new Callback<Integer>()
+        {
+            @Override
+            public void onResponse(retrofit2.Call<Integer> call, Response<Integer> response)
+            {
+                if (response.isSuccessful())
+                {
+                    workhour(session.getId());
+                }
+            }
+            @Override
+            public void onFailure(retrofit2.Call<Integer> call, Throwable t)
+            {
+                Toast.makeText(HomeActivity.this,"Server Failed !", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

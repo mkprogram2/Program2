@@ -35,7 +35,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_arrow_back_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/notification/ic_event_busy_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -68,7 +68,7 @@
                                   <option name="values">
                                     <map>
                                       <entry key="imageAsset" value="D:\Payroll\biru.png" />
-                                      <entry key="outputName" value="back_button" />
+                                      <entry key="outputName" value="permission" />
                                       <entry key="theme" value="HOLO_DARK" />
                                     </map>
                                   </option>

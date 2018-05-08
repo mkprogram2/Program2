@@ -130,7 +130,7 @@
                     android:layout_marginBottom="20dp">
 
                     <CheckBox
-                        android:id="@+id/checkBox"
+                        android:id="@+id/rememberme"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -144,7 +144,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Forgot Password ?"
-                        android:textColor="@color/blue" />
+                        android:textColor="@color/blue"
+                        android:textStyle="italic"/>
                 </LinearLayout>
 
                 <Button
@@ -156,7 +157,8 @@
                     android:text="Log In"
                     android:textColor="@color/blue"
                     android:textSize="20sp"
-                    android:longClickable="true"/>
+                    android:longClickable="true"
+                    android:layout_marginTop="10dp"/>
 
             </LinearLayout>
 

@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -80,7 +81,7 @@ public class RemunerationActivity extends AppCompatActivity {
     @BindView(R.id.cancel_remuneration)
     ImageView cancel_remuneration;
     @BindView(R.id.set_date)
-    ImageView set_date;
+    LinearLayout set_date;
     @BindView(R.id.trans_daily)
     RadioButton trans_daily;
     @BindView(R.id.trans_fixed)
@@ -90,7 +91,9 @@ public class RemunerationActivity extends AppCompatActivity {
     @BindView(R.id.meal_fixed)
     RadioButton meal_fixed;
     @BindView(R.id.select_employee)
-    Button select_employee;
+    LinearLayout select_employee;
+    @BindView(R.id.back_icon)
+    ImageView back_icon;
 
     private EmployeeService employeeService;
     private SalaryService salaryService;
@@ -157,10 +160,24 @@ public class RemunerationActivity extends AppCompatActivity {
         cancel_remuneration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
-                startActivity(getIntent());
+                save_remuneration.setVisibility(View.GONE);
+                cancel_remuneration.setVisibility(View.GONE);
+                select_employee.setVisibility(View.VISIBLE);
             }
         });
+
+        back_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View v) {
+                onBackPressed();
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
     }
 
     private void GetEmployee (String id)
@@ -308,8 +325,10 @@ public class RemunerationActivity extends AppCompatActivity {
             public void onResponse(retrofit2.Call<Remuneration> call, Response<Remuneration> response)
             {
                 remuneration = response.body();
-                Toast.makeText(RemunerationActivity.this,"Saving Remuneration Was Successfully", Toast.LENGTH_LONG).show();
-                startActivity(new Intent(RemunerationActivity.this, HomeActivity.class));
+                Toast.makeText(RemunerationActivity.this,"Remuneration Successfully Saved", Toast.LENGTH_LONG).show();
+                save_remuneration.setVisibility(View.GONE);
+                cancel_remuneration.setVisibility(View.GONE);
+                select_employee.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -602,6 +621,7 @@ public class RemunerationActivity extends AppCompatActivity {
         employee_name.setText(mname);
         save_remuneration.setVisibility(View.VISIBLE);
         cancel_remuneration.setVisibility(View.VISIBLE);
+        select_employee.setVisibility(View.GONE);
 
         GetEmployee(mid);
     }

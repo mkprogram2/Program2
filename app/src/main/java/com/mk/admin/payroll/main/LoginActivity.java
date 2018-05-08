@@ -17,6 +17,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -50,23 +51,25 @@ public class LoginActivity extends AppCompatActivity
     EditText loginmerchantcode;
     @BindView(R.id.login)
     Button login;
+    @BindView(R.id.rememberme)
+    CheckBox rememberme;
 
     private LoginService service, serviceVerified;
     private String mUsername, mPassword, mloginmerchantcode;
     private Session session;
-    private PayrollReceiver payrollReceiver = new PayrollReceiver();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         ButterKnife.bind(this);
 
         service = ClientService.createServiceLogin().create(LoginService.class);
         serviceVerified = ClientService.createService().create(LoginService.class);
         session = new Session(this);
+
+        rememberMe();
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,13 +78,6 @@ public class LoginActivity extends AppCompatActivity
                 attempLogin();
             }
         });
-
-        /*IntentFilter filters = new IntentFilter();
-        filters.addAction("android.net.wifi.STATE_CHANGE");
-        filters.addAction("android.net.wifi.WIFI_STATE_CHANGED");
-        registerReceiver(payrollReceiver, filters);*/
-        //startService(new Intent(LoginActivity.this, PayrollService.class));
-        //EveryTime();
     }
 
     private void getpostlogin(String authorization, String email, String serial_key)
@@ -99,6 +95,11 @@ public class LoginActivity extends AppCompatActivity
                     session.SetUsername(mUsername);
                     session.SetPassword(mPassword);
                     session.SetMerchantCode(loginmerchantcode.getText().toString());
+                    if (rememberme.isChecked())
+                        session.SetRememberMe(1);
+                    else
+                        session.SetRememberMe(0);
+
                     if (data.id != null)
                     {
                         /*if (PayrollService.status == false)
@@ -152,7 +153,7 @@ public class LoginActivity extends AppCompatActivity
                 }
                 else
                 {
-                    Toast.makeText(LoginActivity.this, "Server Failed", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "Username or Password are Wrong!", Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -161,7 +162,6 @@ public class LoginActivity extends AppCompatActivity
             {
                 Toast.makeText(LoginActivity.this, "Server Failed", Toast.LENGTH_LONG).show();
             }
-
         });
     }
 
@@ -206,7 +206,6 @@ public class LoginActivity extends AppCompatActivity
         else
         {
             postlogin(loginmerchantcode.getText().toString(), RestVariable.PASSWORD, mUsername, mPassword);
-
         }
     }
 
@@ -228,7 +227,8 @@ public class LoginActivity extends AppCompatActivity
             }, 1000);
     }
 
-    private boolean isMyServiceRunning(Class<?> serviceClass) {
+    private boolean isMyServiceRunning(Class<?> serviceClass)
+    {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (serviceClass.getName().equals(service.service.getClassName())) {
@@ -236,5 +236,16 @@ public class LoginActivity extends AppCompatActivity
             }
         }
         return false;
+    }
+
+    private void rememberMe ()
+    {
+        if (session.GetRememberMe() == 1)
+        {
+            username.setText(session.GetUsername());
+            password.setText(session.GetPassword());
+            loginmerchantcode.setText(session.GetMerchantCode());
+            rememberme.setChecked(true);
+        }
     }
 }
