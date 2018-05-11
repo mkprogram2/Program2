@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +22,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +54,7 @@ import retrofit2.Response;
 
 public class EmployeeActivity extends AppCompatActivity
 {
+
     @BindView(R.id.employee_id)
     EditText employee_id;
     @BindView(R.id.employee_name)
@@ -66,30 +69,20 @@ public class EmployeeActivity extends AppCompatActivity
     EditText employee_phone;
     @BindView(R.id.employee_birth)
     EditText employee_birth;
+    @BindView(R.id.employee_role)
+    EditText employee_role;
     @BindView(R.id.employee_gender)
     Spinner employee_gender;
-    @BindView(R.id.role_spin)
-    Spinner role_spin;
-    @BindView(R.id.shift_spin)
-    Spinner shift_spin;
-    @BindView(R.id.shift_in)
-    TextView shift_in;
-    @BindView(R.id.shift_out)
-    TextView shift_out;
-    @BindView(R.id.save_employee)
-    ImageView save_employee;
-    @BindView(R.id.edit_employee)
-    ImageView edit_employee;
-    @BindView(R.id.cancel_edit)
-    ImageView cancel_edit;
     @BindView(R.id.employee_photo)
     ImageView employee_photo;
+    @BindView(R.id.back_icon)
+    ImageView back_icon;
     @BindView(R.id.select_employee)
-    Button select_employee;
+    FloatingActionButton select_employee;
     @BindView(R.id.add_employee)
-    Button add_employee;
-    /*@BindView(R.id.calendar_birth)
-    Button calendar_birth;*/
+    ImageView add_employee;
+    @BindView(R.id.progress_bar)
+    ProgressBar progress_bar;
 
     private EmployeeService employeeService;
     private String shiftid, role, mid, mname;
@@ -121,59 +114,7 @@ public class EmployeeActivity extends AppCompatActivity
 
         employeeService = ClientService.createService().create(EmployeeService.class);
 
-        shift_spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
-                for(int i = 0; i < list_shift.size (); i++)
-                {
-                    if(list_shift.get(i).equals(shift_spin.getSelectedItem().toString()))
-                    {
-                        shift_in.setText(shifts.get(i).workstart);
-                        shift_out.setText(shifts.get(i).workend);
-                        Toast.makeText(EmployeeActivity.this,shifts.get(i).workstart, Toast.LENGTH_LONG).show();
-                    }
-                }
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
         SetGenderSpinner();
-
-        save_employee.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mid == null)
-                {
-                    select_employee.setError("Please Select Employee");
-                }
-                else
-                {
-                    SetPerson();
-                    SetRole();
-                    SetShift();
-                    PutEmployee(dataperson);
-                }
-            }
-        });
-
-        edit_employee.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EnableUI();
-            }
-        });
-
-        cancel_edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DisableUI();
-            }
-        });
 
         select_employee.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -204,12 +145,19 @@ public class EmployeeActivity extends AppCompatActivity
             }
         });
 
-        /*calendar_birth.setOnClickListener(new View.OnClickListener() {
+        back_icon.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                showDateDialog();
+            public void onClick (View v) {
+                onBackPressed();
             }
-        });*/
+        });
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        finish();
     }
 
     @Override
@@ -240,6 +188,7 @@ public class EmployeeActivity extends AppCompatActivity
 
     private void GetEmployee (String id)
     {
+        progress_bar.setVisibility(View.VISIBLE);
         Call<Person> call = employeeService.GetEmployee(id, session.getAccesstoken());
         call.enqueue(new Callback<Person>()
         {
@@ -249,19 +198,22 @@ public class EmployeeActivity extends AppCompatActivity
                 if (response.isSuccessful())
                 {
                     dataperson = response.body();
-                    Log.d("Data", dataperson.name);
                     shiftid = dataperson.persondetail.Shift.id;
                     role = dataperson.Role.name;
                     GetShift();
-                    GetRole();
+                }
+                else
+                {
+                    progress_bar.setVisibility(View.GONE);
+                    Toast.makeText(EmployeeActivity.this,"Data Not Found !", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(retrofit2.Call<Person> call, Throwable t)
             {
-                Log.d("Error here", t.getMessage());
-                Toast.makeText(EmployeeActivity.this,"Error", Toast.LENGTH_LONG).show();
+                progress_bar.setVisibility(View.GONE);
+                Toast.makeText(EmployeeActivity.this,"Server Failed !", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -292,21 +244,30 @@ public class EmployeeActivity extends AppCompatActivity
             @Override
             public void onResponse(retrofit2.Call<List<Shift>> call, Response<List<Shift>> response)
             {
-                shifts.clear();
-                list_shift.clear();
-                shifts = response.body();
-                Log.d("Shift", shifts.get(0).workstart);
-                for (int i = 0; i < shifts.size(); i++)
+                if (response.isSuccessful())
                 {
-                    list_shift.add(shifts.get(i).id);
+                    shifts.clear();
+                    list_shift.clear();
+                    shifts = response.body();
+                    Log.d("Shift", shifts.get(0).workstart);
+                    for (int i = 0; i < shifts.size(); i++)
+                    {
+                        list_shift.add(shifts.get(i).id);
+                    }
+                    GetRole();
                 }
-                SetShiftSpinner();
+                else
+                {
+                    progress_bar.setVisibility(View.GONE);
+                    Toast.makeText(EmployeeActivity.this,"Data Not Found !", Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
             public void onFailure(retrofit2.Call<List<Shift>> call, Throwable t)
             {
-                Toast.makeText(EmployeeActivity.this,"Error", Toast.LENGTH_LONG).show();
+                progress_bar.setVisibility(View.GONE);
+                Toast.makeText(EmployeeActivity.this,"Server Failed !", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -319,52 +280,32 @@ public class EmployeeActivity extends AppCompatActivity
             @Override
             public void onResponse(retrofit2.Call<List<Role>> call, Response<List<Role>> response)
             {
-                roles.clear();
-                list_role.clear();
-                roles = response.body();
-                Log.d("Role", roles.get(0).name);
-                for (int i = 0; i < roles.size(); i++)
+                if (response.isSuccessful())
                 {
-                    list_role.add(roles.get(i).name);
+                    roles.clear();
+                    list_role.clear();
+                    roles = response.body();
+                    Log.d("Role", roles.get(0).name);
+                    for (int i = 0; i < roles.size(); i++)
+                    {
+                        list_role.add(roles.get(i).name);
+                    }
+                    progress_bar.setVisibility(View.GONE);
                 }
-                SetRoleSpinner();
+                else
+                {
+                    progress_bar.setVisibility(View.GONE);
+                    Toast.makeText(EmployeeActivity.this,"Data Not Found !", Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
             public void onFailure(retrofit2.Call<List<Role>> call, Throwable t)
             {
-                Toast.makeText(EmployeeActivity.this,"Error", Toast.LENGTH_LONG).show();
+                progress_bar.setVisibility(View.GONE);
+                Toast.makeText(EmployeeActivity.this,"Server Failed !", Toast.LENGTH_LONG).show();
             }
         });
-    }
-
-    private void SetShiftSpinner()
-    {
-        ArrayAdapter<String> adp1 = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list_shift);
-        adp1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        shift_spin.setAdapter(adp1);
-
-        for(int i = 0; i < list_shift.size (); i++)
-        {
-            if(list_shift.get(i).equals(shiftid)) {
-                shift_spin.setSelection(i);
-            }
-        }
-    }
-
-    private void SetRoleSpinner()
-    {
-        ArrayAdapter<String> adp1 = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list_role);
-        adp1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        role_spin.setAdapter(adp1);
-
-        for(int i = 0; i < list_role.size (); i++)
-        {
-            if(list_role.get(i).equals(role))
-            {
-                role_spin.setSelection(i);
-            }
-        }
     }
 
     private void PutEmployee(Person persons)
@@ -393,35 +334,9 @@ public class EmployeeActivity extends AppCompatActivity
         });
     }
 
-    private void SetRole()
-    {
-        for (int i = 0; i < roles.size(); i++)
-        {
-            if (roles.get(i).name.equals(role_spin.getSelectedItem()))
-            {
-                dataperson.Role.id = roles.get(i).id;
-                dataperson.Role.name = roles.get(i).name;
-                dataperson.Role.RoleDetail.maxsalary = roles.get(i).RoleDetail.maxsalary;
-                dataperson.Role.RoleDetail.minsalary = roles.get(i).RoleDetail.minsalary;
-            }
-        }
-    }
-
-    private void SetShift()
-    {
-        for (int i = 0; i < shifts.size(); i++)
-        {
-            if (shifts.get(i).id.equals(shift_spin.getSelectedItem()))
-            {
-                dataperson.persondetail.Shift.id = shifts.get(i).id;
-                dataperson.persondetail.Shift.workstart = shifts.get(i).workstart;
-                dataperson.persondetail.Shift.workend = shifts.get(i).workend;
-            }
-        }
-    }
-
     private void GetPerson ()
     {
+        progress_bar.setVisibility(View.VISIBLE);
         Call<List<Person>> call = employeeService.GetPerson(session.getAccesstoken());
         call.enqueue(new Callback<List<Person>>()
         {
@@ -435,12 +350,18 @@ public class EmployeeActivity extends AppCompatActivity
                     Log.d("Size", String.valueOf(list.size()));
                     showRecyclerList();
                 }
+                else
+                {
+                    progress_bar.setVisibility(View.GONE);
+                    Toast.makeText(EmployeeActivity.this,"Server Failed !", Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
             public void onFailure(retrofit2.Call<List<Person>> call, Throwable t)
             {
-                Toast.makeText(EmployeeActivity.this,"Server Failed", Toast.LENGTH_LONG).show();
+                progress_bar.setVisibility(View.GONE);
+                Toast.makeText(EmployeeActivity.this,"Server Failed !", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -460,6 +381,8 @@ public class EmployeeActivity extends AppCompatActivity
         EmployeeAdapter EmployeeAdapter = new EmployeeAdapter(EmployeeActivity.this);
         EmployeeAdapter.setListPerson(list);
         rvCategory.setAdapter(EmployeeAdapter);
+
+        progress_bar.setVisibility(View.GONE);
 
         ItemClickSupport.addTo(rvCategory).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
@@ -482,6 +405,7 @@ public class EmployeeActivity extends AppCompatActivity
         employee_phone.setText(person.phone);
         employee_birth.setText(String.valueOf(person.birthdate));
         employee_datein.setText(person.persondetail.assignwork);
+        employee_role.setText(person.Role.name);
 
         if (person.image != null)
         {
@@ -506,25 +430,16 @@ public class EmployeeActivity extends AppCompatActivity
         employee_id.setEnabled(false);
         employee_name.setEnabled(false);
         employee_photo.setEnabled(false);
-        role_spin.setEnabled(false);
-        shift_spin.setEnabled(false);
         employee_email.setEnabled(false);
         employee_datein.setEnabled(false);
         employee_npwp.setEnabled(false);
         employee_phone.setEnabled(false);
         employee_birth.setEnabled(false);
         employee_gender.setEnabled(false);
-        //calendar_birth.setEnabled(false);
-        save_employee.setVisibility(View.GONE);
-        cancel_edit.setVisibility(View.GONE);
-        edit_employee.setVisibility(View.VISIBLE);
     }
 
     private void EnableUI ()
     {
-        edit_employee.setVisibility(View.GONE);
-        save_employee.setVisibility(View.VISIBLE);
-        cancel_edit.setVisibility(View.VISIBLE);
         employee_name.setEnabled(true);
         employee_email.setEnabled(true);
         employee_photo.setEnabled(true);
@@ -532,7 +447,6 @@ public class EmployeeActivity extends AppCompatActivity
         employee_phone.setEnabled(true);
         employee_birth.setEnabled(true);
         employee_gender.setEnabled(true);
-        //calendar_birth.setEnabled(true);
     }
 
     private void SetGenderSpinner ()

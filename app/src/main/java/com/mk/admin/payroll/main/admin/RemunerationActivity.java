@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -94,6 +95,8 @@ public class RemunerationActivity extends AppCompatActivity {
     LinearLayout select_employee;
     @BindView(R.id.back_icon)
     ImageView back_icon;
+    @BindView(R.id.progress_bar)
+    ProgressBar progress_bar;
 
     private EmployeeService employeeService;
     private SalaryService salaryService;
@@ -245,40 +248,50 @@ public class RemunerationActivity extends AppCompatActivity {
 
     private void GetRemuneration (String id, Integer month, Integer year)
     {
+        progress_bar.setVisibility(View.VISIBLE);
         Call<Remuneration> call = salaryService.GetRemuneration(id, month, year, session.getAccesstoken());
         call.enqueue(new Callback<Remuneration>()
         {
             @Override
             public void onResponse(retrofit2.Call<Remuneration> call, Response<Remuneration> response)
             {
-                remuneration = response.body();
-                Log.d("tesss", remuneration.id.toString());
+                if (response.isSuccessful())
+                {
+                    remuneration = response.body();
 
-                employee_id.setText(remuneration.person.id.toString());
-                employee_name.setText(remuneration.person.name.toString());
-                employee_role.setText(remuneration.person.Role.name.toString());
-                range_salary.setText("Rp." + setString(remuneration.person.Role.RoleDetail.minsalary) + " - Rp." + setString(remuneration.person.Role.RoleDetail.maxsalary));
+                    employee_id.setText(remuneration.person.id.toString());
+                    employee_name.setText(remuneration.person.name.toString());
+                    employee_role.setText(remuneration.person.Role.name.toString());
+                    range_salary.setText("Rp." + setString(remuneration.person.Role.RoleDetail.minsalary) + " - Rp." + setString(remuneration.person.Role.RoleDetail.maxsalary));
 
-                if (remuneration.salary != null)
-                    basic_salary.setText(setString(remuneration.salary));
-                if (remuneration.trans != null)
-                    trans.setText(setString(remuneration.trans));
-                if (remuneration.meal != null)
-                    meal.setText(setString(remuneration.meal));
-                if (remuneration.communication != null)
-                    communication.setText(setString(remuneration.communication));
-                if (remuneration.diligent != null)
-                    diligent.setText(setString(remuneration.diligent));
-                if (remuneration.health != null)
-                    health.setText(setString(remuneration.health));
-                if (remuneration.overtime != null)
-                    overtime.setText(setString(remuneration.overtime));
-                if (remuneration.pension != null)
-                    pension.setText(setString(remuneration.pension));
-                if (remuneration.commision != null)
-                    commision.setText(setString(remuneration.commision));
-                if (remuneration.income != null)
-                    gross_salary.setText(setString(remuneration.income));
+                    if (remuneration.salary != null)
+                        basic_salary.setText(setString(remuneration.salary));
+                    if (remuneration.trans != null)
+                        trans.setText(setString(remuneration.trans));
+                    if (remuneration.meal != null)
+                        meal.setText(setString(remuneration.meal));
+                    if (remuneration.communication != null)
+                        communication.setText(setString(remuneration.communication));
+                    if (remuneration.diligent != null)
+                        diligent.setText(setString(remuneration.diligent));
+                    if (remuneration.health != null)
+                        health.setText(setString(remuneration.health));
+                    if (remuneration.overtime != null)
+                        overtime.setText(setString(remuneration.overtime));
+                    if (remuneration.pension != null)
+                        pension.setText(setString(remuneration.pension));
+                    if (remuneration.commision != null)
+                        commision.setText(setString(remuneration.commision));
+                    if (remuneration.income != null)
+                        gross_salary.setText(setString(remuneration.income));
+
+                    progress_bar.setVisibility(View.GONE);
+                }
+                else
+                {
+                    progress_bar.setVisibility(View.GONE);
+                    Toast.makeText(RemunerationActivity.this,"Data Not Found !", Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
@@ -294,7 +307,8 @@ public class RemunerationActivity extends AppCompatActivity {
                 remuneration.deduction = 0.0;
                 remuneration.netsalary = 0.0;
                 remuneration.person.id = mid;
-                Toast.makeText(RemunerationActivity.this,"Make New Remuneration!", Toast.LENGTH_LONG).show();
+                progress_bar.setVisibility(View.GONE);
+                Toast.makeText(RemunerationActivity.this,"Make New Remuneration !", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -318,24 +332,34 @@ public class RemunerationActivity extends AppCompatActivity {
 
     private void PostRemuneration (Remuneration remunerations)
     {
+        progress_bar.setVisibility(View.VISIBLE);
         Call<Remuneration> call = salaryService.PostRemuneration(remunerations, session.getAccesstoken());
         call.enqueue(new Callback<Remuneration>()
         {
             @Override
             public void onResponse(retrofit2.Call<Remuneration> call, Response<Remuneration> response)
             {
-                remuneration = response.body();
-                Toast.makeText(RemunerationActivity.this,"Remuneration Successfully Saved", Toast.LENGTH_LONG).show();
-                save_remuneration.setVisibility(View.GONE);
-                cancel_remuneration.setVisibility(View.GONE);
-                select_employee.setVisibility(View.VISIBLE);
+                if (response.isSuccessful())
+                {
+                    remuneration = response.body();
+                    Toast.makeText(RemunerationActivity.this,"Remuneration Successfully Saved", Toast.LENGTH_LONG).show();
+                    save_remuneration.setVisibility(View.GONE);
+                    cancel_remuneration.setVisibility(View.GONE);
+                    select_employee.setVisibility(View.VISIBLE);
+                    progress_bar.setVisibility(View.GONE);
+                }
+                else
+                {
+                    progress_bar.setVisibility(View.GONE);
+                    Toast.makeText(RemunerationActivity.this,"Server Failed !", Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
             public void onFailure(retrofit2.Call<Remuneration> call, Throwable t)
             {
-                Log.d("Error here", t.getMessage());
-                Toast.makeText(RemunerationActivity.this,"Error", Toast.LENGTH_LONG).show();
+                progress_bar.setVisibility(View.GONE);
+                Toast.makeText(RemunerationActivity.this,"Server Failed !", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -573,16 +597,23 @@ public class RemunerationActivity extends AppCompatActivity {
             @Override
             public void onResponse(retrofit2.Call<List<Person>> call, Response<List<Person>> response)
             {
-                list = response.body();
-                Log.d("Data",list.get(0).name);
-                Log.d("Size", String.valueOf(list.size()));
-                showRecyclerList();
+                if (response.isSuccessful())
+                {
+                    list = response.body();
+                    Log.d("Data",list.get(0).name);
+                    Log.d("Size", String.valueOf(list.size()));
+                    showRecyclerList();
+                }
+                else
+                {
+                    Toast.makeText(RemunerationActivity.this,"Data Not Found !", Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
             public void onFailure(retrofit2.Call<List<Person>> call, Throwable t)
             {
-                Toast.makeText(RemunerationActivity.this,"Error", Toast.LENGTH_LONG).show();
+                Toast.makeText(RemunerationActivity.this,"Server Failed !", Toast.LENGTH_LONG).show();
             }
         });
     }

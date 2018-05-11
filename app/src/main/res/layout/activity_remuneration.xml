@@ -135,6 +135,10 @@
         </LinearLayout>
     </android.support.design.widget.AppBarLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -283,7 +287,7 @@
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:src="@drawable/ic_person"
+                        android:src="@drawable/basic_salary"
                         android:tint="@color/blue"
                         android:layout_gravity="center"/>
 
@@ -343,7 +347,7 @@
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:src="@drawable/ic_person"
+                        android:src="@drawable/transport_allowance"
                         android:tint="@color/blue"
                         android:layout_gravity="center"/>
 
@@ -431,7 +435,7 @@
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:src="@drawable/ic_person"
+                        android:src="@drawable/meal_allowance"
                         android:tint="@color/blue"
                         android:layout_gravity="center"/>
 
@@ -520,7 +524,7 @@
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:src="@drawable/ic_person"
+                        android:src="@drawable/communication_allowance"
                         android:tint="@color/blue"
                         android:layout_gravity="center"/>
 
@@ -580,7 +584,7 @@
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:src="@drawable/ic_person"
+                        android:src="@drawable/diligently_allowance"
                         android:tint="@color/blue"
                         android:layout_gravity="center"/>
 
@@ -639,7 +643,7 @@
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:src="@drawable/ic_person"
+                        android:src="@drawable/health"
                         android:tint="@color/blue"
                         android:layout_gravity="center"/>
 
@@ -698,7 +702,7 @@
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:src="@drawable/ic_person"
+                        android:src="@drawable/overtime"
                         android:tint="@color/blue"
                         android:layout_gravity="center"/>
 
@@ -757,7 +761,7 @@
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:src="@drawable/ic_person"
+                        android:src="@drawable/commision"
                         android:tint="@color/blue"
                         android:layout_gravity="center"/>
 
@@ -816,7 +820,7 @@
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:src="@drawable/ic_person"
+                        android:src="@drawable/pension"
                         android:tint="@color/blue"
                         android:layout_gravity="center"/>
 
@@ -867,6 +871,18 @@
             </LinearLayout>
 
         </LinearLayout>
+
     </ScrollView>
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:visibility="gone" />
+
+    </RelativeLayout>
 
 </LinearLayout>

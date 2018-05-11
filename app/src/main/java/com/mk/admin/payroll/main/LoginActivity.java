@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.mk.admin.payroll.R;
@@ -53,6 +54,8 @@ public class LoginActivity extends AppCompatActivity
     Button login;
     @BindView(R.id.rememberme)
     CheckBox rememberme;
+    @BindView(R.id.progress_bar)
+    ProgressBar progress_bar;
 
     private LoginService service, serviceVerified;
     private String mUsername, mPassword, mloginmerchantcode;
@@ -113,15 +116,18 @@ public class LoginActivity extends AppCompatActivity
                     /*stopService(new Intent(LoginActivity.this, PayrollService.class));
                     startService(new Intent(LoginActivity.this, PayrollService.class));*/
                         startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                        progress_bar.setVisibility(View.GONE);
                     }
                     else
                     {
                         Toast.makeText(LoginActivity.this, "E-mail Or Password Are Wrong!", Toast.LENGTH_LONG).show();
+                        progress_bar.setVisibility(View.GONE);
                     }
                 }
                 else
                 {
-                    Toast.makeText(LoginActivity.this, "E-mail Or Password Are Wrong!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "Server Failed!", Toast.LENGTH_LONG).show();
+                    progress_bar.setVisibility(View.GONE);
                 }
             }
 
@@ -154,6 +160,7 @@ public class LoginActivity extends AppCompatActivity
                 else
                 {
                     Toast.makeText(LoginActivity.this, "Username or Password are Wrong!", Toast.LENGTH_LONG).show();
+                    progress_bar.setVisibility(View.GONE);
                 }
             }
 
@@ -161,6 +168,7 @@ public class LoginActivity extends AppCompatActivity
             public void onFailure(retrofit2.Call<AuthUtil> call, Throwable t)
             {
                 Toast.makeText(LoginActivity.this, "Server Failed", Toast.LENGTH_LONG).show();
+                progress_bar.setVisibility(View.GONE);
             }
         });
     }
@@ -207,6 +215,8 @@ public class LoginActivity extends AppCompatActivity
         {
             postlogin(loginmerchantcode.getText().toString(), RestVariable.PASSWORD, mUsername, mPassword);
         }
+
+        progress_bar.setVisibility(View.VISIBLE);
     }
 
     private void EveryTime ()

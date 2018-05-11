@@ -5,9 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context="com.mk.admin.payroll.main.employee.ProfileActivity"
     android:orientation="vertical">
-
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -73,11 +73,9 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -112,7 +110,8 @@
                     android:background="@color/white"
                     android:orientation="vertical"
                     android:paddingBottom="10dp"
-                    android:paddingTop="10dp">
+                    android:paddingTop="10dp"
+                    android:layout_marginTop="5dp">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -455,8 +454,18 @@
                 </LinearLayout>
 
             </LinearLayout>
+
         </ScrollView>
 
-    </LinearLayout>
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:visibility="gone" />
+
+    </RelativeLayout>
 
 </LinearLayout>

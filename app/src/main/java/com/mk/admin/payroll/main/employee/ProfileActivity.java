@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -69,8 +70,8 @@ public class ProfileActivity extends AppCompatActivity {
     ImageView employee_photo;
     @BindView(R.id.back_icon)
     ImageView back_icon;
-    /*@BindView(R.id.calendar_birth)
-    Button calendar_birth;*/
+    @BindView(R.id.progress_bar)
+    ProgressBar progress_bar;
 
     private EmployeeService employeeService;
     private Session session;
@@ -121,13 +122,6 @@ public class ProfileActivity extends AppCompatActivity {
                 showDateDialog();
             }
         });
-
-        /*calendar_birth.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDateDialog();
-            }
-        });*/
 
         employee_photo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,6 +174,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void GetEmployee (String id)
     {
+        progress_bar.setVisibility(View.VISIBLE);
         Call<Person> call = employeeService.GetEmployee(id, session.getAccesstoken());
         call.enqueue(new Callback<Person>()
         {
@@ -189,14 +184,20 @@ public class ProfileActivity extends AppCompatActivity {
                 if (response.isSuccessful())
                 {
                     person = response.body();
-                    Log.d("AAAAAAAAAAAAA", person.birthdate.toString());
                     SetUI();
+                    progress_bar.setVisibility(View.GONE);
+                }
+                else
+                {
+                    progress_bar.setVisibility(View.GONE);
+                    Toast.makeText(ProfileActivity.this,"Data Not Found", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(retrofit2.Call<Person> call, Throwable t)
             {
+                progress_bar.setVisibility(View.GONE);
                 Toast.makeText(ProfileActivity.this,"Server Failed", Toast.LENGTH_LONG).show();
             }
         });
@@ -304,20 +305,31 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void PutEmployee(Person persons)
     {
+        progress_bar.setVisibility(View.VISIBLE);
         Call<Person> call = employeeService.PutEmployee(persons, session.getAccesstoken());
         call.enqueue(new Callback<Person>()
         {
             @Override
             public void onResponse(retrofit2.Call<Person> call, Response<Person> response)
             {
-                person = response.body();
-                Toast.makeText(ProfileActivity.this,"Saving Success", Toast.LENGTH_LONG).show();
-                DisableUI();
+                if (response.isSuccessful())
+                {
+                    person = response.body();
+                    Toast.makeText(ProfileActivity.this,"Saving Success", Toast.LENGTH_LONG).show();
+                    DisableUI();
+                    progress_bar.setVisibility(View.GONE);
+                }
+                else
+                {
+                    progress_bar.setVisibility(View.GONE);
+                    Toast.makeText(ProfileActivity.this,"Server Failed !", Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
             public void onFailure(retrofit2.Call<Person> call, Throwable t)
             {
+                progress_bar.setVisibility(View.GONE);
                 Toast.makeText(ProfileActivity.this,"Server Failed", Toast.LENGTH_LONG).show();
             }
         });

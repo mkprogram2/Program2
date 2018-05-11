@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -80,6 +81,8 @@ public class HomeActivity extends AppCompatActivity
     TextView checkout;
     @BindView(R.id.timeout)
     TextView timeout;
+    @BindView(R.id.progress_bar)
+    ProgressBar progress_bar;
 
     private EmployeeService employeeService;
     private WorkhourService service3;
@@ -171,10 +174,10 @@ public class HomeActivity extends AppCompatActivity
         {
             startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
         }
-        else if ( id == R.id.calendar_menu)
+        /*else if ( id == R.id.calendar_menu)
         {
             startActivity(new Intent(HomeActivity.this,CalendarActivity.class));
-        }
+        }*/
         else if ( id == R.id.salary_menu)
         {
             startActivity(new Intent(HomeActivity.this, SalaryActivity.class));
@@ -311,31 +314,42 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onResponse(retrofit2.Call<Workhour> call, Response<Workhour> response)
             {
-                final Workhour data = response.body();
-
-                workstart = data.workstart.toString();
-                workstartinterval = data.workstartinterval.toString();
-                if (data.workend == null)
+                if (response.isSuccessful())
                 {
-                    workend = "null_workend";
+                    final Workhour data = response.body();
+
+                    workstart = data.workstart.toString();
+                    workstartinterval = data.workstartinterval.toString();
+                    if (data.workend == null)
+                    {
+                        workend = "null_workend";
+                    }
+                    else
+                    {
+                        workend = data.workend.toString();
+                    }
+                    setTime();
+                    progress_bar.setVisibility(View.GONE);
                 }
                 else
                 {
-                    workend = data.workend.toString();
+                    progress_bar.setVisibility(View.GONE);
+                    Toast.makeText(HomeActivity.this,"Data Not Found !", Toast.LENGTH_LONG).show();
                 }
-                setTime();
             }
 
             @Override
             public void onFailure(retrofit2.Call<Workhour> call, Throwable t)
             {
-                Toast.makeText(HomeActivity.this,"Please Check In", Toast.LENGTH_LONG).show();
+                progress_bar.setVisibility(View.GONE);
+                Toast.makeText(HomeActivity.this,"Server Failed !", Toast.LENGTH_LONG).show();
             }
         });
     }
 
     private void GetEmployee (String id)
     {
+        progress_bar.setVisibility(View.VISIBLE);
         Call<Person> call = employeeService.GetEmployee(id, session.getAccesstoken());
         call.enqueue(new Callback<Person>()
         {
@@ -374,11 +388,18 @@ public class HomeActivity extends AppCompatActivity
                     requestBody = RequestBody.create(MediaType.parse("text/plain"),session.getId());
                     Behavior(requestBody);
                 }
+                else
+                {
+                    progress_bar.setVisibility(View.GONE);
+                    Toast.makeText(HomeActivity.this,"Data Not Found!", Toast.LENGTH_LONG).show();
+
+                }
             }
 
             @Override
             public void onFailure(retrofit2.Call<Person> call, Throwable t)
             {
+                progress_bar.setVisibility(View.GONE);
                 Toast.makeText(HomeActivity.this,"Server Failed", Toast.LENGTH_LONG).show();
             }
         });
@@ -575,10 +596,16 @@ public class HomeActivity extends AppCompatActivity
                 {
                     workhour(session.getId());
                 }
+                else
+                {
+                    progress_bar.setVisibility(View.GONE);
+                    Toast.makeText(HomeActivity.this,"Data Not Found !", Toast.LENGTH_LONG).show();
+                }
             }
             @Override
             public void onFailure(retrofit2.Call<Integer> call, Throwable t)
             {
+                progress_bar.setVisibility(View.GONE);
                 Toast.makeText(HomeActivity.this,"Server Failed !", Toast.LENGTH_LONG).show();
             }
         });

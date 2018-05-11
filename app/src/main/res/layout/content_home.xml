@@ -10,6 +10,10 @@
     tools:context="com.mk.admin.payroll.main.HomeActivity"
     tools:showIn="@layout/app_bar_home">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -205,4 +209,16 @@
         </LinearLayout>
 
     </ScrollView>
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
 </android.support.constraint.ConstraintLayout>

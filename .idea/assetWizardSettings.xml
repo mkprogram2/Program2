@@ -67,8 +67,9 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="imageAsset" value="D:\Payroll\biru.png" />
-                                      <entry key="outputName" value="permission" />
+                                      <entry key="assetType" value="IMAGE" />
+                                      <entry key="imageAsset" value="D:\remuneration\login-1.png" />
+                                      <entry key="outputName" value="payroll_icon" />
                                       <entry key="theme" value="HOLO_DARK" />
                                     </map>
                                   </option>

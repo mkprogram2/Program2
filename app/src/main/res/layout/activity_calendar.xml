@@ -32,45 +32,34 @@
 
             <RelativeLayout
                 android:id="@+id/header"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
                 android:background="@drawable/calendar_top">
 
-                <RelativeLayout
-                    android:id="@+id/previous"
-                    android:layout_width="40dip"
-                    android:layout_height="30dip"
-                    android:layout_alignParentLeft="true">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/arrow_left" />
-                </RelativeLayout>
+                <ImageView
+                    android:id="@+id/prev"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:background="@drawable/arrow_left" />
 
                 <TextView
                     android:id="@+id/title_calendar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="5dip"
-                    android:textColor="#000000"
-                    android:textSize="18dip"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/blue"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
-                <RelativeLayout
+                <ImageView
                     android:id="@+id/next"
-                    android:layout_width="40dip"
-                    android:layout_height="30dip"
-                    android:layout_alignParentRight="true">
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/arrow_right" />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/arrow_right" />
-                </RelativeLayout>
             </RelativeLayout>
 
             <GridView xmlns:android="http://schemas.android.com/apk/res/android"

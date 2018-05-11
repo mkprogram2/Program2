@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -103,7 +104,7 @@ public class CalendarActivity extends AppCompatActivity {
         rvEvent = (RecyclerView)findViewById(R.id.rv_event);
         rvEvent.setHasFixedSize(true);
 
-        RelativeLayout previous = (RelativeLayout)findViewById(R.id.previous);
+        ImageView previous = (ImageView) findViewById(R.id.prev);
         previous.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setPreviousMonth();
@@ -111,7 +112,7 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
 
-        RelativeLayout next = (RelativeLayout) findViewById(R.id.next);
+        ImageView next = (ImageView) findViewById(R.id.next);
         next.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setNextMonth();

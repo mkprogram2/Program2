@@ -13,17 +13,17 @@
                     android:id="@+id/profile_menu"
                     android:icon="@drawable/ic_profile"
                     android:title="@string/profile"/>
-                <item
+                <!--<item
                     android:id="@+id/calendar_menu"
                     android:icon="@drawable/ic_calendar"
-                    android:title="Calendar" />
+                    android:title="Calendar" />-->
                 <item
                     android:id="@+id/salary_menu"
-                    android:icon="@drawable/ic_payments"
+                    android:icon="@drawable/basic_salary"
                     android:title="Salary" />
                 <item
                     android:id="@+id/overtime"
-                    android:icon="@drawable/ic_overtime"
+                    android:icon="@drawable/ic_workhours"
                     android:title="@string/overtime"/>
             </menu>
         </item>
@@ -42,11 +42,11 @@
                     android:title="Employee" />
                 <item
                     android:id="@+id/remuneration_menu"
-                    android:icon="@drawable/ic_payments"
+                    android:icon="@drawable/ic_salary"
                     android:title="Remuneration" />
                 <item
                     android:id="@+id/permission_menu"
-                    android:icon="@drawable/ic_permission_list"
+                    android:icon="@drawable/permission"
                     android:title="@string/permission"/>
             </menu>
         </item>
@@ -66,14 +66,5 @@
             </menu>
         </item>
     </group>
-
-    <!--<item android:title="Logout">
-        <menu>
-            <item
-                android:id="@+id/menu_logout"
-                android:icon="@drawable/ic_overtime"
-                android:title="Logout" />
-        </menu>
-    </item>-->
 
 </menu>

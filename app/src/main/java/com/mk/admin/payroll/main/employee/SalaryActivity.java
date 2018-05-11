@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,6 +82,8 @@ public class SalaryActivity extends AppCompatActivity
     TextView period;
     @BindView(R.id.back_icon)
     ImageView back_icon;
+    @BindView(R.id.progress_bar)
+    ProgressBar progress_bar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -124,53 +127,74 @@ public class SalaryActivity extends AppCompatActivity
             @Override
             public void onResponse(retrofit2.Call<Remuneration> call, Response<Remuneration> response)
             {
-                remuneration = response.body();
-                ShowSalary();
+                if (response.isSuccessful())
+                {
+                    remuneration = response.body();
+                    ShowSalary();
+                    progress_bar.setVisibility(View.GONE);
+                }
+                else
+                {
+                    EmptyUI();
+                    progress_bar.setVisibility(View.GONE);
+                    Toast.makeText(SalaryActivity.this,"Data Not Found !", Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
             public void onFailure(retrofit2.Call<Remuneration> call, Throwable t)
             {
                 EmptyUI();
-                Toast.makeText(SalaryActivity.this,"Data Not Found!", Toast.LENGTH_LONG).show();
+                progress_bar.setVisibility(View.GONE);
+                Toast.makeText(SalaryActivity.this,"Salary Not Set !", Toast.LENGTH_LONG).show();
             }
         });
     }
 
     private void getPresent (Integer month, Integer year, String id)
     {
+        progress_bar.setVisibility(View.VISIBLE);
         Call<List<Workhour>> call = service4.getDay(month, year, id, session.getAccesstoken());
         call.enqueue(new Callback<List<Workhour>>()
         {
             @Override
             public void onResponse(retrofit2.Call<List<Workhour>> call, Response<List<Workhour>> response)
             {
-                final List<Workhour> workhours = response.body();
-                Integer temp = 0;
-                for (int i = 0; i < workhours.size(); i++)
+                if (response.isSuccessful())
                 {
-                    if (workhours.get(i).workend != null)
+                    final List<Workhour> workhours = response.body();
+                    Integer temp = 0;
+                    for (int i = 0; i < workhours.size(); i++)
                     {
-                        temp++;
+                        if (workhours.get(i).workend != null)
+                        {
+                            temp++;
+                        }
                     }
-                }
-                present_days = temp;
-                Log.d("PRESENT", present_days.toString());
-                present_day.setText(String.valueOf(present_days));
-                if (months == month_now)
-                {
-                    GetWorkdaysToday(months, years);
+                    present_days = temp;
+                    Log.d("PRESENT", present_days.toString());
+                    present_day.setText(String.valueOf(present_days));
+                    if (months == month_now)
+                    {
+                        GetWorkdaysToday(months, years);
+                    }
+                    else
+                    {
+                        GetWorkdays(months, years);
+                    }
                 }
                 else
                 {
-                    GetWorkdays(months, years);
+                    progress_bar.setVisibility(View.GONE);
+                    Toast.makeText(SalaryActivity.this,"Data Not Found !", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(retrofit2.Call<List<Workhour>> call, Throwable t)
             {
-                Toast.makeText(SalaryActivity.this,t.getMessage(), Toast.LENGTH_LONG).show();
+                progress_bar.setVisibility(View.GONE);
+                Toast.makeText(SalaryActivity.this,"Server Failed !", Toast.LENGTH_LONG).show();
             }
 
         });
@@ -184,20 +208,30 @@ public class SalaryActivity extends AppCompatActivity
             @Override
             public void onResponse(retrofit2.Call<Integer> call, Response<Integer> response)
             {
-                final Integer workhours = response.body();
-                work_days = workhours;
-                if (present_days == null)
+                if (response.isSuccessful())
                 {
-                    present_days = 0;
+                    final Integer workhours = response.body();
+                    work_days = workhours;
+                    if (present_days == null)
+                    {
+                        present_days = 0;
+                    }
+                    absent_day.setText(String.valueOf(work_days - present_days));
+                    workdays.setText(workhours.toString());
+                    getSalary(mid, months, years);
                 }
-                absent_day.setText(String.valueOf(work_days - present_days));
-                workdays.setText(workhours.toString());
+                else
+                {
+                    progress_bar.setVisibility(View.GONE);
+                    Toast.makeText(SalaryActivity.this,"Data Not Found !", Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
             public void onFailure(retrofit2.Call<Integer> call, Throwable t)
             {
-                Toast.makeText(SalaryActivity.this,t.getMessage(), Toast.LENGTH_LONG).show();
+                progress_bar.setVisibility(View.GONE);
+                Toast.makeText(SalaryActivity.this,"Server Failed !", Toast.LENGTH_LONG).show();
             }
 
         });
@@ -211,20 +245,30 @@ public class SalaryActivity extends AppCompatActivity
             @Override
             public void onResponse(retrofit2.Call<Integer> call, Response<Integer> response)
             {
-                final Integer workhours = response.body();
-                work_days = workhours;
-                if (present_days == null)
+                if (response.isSuccessful())
                 {
-                    present_days = 0;
+                    final Integer workhours = response.body();
+                    work_days = workhours;
+                    if (present_days == null)
+                    {
+                        present_days = 0;
+                    }
+                    absent_day.setText(String.valueOf(work_days - present_days));
+                    workdays.setText(workhours.toString());
+                    getSalary(mid, months, years);
                 }
-                absent_day.setText(String.valueOf(work_days - present_days));
-                workdays.setText(workhours.toString());
+                else
+                {
+                    progress_bar.setVisibility(View.GONE);
+                    Toast.makeText(SalaryActivity.this,"Data Not Found !", Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
             public void onFailure(retrofit2.Call<Integer> call, Throwable t)
             {
-                Toast.makeText(SalaryActivity.this,t.getMessage(), Toast.LENGTH_LONG).show();
+                progress_bar.setVisibility(View.GONE);
+                Toast.makeText(SalaryActivity.this,"Server Failed !", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -331,7 +375,6 @@ public class SalaryActivity extends AppCompatActivity
                         years = year;
                         month_now = currentMonth + 1;
                         getPresent(month, year, mid);
-                        getSalary(mid, month, year);
                     }
                 })
                 .setNegativeButton(new OnCancelMonthDialogListener()
