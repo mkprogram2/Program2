@@ -8,11 +8,11 @@ import android.util.Base64;
 
 public class RestVariable
 {
-    /*public static final String SERVER_LOGIN = "http://192.168.70.41:6776/api/auth/";
-    public static final String SERVER_URL = "http://192.168.70.41:6776/api/hr/";*/
+    public static final String SERVER_LOGIN = "http://192.168.70.41:6776/api/auth/";
+    public static final String SERVER_URL = "http://192.168.70.41:6776/api/hr/";
 
-    public static final String SERVER_LOGIN = "http://192.168.71.89:6776/api/auth/";
-    public static final String SERVER_URL = "http://192.168.71.89:6776/api/hr/";
+    /*public static final String SERVER_LOGIN = "http://192.168.71.89:6776/api/auth/";
+    public static final String SERVER_URL = "http://192.168.71.89:6776/api/hr/";*/
 
     public static final String APP_ID = "app-payroll";
     public static final String SECRET = "f647a550-0a41-11e8-ae94-d73daeaee534";

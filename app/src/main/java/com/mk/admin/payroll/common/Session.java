@@ -82,4 +82,15 @@ public class Session
         Integer rememberme = prefs.getInt("rememberme", 0);
         return rememberme;
     }
+
+    public void SetRole (Integer role)
+    {
+        prefs.edit().putInt("role", role).commit();
+    }
+
+    public Integer GetRole ()
+    {
+        Integer role = prefs.getInt("role", 0);
+        return role;
+    }
 }

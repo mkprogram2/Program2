@@ -20,7 +20,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +52,7 @@ import com.mk.admin.payroll.model.Workhour;
 import com.mk.admin.payroll.service.EmployeeService;
 import com.mk.admin.payroll.service.WorkhourService;
 
+import java.security.acl.Group;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -83,16 +86,19 @@ public class HomeActivity extends AppCompatActivity
     TextView timeout;
     @BindView(R.id.progress_bar)
     ProgressBar progress_bar;
+    @BindView(R.id.home_content)
+    ScrollView home_content;
+    @BindView(R.id.data_not_found)
+    LinearLayout data_not_found;
 
     private EmployeeService employeeService;
     private WorkhourService service3;
-    private String mid, mname, shift_workstart, shift_workend, interval_work, role_name, workstart, workstartinterval, workend, result, result2, personid, shifttime, EVENT_DATE_TIME;
+    private String mid, mname, shift_workstart, shift_workend, interval_work, role_name, workstart, workstartinterval, workend, result, result2, shifttime, EVENT_DATE_TIME;
     public Integer role_id, jam_pulang_shift, menit_pulang_shift, jam_pulang, menit_pulang, telat_jam, telat_menit, check;
     private Long workstartinterval_time;
     private String[] waktu_shift, waktu_kerja, telat_s;
     private NavigationView navigationView;
     private Session session;
-    private Person dataperson = new Person();
     private Handler handler = new Handler();
     private Runnable runnable;
     private RequestBody requestBody;
@@ -131,6 +137,16 @@ public class HomeActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+        role_id = session.GetRole();
+        CheckRole();
+
+        data_not_found.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View v) {
+                GetEmployee(session.getId());
+            }
+        });
     }
 
     @Override
@@ -232,7 +248,7 @@ public class HomeActivity extends AppCompatActivity
 
                 if(menuItem.getItemId() == R.id.item_human_resource)
                 {
-                    menuItem.setVisible(false);
+                    menuItem.setVisible(true);
                 }
             }
         }
@@ -330,11 +346,12 @@ public class HomeActivity extends AppCompatActivity
                     }
                     setTime();
                     progress_bar.setVisibility(View.GONE);
+                    home_content.setVisibility(View.VISIBLE);
                 }
                 else
                 {
                     progress_bar.setVisibility(View.GONE);
-                    Toast.makeText(HomeActivity.this,"Data Not Found !", Toast.LENGTH_LONG).show();
+                    data_not_found.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -342,7 +359,7 @@ public class HomeActivity extends AppCompatActivity
             public void onFailure(retrofit2.Call<Workhour> call, Throwable t)
             {
                 progress_bar.setVisibility(View.GONE);
-                Toast.makeText(HomeActivity.this,"Server Failed !", Toast.LENGTH_LONG).show();
+                data_not_found.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -363,7 +380,6 @@ public class HomeActivity extends AppCompatActivity
                     mid = dataperson.id;
                     mname = dataperson.name;
                     role_name = dataperson.Role.name;
-                    role_id = dataperson.Role.id;
                     shift_workstart = dataperson.persondetail.Shift.workstart;
                     shift_workend = dataperson.persondetail.Shift.workend;
                     shift_in.setText(SetShiftTime(dataperson.persondetail.Shift.workstart));
@@ -382,7 +398,6 @@ public class HomeActivity extends AppCompatActivity
                         Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
                         employee_photo.setImageBitmap(bmp);
                     }
-                    CheckRole();
                     GetIntervalWork();
 
                     requestBody = RequestBody.create(MediaType.parse("text/plain"),session.getId());
@@ -391,8 +406,7 @@ public class HomeActivity extends AppCompatActivity
                 else
                 {
                     progress_bar.setVisibility(View.GONE);
-                    Toast.makeText(HomeActivity.this,"Data Not Found!", Toast.LENGTH_LONG).show();
-
+                    data_not_found.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -400,7 +414,7 @@ public class HomeActivity extends AppCompatActivity
             public void onFailure(retrofit2.Call<Person> call, Throwable t)
             {
                 progress_bar.setVisibility(View.GONE);
-                Toast.makeText(HomeActivity.this,"Server Failed", Toast.LENGTH_LONG).show();
+                data_not_found.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -599,6 +613,7 @@ public class HomeActivity extends AppCompatActivity
                 else
                 {
                     progress_bar.setVisibility(View.GONE);
+                    data_not_found.setVisibility(View.VISIBLE);
                     Toast.makeText(HomeActivity.this,"Data Not Found !", Toast.LENGTH_LONG).show();
                 }
             }
@@ -606,6 +621,7 @@ public class HomeActivity extends AppCompatActivity
             public void onFailure(retrofit2.Call<Integer> call, Throwable t)
             {
                 progress_bar.setVisibility(View.GONE);
+                data_not_found.setVisibility(View.VISIBLE);
                 Toast.makeText(HomeActivity.this,"Server Failed !", Toast.LENGTH_LONG).show();
             }
         });

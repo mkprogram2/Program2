@@ -97,6 +97,7 @@ public class LoginActivity extends AppCompatActivity
                     session.setId(data.id);
                     session.SetUsername(mUsername);
                     session.SetPassword(mPassword);
+                    session.SetRole(data.Role.id);
                     session.SetMerchantCode(loginmerchantcode.getText().toString());
                     if (rememberme.isChecked())
                         session.SetRememberMe(1);
@@ -159,7 +160,7 @@ public class LoginActivity extends AppCompatActivity
                 }
                 else
                 {
-                    Toast.makeText(LoginActivity.this, "Username or Password are Wrong!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "Server Failed !", Toast.LENGTH_LONG).show();
                     progress_bar.setVisibility(View.GONE);
                 }
             }
@@ -167,7 +168,7 @@ public class LoginActivity extends AppCompatActivity
             @Override
             public void onFailure(retrofit2.Call<AuthUtil> call, Throwable t)
             {
-                Toast.makeText(LoginActivity.this, "Server Failed", Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "Server Failed !", Toast.LENGTH_LONG).show();
                 progress_bar.setVisibility(View.GONE);
             }
         });
