@@ -80,7 +80,8 @@
         </receiver>
 
         <activity android:name=".main.admin.PermissionActivity" />
-        <activity android:name=".main.manage.FormEmployeeOvertime"></activity>
+        <activity android:name=".main.manage.FormEmployeeOvertime" />
+        <activity android:name=".main.admin.AddPermission"></activity>
     </application>
 
 </manifest>

@@ -1,26 +1,34 @@
 package com.mk.admin.payroll.main.admin;
 
-import android.net.Uri;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.mk.admin.payroll.R;
-import com.mk.admin.payroll.main.admin.fragment.AddPermissionFragment;
-import com.mk.admin.payroll.main.admin.fragment.ListPermissionFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PermissionActivity extends AppCompatActivity implements View.OnClickListener
+public class PermissionActivity extends AppCompatActivity
 {
-    @BindView(R.id.search_permission)
-    ImageView search_permission;
+    @BindView(R.id.back_icon)
+    ImageView back_icon;
     @BindView(R.id.add_permission)
     ImageView add_permission;
+    @BindView(R.id.search_toolbar_permission)
+    ImageView search_toolbar_permission;
+    @BindView(R.id.close_search_permission)
+    ImageView close_search_permission;
+    @BindView(R.id.search_employee_permission)
+    EditText search_employee_permission;
+    @BindView(R.id.main_toolbar)
+    LinearLayout main_toolbar;
+    @BindView(R.id.search_toolbar)
+    LinearLayout search_toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -29,43 +37,41 @@ public class PermissionActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_permission);
         ButterKnife.bind(this);
 
-        initFragment();
-        search_permission.setOnClickListener(this);
-        add_permission.setOnClickListener(this);
-    }
+        back_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View v) {
+                onBackPressed();
+            }
+        });
 
-    private void initFragment ()
-    {
-        ListPermissionFragment listPermissionFragment = new ListPermissionFragment();
-        FragmentManager FM2 = getSupportFragmentManager();
-        FragmentTransaction FT2 = FM2.beginTransaction();
-        FT2.replace(R.id.permission_overtime, listPermissionFragment);
-        FT2.commit();
+        search_toolbar_permission.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View v) {
+                main_toolbar.setVisibility(View.GONE);
+                search_toolbar.setVisibility(View.VISIBLE);
+            }
+        });
+
+        close_search_permission.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View v) {
+                search_toolbar.setVisibility(View.GONE);
+                main_toolbar.setVisibility(View.VISIBLE);
+            }
+        });
+
+        add_permission.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View v) {
+                startActivity(new Intent(PermissionActivity.this, AddPermission.class));
+            }
+        });
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId())
-        {
-            case R.id.search_permission:
-                search_permission.setColorFilter(getBaseContext().getResources().getColor(R.color.blue));
-                add_permission.setColorFilter(getBaseContext().getResources().getColor(R.color.black_de));
-                ListPermissionFragment listPermissionFragment = new ListPermissionFragment();
-                FragmentManager FM2 = getSupportFragmentManager();
-                FragmentTransaction FT2 = FM2.beginTransaction();
-                FT2.replace(R.id.permission_overtime, listPermissionFragment);
-                FT2.commit();
-                break;
-            case R.id.add_permission:
-                add_permission.setColorFilter(getBaseContext().getResources().getColor(R.color.blue));
-                search_permission.setColorFilter(getBaseContext().getResources().getColor(R.color.black_de));
-                AddPermissionFragment addPermissionFragment = new AddPermissionFragment();
-                FragmentManager FM = getSupportFragmentManager();
-                FragmentTransaction FT = FM.beginTransaction();
-                FT.replace(R.id.permission_overtime, addPermissionFragment);
-                FT.commit();
-                break;
-
-        }
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        finish();
     }
 }

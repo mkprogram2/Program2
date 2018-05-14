@@ -158,7 +158,7 @@ public class PayrollService extends Service {
             @Override
             public void onFailure(retrofit2.Call<Integer> call, Throwable t)
             {
-                Toast.makeText(PayrollService.this,"Server Failed !", Toast.LENGTH_LONG).show();
+
             }
         });
     }
@@ -173,7 +173,6 @@ public class PayrollService extends Service {
                 if(condition != true) {
                     handler.postDelayed(this, 60000);
                     Log.d("YAAA", " YAAA");
-                    //Toast.makeText(PayrollService.this, "Service", Toast.LENGTH_SHORT).show();
 
                     temp = false;
                     Behavior(requestBody);
